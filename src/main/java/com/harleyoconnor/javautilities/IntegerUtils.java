@@ -20,4 +20,22 @@ public final class IntegerUtils {
         return RANDOM.nextInt((max - min) + 1) + min;
     }
 
+    /**
+     * Checks if a number is prime.
+     *
+     * @param number The number to check.
+     * @return Whether or not it was prime.
+     */
+    public static boolean isPrime (final int number) {
+        if (number == 1) return false;
+
+        for (int i = 2; i <= number / 2; i++) {
+            if (number % i == 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }
