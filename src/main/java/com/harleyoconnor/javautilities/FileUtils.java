@@ -23,7 +23,7 @@ public final class FileUtils {
      * @param relativePath Path relative to the default resource path.
      * @return The new file object.
      */
-    public static File getFile (@Nonnull final String relativePath) {
+    public static File getFile (final String relativePath) {
         return getFile(relativePath, true);
     }
 
@@ -34,7 +34,7 @@ public final class FileUtils {
      * @param useDefaultResourcePath Whether or not to use the default resources path.
      * @return The new file object.
      */
-    public static File getFile (@Nonnull final String path, final boolean useDefaultResourcePath) {
+    public static File getFile (final String path, final boolean useDefaultResourcePath) {
         return new File ((useDefaultResourcePath ? RESOURCES_PATH : "") + path);
     }
 
@@ -45,7 +45,7 @@ public final class FileUtils {
      * @return The list of child file objects.
      */
     @Nullable
-    public static List<File> getChildFiles (@Nonnull final File directory) {
+    public static List<File> getChildFiles (final File directory) {
         return !directory.isDirectory() ? null : Arrays.asList(Objects.requireNonNull(directory.listFiles()));
     }
 
@@ -58,7 +58,7 @@ public final class FileUtils {
      * @return The list of child files objects.
      */
     @Nullable
-    public static List<File> getChildFiles (@Nonnull final File directory, @Nonnull final String fileExtension) {
+    public static List<File> getChildFiles (final File directory, final String fileExtension) {
         return !directory.isDirectory() ? null : Arrays.asList(Objects.requireNonNull(directory.listFiles(file -> file.getName().toLowerCase().endsWith(fileExtension.toLowerCase()))));
     }
 
