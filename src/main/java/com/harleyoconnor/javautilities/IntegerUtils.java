@@ -38,4 +38,15 @@ public final class IntegerUtils {
         return true;
     }
 
+    /**
+     * Rounds number to given decimal places
+     *
+     * @param number The number to round.
+     * @param decimalPlaces The number to of places to round to.
+     * @return Rounded number.
+     */
+    public static double roundNumber (final double number,final int decimalPlaces) {
+        int power = (int) Math.pow(10,decimalPlaces);
+        return (double) Math.round(number*power)/power;
+    }
 }
