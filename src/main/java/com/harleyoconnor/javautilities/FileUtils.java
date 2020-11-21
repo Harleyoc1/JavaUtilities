@@ -1,6 +1,5 @@
 package com.harleyoconnor.javautilities;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.util.Arrays;
@@ -15,7 +14,12 @@ public final class FileUtils {
     /**
      * The default resources path used by functions in this class.
      */
-    public static String RESOURCES_PATH = "src/main/resources/assets/";
+    public static String RESOURCES_PATH = "src/main/resources/";
+
+    /**
+     * The default assets path used by functions in this class.
+     */
+    public static String ASSETS_PATH = RESOURCES_PATH + "assets/";
 
     /**
      * Creates a file object at the specified location using the default resource path.
@@ -35,7 +39,17 @@ public final class FileUtils {
      * @return The new file object.
      */
     public static File getFile (final String path, final boolean useDefaultResourcePath) {
-        return new File ((useDefaultResourcePath ? RESOURCES_PATH : "") + path);
+        return new File ((useDefaultResourcePath ? ASSETS_PATH : "") + path);
+    }
+
+    /**
+     * Gets the internal path of a given asset.
+     *
+     * @param relativePath The path relative to the resources/assets folder.
+     * @return The path including the assets path defined at the top of this class.
+     */
+    public static String getInternalPath (final String relativePath) {
+        return ASSETS_PATH + relativePath;
     }
 
     /**
