@@ -27,7 +27,7 @@ public final class IntegerUtils {
      * @return Whether or not it was prime.
      */
     public static boolean isPrime (final int number) {
-        if (number == 1) return false;
+        if (number == 1 || number == 0) return false;
 
         for (int i = 2; i <= number / 2; i++) {
             if (number % i == 0) {

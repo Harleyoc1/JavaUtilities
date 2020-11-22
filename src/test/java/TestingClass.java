@@ -8,7 +8,12 @@ public final class TestingClass {
 
     @Test
     public void test () {
-        System.out.println(IntegerUtils.isPrime(1));
+        System.out.println("\n\nStart of Java Utilities Testing\n");
+
+        System.out.println(IntegerUtils.isPrime(155));
+        System.out.println(IntegerUtils.roundNumber(Math.PI, 7));
+
+        System.out.println("\nEnd of Java Utilities Testing\n\n");
     }
 
 }
