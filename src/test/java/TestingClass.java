@@ -11,7 +11,7 @@ public final class TestingClass {
         System.out.println("\n\nStart of Java Utilities Testing\n");
 
         System.out.println(IntegerUtils.isPrime(155));
-        System.out.println(IntegerUtils.roundNumber(Math.PI, 7));
+        System.out.println(IntegerUtils.round(Math.PI, 7));
         System.out.println(Math.round(3.524));
 
         System.out.println("\nEnd of Java Utilities Testing\n\n");

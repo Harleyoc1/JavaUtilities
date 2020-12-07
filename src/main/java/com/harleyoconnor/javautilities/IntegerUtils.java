@@ -45,8 +45,8 @@ public final class IntegerUtils {
      * @param decimalPlaces The number to of places to round to.
      * @return Rounded number.
      */
-    public static double roundNumber (final double number,final int decimalPlaces) {
-        int power = (int) Math.pow(10,decimalPlaces);
-        return (double) Math.round(number*power)/power;
+    public static double round (final double number, final int decimalPlaces) {
+        final int power = (int) Math.pow(10, decimalPlaces);
+        return (double) Math.round(number * power) / power;
     }
 }
