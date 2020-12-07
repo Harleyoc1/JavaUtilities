@@ -14,5 +14,5 @@ maven {
 Next, add the following to your `dependencies` section to load java utilities:
 
 ```
-implementation group: 'com.harleyoconnor.javautilities', name: 'JavaUtilities', version: '0.0.5'
+implementation group: 'com.harleyoconnor.javautilities', name: 'JavaUtilities', version: '0.0.6'
 ```
