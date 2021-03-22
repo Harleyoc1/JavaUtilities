@@ -22,7 +22,7 @@ public final class FileUtils {
     public static String ASSETS_PATH = RESOURCES_PATH + "assets/";
 
     /**
-     * Creates a file object at the specified location using the default resource path.
+     * Creates a {@link File} object at the specified location using the default resource path.
      *
      * @param relativePath Path relative to the default resource path.
      * @return The new file object.
@@ -32,7 +32,7 @@ public final class FileUtils {
     }
 
     /**
-     * Creates a file object at the specified location.
+     * Creates a {@link File} object at the specified location.
      *
      * @param path The file path.
      * @param useDefaultResourcePath Whether or not to use the default resources path.

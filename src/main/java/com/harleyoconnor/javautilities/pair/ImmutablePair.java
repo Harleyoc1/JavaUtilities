@@ -9,9 +9,10 @@ package com.harleyoconnor.javautilities.pair;
  * @author Harley O'Connor
  * @see Pair
  * @see MutablePair
+ * @see PartiallyMutablePair
  * @since JavaUtilities 0.0.7
  */
-public final class ImmutablePair<K, V> implements Pair<K, V> {
+public final class ImmutablePair<K, V> extends AbstractPair<K, V> {
 
     private final K key;
     private final V value;
@@ -23,7 +24,7 @@ public final class ImmutablePair<K, V> implements Pair<K, V> {
      * @param key The {@link #key} to set.
      * @param value The {@link #value} to set.
      */
-    public ImmutablePair(K key, V value) {
+    public ImmutablePair(final K key, final V value) {
         this.key = key;
         this.value = value;
     }

@@ -10,10 +10,11 @@ package com.harleyoconnor.javautilities.pair;
  * @param <V> The type of the value.
  * @author Harley O'Connor
  * @see Pair
+ * @see PartiallyMutablePair
  * @see ImmutablePair
  * @since JavaUtilities 0.0.7
  */
-public final class MutablePair<K, V> implements Pair<K, V> {
+public final class MutablePair<K, V> extends AbstractPair<K, V> {
 
     private K key;
     private V value;
@@ -25,15 +26,15 @@ public final class MutablePair<K, V> implements Pair<K, V> {
     public MutablePair() {}
 
     /**
-     * Constructs a new {@link MutablePair} object with the given {@code key}
-     * and {@code value} objects assigned to {@link #key} and {@link #value}.
+     * Constructs a new {@link MutablePair} object with the given {@code initialKey}
+     * and {@code initialValue} objects assigned to {@link #key} and {@link #value}.
      *
-     * @param key The initial {@link #key} to set.
-     * @param value The initial {@link #value} to set.
+     * @param initialKey The initial {@link #key} to set.
+     * @param initialValue The initial {@link #value} to set.
      */
-    public MutablePair(final K key, final V value) {
-        this.key = key;
-        this.value = value;
+    public MutablePair(final K initialKey, final V initialValue) {
+        this.key = initialKey;
+        this.value = initialValue;
     }
 
     /**
@@ -88,7 +89,7 @@ public final class MutablePair<K, V> implements Pair<K, V> {
      * @return This {@link MutablePair} for chaining.
      */
     @Override
-    public Pair<K, V> setKeyValue(K key, V value) {
+    public Pair<K, V> setKeyValue(final K key, final V value) {
         return this.setKey(key).setValue(value);
     }
 
