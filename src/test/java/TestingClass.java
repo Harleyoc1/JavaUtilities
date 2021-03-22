@@ -1,4 +1,4 @@
-import com.harleyoconnor.javautilities.IntegerUtils;
+import com.harleyoconnor.javautilities.utils.IntegerUtils;
 import org.junit.Test;
 
 /**

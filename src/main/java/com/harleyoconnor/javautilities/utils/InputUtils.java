@@ -1,4 +1,4 @@
-package com.harleyoconnor.javautilities;
+package com.harleyoconnor.javautilities.utils;
 
 import javax.annotation.Nullable;
 import java.util.List;

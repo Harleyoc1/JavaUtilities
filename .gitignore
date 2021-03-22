@@ -25,3 +25,6 @@ hs_err_pid*
 # Other
 /.idea/
 /.gradle/
+
+# Build folder.
+**/build/**

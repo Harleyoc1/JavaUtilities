@@ -1,4 +1,4 @@
-package com.harleyoconnor.javautilities;
+package com.harleyoconnor.javautilities.utils;
 
 import java.util.ArrayList;
 import java.util.List;

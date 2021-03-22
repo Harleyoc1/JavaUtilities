@@ -1,9 +1,17 @@
 plugins {
     id 'java'
+    id 'maven'
 }
 
-group 'com.harleyoconnor.javautilities'
-version '0.0.6'
+ext.configFile = file "gradle.properties"
+configFile.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    ext.config = new ConfigSlurper().parse prop
+}
+
+group config.package_group
+version config.version
 
 repositories {
     mavenCentral()
@@ -16,9 +24,23 @@ dependencies {
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+    archiveClassifier.set('sources')
     from sourceSets.main.allSource
 }
+
+task writeNewPom {
+    doLast {
+        pom {
+            project {
+                groupId config.package_group
+                artifactId config.name
+                version config.version
+            }
+        }.writeTo("build/libs/${config.name}-${config.version}.pom")
+    }
+}
+
+jar.finalizedBy('writeNewPom')
 
 artifacts {
     archives sourcesJar
