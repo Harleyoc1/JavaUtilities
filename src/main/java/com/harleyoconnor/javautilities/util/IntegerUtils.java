@@ -1,9 +1,12 @@
-package com.harleyoconnor.javautilities.utils;
+package com.harleyoconnor.javautilities.util;
 
 import java.util.Random;
 
 /**
+ * Provides various useful {@code static} {@link Integer} manipulation functions.
+ *
  * @author Harley O'Connor
+ * @since JavaUtilities 0.0.1
  */
 public final class IntegerUtils {
 
@@ -25,9 +28,11 @@ public final class IntegerUtils {
      *
      * @param number The number to check.
      * @return Whether or not it was prime.
+     * @since JavaUtilities 0.0.3
      */
     public static boolean isPrime (final int number) {
-        if (number == 1 || number == 0) return false;
+        if (number == 1 || number == 0)
+            return false;
 
         for (int i = 2; i <= number / 2; i++) {
             if (number % i == 0) {
@@ -39,11 +44,12 @@ public final class IntegerUtils {
     }
 
     /**
-     * Rounds number to given decimal places
+     * Rounds number to given number of decimal places.
      *
      * @param number The number to round.
      * @param decimalPlaces The number to of places to round to.
-     * @return Rounded number.
+     * @return The rounded number.
+     * @since JavaUtilities 0.0.5
      */
     public static double round (final double number, final int decimalPlaces) {
         final int power = (int) Math.pow(10, decimalPlaces);

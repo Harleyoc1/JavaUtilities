@@ -1,5 +1,5 @@
 import com.harleyoconnor.javautilities.pair.Pair;
-import com.harleyoconnor.javautilities.utils.IntegerUtils;
+import com.harleyoconnor.javautilities.util.IntegerUtils;
 import org.junit.Test;
 
 /**
@@ -19,6 +19,11 @@ public final class TestingClass {
         Pair<Integer, Integer> secondPair = Pair.partiallyMutable(4, 6);
 
         Pair<String, Integer> pair = Pair.mutable();
+
+        final Pair<String, Integer> pairClone = pair.duplicate();
+
+        System.out.println(pair == pairClone);
+        System.out.println(pair.equals(pairClone));
 
         System.out.println(firstPair.equals(secondPair));
         System.out.println(pair.hashCode());

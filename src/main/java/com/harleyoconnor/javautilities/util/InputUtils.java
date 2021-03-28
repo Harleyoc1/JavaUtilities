@@ -1,16 +1,21 @@
-package com.harleyoconnor.javautilities.utils;
+package com.harleyoconnor.javautilities.util;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Scanner;
 
 /**
+ * Provides various useful {@code static} functions for reading from
+ * standard input ({@link System#in}) using {@link #IN}, a simple
+ * {@link Scanner}.
+ *
  * @author Harley O'Connor
+ * @since JavaUtilities 0.0.1
  */
 public final class InputUtils {
 
-    // Create and initialise private scanner - all inputs should be handled from this class.
-    private static final Scanner in = new Scanner(System.in);
+    /** Creates an initialises a {@link Scanner} instance for reading from {@link System#in}. */
+    private static final Scanner IN = new Scanner(System.in);
 
     public static String getInput (final String prompt) {
         return getInput(prompt, true);
@@ -28,7 +33,7 @@ public final class InputUtils {
 
         while (true) {
             System.out.print(prompt + " ");
-            strInput = in.next();
+            strInput = IN.next();
 
             if (!strInput.equals("") || !requireNotEmpty) break;
 
@@ -145,7 +150,7 @@ public final class InputUtils {
      */
     private static void invalidInput (final String invalidValue, final boolean readyNextInput) {
         System.out.println("\nYou must enter a valid " + invalidValue + ".");
-        if (readyNextInput) in.next();
+        if (readyNextInput) IN.next();
     }
 
 }

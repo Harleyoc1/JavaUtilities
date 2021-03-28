@@ -6,6 +6,7 @@ package com.harleyoconnor.javautilities.pair;
  *
  * @param <K> The type of the key.
  * @param <V> The type of the value.
+ *
  * @author Harley O'Connor
  * @see Pair
  * @see MutablePair
@@ -47,6 +48,26 @@ public final class ImmutablePair<K, V> extends AbstractPair<K, V> {
     @Override
     public V getValue() {
         return value;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return The duplicated {@link ImmutablePair}.
+     */
+    @Override
+    public ImmutablePair<K, V> duplicate() {
+        return new ImmutablePair<>(this.key, this.value);
+    }
+
+    /**
+     * Returns this {@link ImmutablePair}.
+     *
+     * @return This {@link ImmutablePair}.
+     */
+    @Override
+    public ImmutablePair<K, V> toImmutable() {
+        return this;
     }
 
 }

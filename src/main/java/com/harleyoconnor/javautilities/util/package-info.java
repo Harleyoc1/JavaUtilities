@@ -3,6 +3,6 @@
  */
 @javax.annotation.ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package com.harleyoconnor.javautilities;
+package com.harleyoconnor.javautilities.util;
 
 import com.harleyoconnor.javautilities.annotation.MethodsReturnNonnullByDefault;

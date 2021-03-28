@@ -1,4 +1,4 @@
-package com.harleyoconnor.javautilities.utils;
+package com.harleyoconnor.javautilities.util;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * Provides various useful {@code static} {@link File}-related functions.
+ *
  * @author Harley O'Connor
+ * @since JavaUtilities 0.0.2
  */
 public final class FileUtils {
 
@@ -47,6 +50,7 @@ public final class FileUtils {
      *
      * @param relativePath The path relative to the resources/assets folder.
      * @return The path including the assets path defined at the top of this class.
+     * @since JavaUtilities 0.0.5
      */
     public static String getInternalPath (final String relativePath) {
         return ASSETS_PATH + relativePath;

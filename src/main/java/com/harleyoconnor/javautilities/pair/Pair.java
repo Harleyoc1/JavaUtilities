@@ -14,6 +14,7 @@ import java.util.Objects;
  *
  * @param <K> The type of the key.
  * @param <V> The type of the value.
+ *
  * @author Harley O'Connor
  * @see MutablePair
  * @see PartiallyMutablePair
@@ -38,7 +39,7 @@ public interface Pair<K, V> {
      *         but some implementations, may provide it (like {@link MutablePair#setKey(Object)}).
      */
     default Pair<K, V> setKey(K key) {
-        throw settingFieldUnsupported(this.getClass(), "key");
+        throw new UnsupportedOperationException(getUnsupportedResetMessage(this.getClass(), "key"));
     }
 
     /**
@@ -57,7 +58,7 @@ public interface Pair<K, V> {
      *         but some implementations, may provide it (like {@link MutablePair#setValue(Object)}).
      */
     default Pair<K, V> setValue(V value) {
-        throw settingFieldUnsupported(this.getClass(), "value");
+        throw new UnsupportedOperationException(getUnsupportedResetMessage(this.getClass(), "value"));
     }
 
     /**
@@ -70,11 +71,35 @@ public interface Pair<K, V> {
      *         but some implementations, may provide it (like {@link MutablePair#setKeyValue(Object, Object)}).
      */
     default Pair<K, V> setKeyValue(K key, V value) {
-        throw settingFieldUnsupported(this.getClass(), "key and value");
+        throw new UnsupportedOperationException(getUnsupportedResetMessage(this.getClass(), "key and value"));
     }
 
-    static <P extends Pair<?, ?>> UnsupportedOperationException settingFieldUnsupported(final Class<P> pairClass, final String nameOfField) {
-        return new UnsupportedOperationException("Pair implementation '" + pairClass.getSimpleName() + "' does not support resetting the " + nameOfField + ".");
+    static <P extends Pair<?, ?>> String getUnsupportedResetMessage(final Class<P> pairClass, final String nameOfField) {
+        return "Pair implementation '" + pairClass.getSimpleName() + "' does not support resetting the " + nameOfField + ".";
+    }
+
+    /**
+     * Duplicates this {@link Pair}, creating a new {@link Pair}
+     * object with this {@link Pair}'s {@code key} and {@code value}.
+     *
+     * @return The duplicated {@link Pair}.
+     * @since JavaUtilities 0.0.9
+     */
+    Pair<K, V> duplicate();
+
+    /**
+     * Converts this {@link Pair} to an {@link ImmutablePair}.
+     *
+     * <p>Note that if this {@link Pair} is already an {@link ImmutablePair}
+     * it will return itself. See {@link #duplicate()} for creating a new
+     * {@link Pair} object from this one.</p>
+     *
+     * @return An {@link ImmutablePair} with this {@link Pair}'s {@code key}
+     *         {@code value}.
+     * @since JavaUtilities 0.0.9
+     */
+    default ImmutablePair<K, V> toImmutable() {
+        return immutable(this.getKey(), this.getValue());
     }
 
     /**
