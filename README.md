@@ -1,6 +1,11 @@
 # Java Utilities
 My custom set of miscellaneous but useful utility classes for various Java projects.
 
+The aims of this project include: 
+
+- Providing code I believe should be included in the JDK. 
+- Minimising effort required to use features already included in the JDK.
+
 ## Gradle Setup
 *Don't reinvent the wheel, add it to your build.gradle!*
 
