@@ -21,27 +21,22 @@ import java.util.Objects;
 public abstract class AbstractPair<K, V> implements Pair<K, V> {
 
     /**
-     * Indicates whether or not the given {@link Object} {@code obj} is equal to
-     * this {@link Pair}.
+     * {@inheritDoc}
      *
-     * <p>Note that two pairs will not be equal if they are of different classes (such
-     * as an {@link ImmutablePair} and a {@link MutablePair}) even if they have the same
-     * key and value. For an equals that is not 'class sensitive', use
-     * {@link #isEqual(Pair)}</p>
-     *
-     * @param obj The reference object with which to compare.
+     * @param object The reference object with which to compare.
      * @return {@code true} if this object is the same as the {@code obj}
      *         argument; {@code false} otherwise.
      */
     @Override
-    public boolean equals(@Nullable final Object obj) {
-        if (this == obj)
+    public boolean equals(@Nullable final Object object) {
+        if (this == object)
             return true;
-        if (obj == null || this.getClass() != obj.getClass())
+        if (!(object instanceof Pair))
             return false;
 
-        final Pair<?, ?> otherPair = (Pair<?, ?>) obj;
-        return Objects.equals(this.getKey(), otherPair.getKey()) && Objects.equals(this.getKey(), otherPair.getKey());
+        final Pair<?, ?> otherPair = (Pair<?, ?>) object;
+        return Objects.equals(this.getKey(), otherPair.getKey()) &&
+                Objects.equals(this.getKey(), otherPair.getKey());
     }
 
     /**

@@ -3,7 +3,7 @@ My custom set of miscellaneous but useful utility classes for various Java proje
 
 The aims of this project include: 
 
-- Providing code I believe should be included in the JDK. 
+- Providing features I believe should be included in the JDK. 
 - Minimising effort required to use features already included in the JDK.
 
 ## Gradle Setup

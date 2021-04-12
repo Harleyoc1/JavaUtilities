@@ -21,8 +21,8 @@ public final class MutablePair<K, V> extends AbstractPair<K, V> {
     private V value;
 
     /**
-     * Constructs an empty {@link ImmutablePair}, or in other words one in which
-     * both the {@link #key} and {@link #value} are null.
+     * Constructs an (initially) empty {@link MutablePair}, or in other words one
+     * in which both the {@link #key} and {@link #value} are null.
      */
     public MutablePair() {}
 
