@@ -1,6 +1,5 @@
 package com.harleyoconnor.javautilities.function;
 
-
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -8,15 +7,15 @@ import java.util.function.Function;
 /**
  * Mirrors the {@link java.util.function.BiFunction}, except that
  * {@link #apply(Object, Object)} can throw a {@link Throwable} of type
- * {@link E}.
+ * {@link T}.
  *
  * <p>This is a {@link FunctionalInterface} whose functional method is
  * {@link #apply(Object, Object)}.
  *
- * @param <T> The type of the first argument to the function.
- * @param <U> The type of the second argument to the function.
+ * @param <U> The type of the first argument to the function.
+ * @param <S> The type of the second argument to the function.
  * @param <R> The type of the result of the function.
- * @param <E> The type that the function {@code throws}.
+ * @param <T> The type that the function {@code throws}.
  *
  * @author Harley O'Connor
  * @see java.util.function.BiFunction
@@ -24,17 +23,17 @@ import java.util.function.Function;
  * @since JavaUtilities 0.0.9
  */
 @FunctionalInterface
-public interface ThrowableBiFunction<T, U, R, E extends Throwable> {
+public interface ThrowableBiFunction<U, S, R, T extends Throwable> {
 
     /**
      * Applies this function to the given arguments.
      *
-     * @param t The first function argument.
-     * @param u The second function argument.
+     * @param u The first function argument.
+     * @param s The second function argument.
      * @return The function result.
-     * @throws E The function {@link Throwable}.
+     * @throws T The function {@link Throwable}.
      */
-    R apply(T t, U u) throws E;
+    R apply(U u, S s) throws T;
 
     /**
      * Returns a composed function that first applies this function to
@@ -49,14 +48,14 @@ public interface ThrowableBiFunction<T, U, R, E extends Throwable> {
      *         applies the {@code after} function.
      * @throws NullPointerException If {@code after} is {@code null}.
      */
-    default <V> ThrowableBiFunction<T, U, V, E> andThen(ThrowableFunction<? super R, ? extends V, E> after) {
+    default <V> ThrowableBiFunction<U, S, V, T> andThen(ThrowableFunction<? super R, ? extends V, T> after) {
         Objects.requireNonNull(after);
-        return (T t, U u) -> after.apply(apply(t, u));
+        return (U u, S s) -> after.apply(apply(u, s));
     }
 
     /**
      * Creates a {@link ThrowableBiFunction} that acts as a "proxy" to the given
-     * {@link java.util.function.BiFunction} (calling {@link BiFunction#apply(Object, Object)}
+     * {@link BiFunction} (calling {@link BiFunction#apply(Object, Object)}
      * when {@link #apply(Object, Object)} is called on it). It can throw a
      * {@link Throwable} of inferred type {@link E}.
      *

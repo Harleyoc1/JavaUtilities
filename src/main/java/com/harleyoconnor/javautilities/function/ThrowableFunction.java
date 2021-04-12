@@ -1,36 +1,35 @@
 package com.harleyoconnor.javautilities.function;
 
-
 import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.function.Function;
 
 /**
  * Mirrors the {@link java.util.function.Function}, except that {@link #apply(Object)}
- * can throw a {@link Throwable} of type {@link E}.
+ * can throw a {@link Throwable} of type {@link T}.
  *
  * <p>This is a {@link FunctionalInterface} whose functional method is
  * {@link #apply(Object)}.
  *
- * @param <T> The type of the input to the function.
+ * @param <U> The type of the input to the function.
  * @param <R> The type of the result of the function.
- * @param <E> The type that the function {@code throws}.
+ * @param <T> The type that the function {@code throws}.
  *
  * @author Harley O'Connor
  * @see java.util.function.Function
  * @since JavaUtilities 0.0.9
  */
 @FunctionalInterface
-public interface ThrowableFunction<T, R, E extends Throwable> {
+public interface ThrowableFunction<U, R, T extends Throwable> {
 
     /**
-     * Applies this function to the given argument, or throws {@link E}.
+     * Applies this function to the given argument, or throws {@link T}.
      *
-     * @param t The function argument.
+     * @param u The function argument.
      * @return The function result.
-     * @throws E The function {@link Throwable}.
+     * @throws T The function {@link Throwable}.
      */
-    R apply(T t) throws E;
+    R apply(U u) throws T;
 
     /**
      * Returns a composed function that first applies the {@code before}
@@ -47,7 +46,7 @@ public interface ThrowableFunction<T, R, E extends Throwable> {
      *
      * @see #andThen(ThrowableFunction)
      */
-    default <V> ThrowableFunction<V, R, E> compose(@Nonnull ThrowableFunction<? super V, ? extends T, E> before) {
+    default <V> ThrowableFunction<V, R, T> compose(@Nonnull ThrowableFunction<? super V, ? extends U, T> before) {
         Objects.requireNonNull(before);
         return (V v) -> apply(before.apply(v));
     }
@@ -67,9 +66,9 @@ public interface ThrowableFunction<T, R, E extends Throwable> {
      *
      * @see #compose(ThrowableFunction)
      */
-    default <V> ThrowableFunction<T, V, E> andThen(@Nonnull ThrowableFunction<? super R, ? extends V, E> after) {
+    default <V> ThrowableFunction<U, V, T> andThen(@Nonnull ThrowableFunction<? super R, ? extends V, T> after) {
         Objects.requireNonNull(after);
-        return (T t) -> after.apply(apply(t));
+        return (U u) -> after.apply(apply(u));
     }
 
     /**
