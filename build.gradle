@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'maven'
+    id 'maven-publish'
 }
 
 ext.configFile = file "gradle.properties"
@@ -18,30 +18,49 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: config.findbugs_version
 
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: config.junit_version
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier.set('sources')
-    from sourceSets.main.allSource
+test {
+    useJUnitPlatform()
 }
 
-task writeNewPom {
-    doLast {
-        pom {
-            project {
-                groupId config.package_group
-                artifactId config.name
-                version config.version
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = config.name
+
+            from components.java
+
+            pom {
+                url = "https://github.com/Harleyoc1/${config.name}"
+                licenses {
+                    license {
+                        name = 'MIT'
+                        url = 'https://mit-license.org'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'harleyoconnor'
+                        name = 'Harley O\'Connor'
+                        email = 'harleyoc1@gmail.com'
+                    }
+                }
+                scm {
+                    connection = "scm:git:git://github.com/Harleyoc1/${config.name}.git"
+                    developerConnection = "scm:git:ssh://github.com/Harleyoc1/${config.name}.git"
+                    url = "https://github.com/Harleyoc1/${config.name}"
+                }
             }
-        }.writeTo("build/libs/${config.name}-${config.version}.pom")
+        }
     }
-}
-
-jar.finalizedBy('writeNewPom')
-
-artifacts {
-    archives sourcesJar
 }
