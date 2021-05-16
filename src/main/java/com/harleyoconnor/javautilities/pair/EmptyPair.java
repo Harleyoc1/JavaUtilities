@@ -16,7 +16,7 @@ package com.harleyoconnor.javautilities.pair;
  * @author Harley O'Connor
  * @see Pair
  * @see Pair#empty()
- * @since JavaUtilities 0.0.10
+ * @since JavaUtilities 0.1.0
  */
 public final class EmptyPair<K, V> implements Pair<K, V> {
 

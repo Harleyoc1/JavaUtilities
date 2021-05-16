@@ -40,11 +40,10 @@ public abstract class AbstractPair<K, V> implements Pair<K, V> {
     }
 
     /**
-     * Returns the hash code for this {@link Pair}. This is done by passing the {@code key}
-     * and {@code value} to {@link Objects#hash(Object...)} - more details can be found
-     * there.
+     * {@inheritDoc}
      *
-     * @return The hash code for this {@link Pair}.
+     * @return The hash code for this {@link Pair} object.
+     * @see Object#hashCode()
      * @see Objects#hash(Object...)
      */
     @Override
@@ -53,10 +52,9 @@ public abstract class AbstractPair<K, V> implements Pair<K, V> {
     }
 
     /**
-     * Converts this {@link Pair} object to a {@link String}, with both the {@code key}
-     * being added first, a colon, and then the {@code value}.
+     * {@inheritDoc}
      *
-     * @return The {@link Pair} as a {@link String}.
+     * @return The {@link String} representation of this {@link Pair}.
      */
     @Override
     public String toString() {

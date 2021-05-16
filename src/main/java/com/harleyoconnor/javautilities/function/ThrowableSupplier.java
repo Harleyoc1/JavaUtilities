@@ -14,7 +14,7 @@ import java.util.function.Supplier;
  *
  * @author Harley O'Connor
  * @see Supplier
- * @since JavaUtilities 0.0.10
+ * @since JavaUtilities 0.1.0
  */
 @FunctionalInterface
 public interface ThrowableSupplier<R, T extends Throwable> {

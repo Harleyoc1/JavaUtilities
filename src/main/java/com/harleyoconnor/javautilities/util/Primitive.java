@@ -11,7 +11,7 @@ import java.util.stream.Stream;
  * equivalent.</p>
  *
  * @author Harley O'Connor
- * @since JavaUtilities 0.0.10
+ * @since JavaUtilities 0.1.0
  */
 public enum Primitive {
     BOOLEAN(boolean.class, Boolean.class),

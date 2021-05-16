@@ -88,7 +88,7 @@ public interface Pair<K, V> {
      * @return The {@code message} for the {@link Exception}.
      */
     static <P extends Pair<?, ?>> String unsupportedMutation(final Class<P> pairClass, final String nameOfField) {
-        return "Pair implementation '" + pairClass.getSimpleName() + "' does not support resetting the " + nameOfField + ".";
+        return "Pair implementation '" + pairClass.getName() + "' does not support resetting the " + nameOfField + ".";
     }
 
     /**
@@ -126,7 +126,7 @@ public interface Pair<K, V> {
      * @return {@code true} if the specified {@code object} is equal to
      *         this {@link Pair}.
      * @see Object#equals(Object)
-     * @since JavaUtilities 0.0.10
+     * @since JavaUtilities 0.1.0
      */
     boolean equals(@Nullable final Object object);
 
@@ -137,7 +137,7 @@ public interface Pair<K, V> {
      * @return The hash code for this {@link Pair} object.
      * @see Object#hashCode()
      * @see Objects#hash(Object...)
-     * @since JavaUtilities 0.0.10
+     * @since JavaUtilities 0.1.0
      */
     int hashCode();
 
@@ -186,7 +186,7 @@ public interface Pair<K, V> {
      *
      * @return {@code true} if this {@link Pair} is empty; {@code false}
      *         otherwise.
-     * @since JavaUtilities 0.0.10
+     * @since JavaUtilities 0.1.0
      */
     default boolean isEmpty() {
         return EmptyPair.INSTANCE.equals(this);
@@ -270,7 +270,7 @@ public interface Pair<K, V> {
      * @param <K> The type of the non-existent {@code key}.
      * @param <V> The type of the non-existent {@code value}.
      * @return The {@link EmptyPair#INSTANCE} instance.
-     * @since JavaUtilities 0.0.10
+     * @since JavaUtilities 0.1.0
      */
     @SuppressWarnings("unchecked")
     static <K, V> EmptyPair<K, V> empty() {
