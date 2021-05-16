@@ -21,7 +21,7 @@ maven {
 Next, add the following to your `dependencies` section to load java utilities:
 
 ```groovy
-implementation group: 'com.harleyoconnor.javautilities', name: 'JavaUtilities', version: '0.0.9'
+implementation group: 'com.harleyoconnor.javautilities', name: 'JavaUtilities', version: '0.1.0'
 ```
 
 Also note that as of Gradle 7 you will need to add the following line to the maven closure from above since my website does not currently have an SSL certificate:
