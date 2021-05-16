@@ -245,8 +245,8 @@ public interface Reflect<T> {
      * from calling {@link Object#getClass()} on the specified {@code parameter}s.</p>
      *
      * @param name The {@link String} name of the {@link Method}.
-     * @param parameters The parameters to pass on invocation of the specified
-     *                   {@code method}.
+     * @param parameterTypes The {@link Class} types the member {@code method} takes.
+     * @param parameters The parameters to pass on invocation of the specified {@code method}.
      * @param <V> The return type of the {@code method}.
      * @return The value returned by the invocation of the {@code method}.
      * @throws NoSuchMethodException If a {@code method} with the specified {@code name}
@@ -378,6 +378,7 @@ public interface Reflect<T> {
      * {@code parameter} {@link Class} types, calling it with the specified parameters
      * {@link Object}s.
      *
+     * @param parameterTypes The {@link Class} types the member {@code constructor} takes.
      * @param parameters The parameters to pass on instantiation of the specified
      *                   {@code constructor}.
      * @return The constructed {@link Object} of type {@link T}.
@@ -453,6 +454,7 @@ public interface Reflect<T> {
      * <p>This modification of {@link #instantiate(List)} infers the {@link Class} type.
      * This is mainly for when creating inner classes in which the actual type is not known.</p>
      *
+     * @param parameterTypes The {@link Class} types the member {@code constructor} takes.
      * @param parameters The parameters to pass on instantiation of the specified
      *                   {@code constructor}.
      * @param <V> The inferred type of the {@link T}.
