@@ -29,6 +29,7 @@ public final class IntegerUtils {
      * @param number The number to check.
      * @return Whether or not it was prime.
      * @since JavaUtilities 0.0.3
+     * @author Archie Adams
      */
     public static boolean isPrime (final int number) {
         if (number == 1 || number == 0)
@@ -50,6 +51,7 @@ public final class IntegerUtils {
      * @param decimalPlaces The number to of places to round to.
      * @return The rounded number.
      * @since JavaUtilities 0.0.5
+     * @author Archie Adams
      */
     public static double round (final double number, final int decimalPlaces) {
         final int power = (int) Math.pow(10, decimalPlaces);

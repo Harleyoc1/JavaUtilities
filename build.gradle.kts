@@ -5,7 +5,7 @@ plugins {
     id("maven-publish")
 }
 
-val name = property("name")
+val projectName = property("name")
 group = property("group")
 version = property("version")
 
@@ -32,10 +32,13 @@ java {
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
-            artifactId = name
+            artifactId = projectName
+
+            from(components["java"])
 
             pom {
-                url.set("https://github.com/Harleyoc1/${name}")
+                name.set(projectName)
+                url.set("https://github.com/Harleyoc1/${projectName}")
                 licenses {
                     license {
                         name.set("MIT")
@@ -50,9 +53,9 @@ publishing {
                     }
                 }
                 scm {
-                    connection.set("scm:git:git://github.com/Harleyoc1/${name}.git")
-                    developerConnection.set("scm:git:ssh://github.com/Harleyoc1/${name}.git")
-                    url.set("https://github.com/Harleyoc1/${name}")
+                    connection.set("scm:git:git://github.com/Harleyoc1/${projectName}.git")
+                    developerConnection.set("scm:git:ssh://github.com/Harleyoc1/${projectName}.git")
+                    url.set("https://github.com/Harleyoc1/${projectName}")
                 }
             }
         }
