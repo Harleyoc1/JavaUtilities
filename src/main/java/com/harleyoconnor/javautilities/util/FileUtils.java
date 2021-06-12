@@ -1,8 +1,8 @@
 package com.harleyoconnor.javautilities.util;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,23 +15,65 @@ import java.util.Objects;
 public final class FileUtils {
 
     /**
-     * The default resources path used by functions in this class.
+     * Suppresses default constructor, ensuring non-instantiability.
      */
-    public static String RESOURCES_PATH = "src/main/resources/";
+    private FileUtils() {}
+
+    /** The default resources path used by functions in this class. */
+    private static String RESOURCES_PATH = "src/main/resources/";
+
+    /** The default assets path used by functions in this class. */
+    private static String ASSETS_PATH = RESOURCES_PATH + "assets/";
 
     /**
-     * The default assets path used by functions in this class.
+     * Returns the current default {@link #RESOURCES_PATH}.
+     *
+     * @return The default {@link #RESOURCES_PATH}.
+     * @since JavaUtilities 0.1.1
      */
-    public static String ASSETS_PATH = RESOURCES_PATH + "assets/";
+    public static String resourcePath() {
+        return RESOURCES_PATH;
+    }
 
     /**
-     * Creates a {@link File} object at the specified location using the default resource path.
+     * Sets a new default {@link #RESOURCES_PATH}.
+     *
+     * @param resourcesPath The new {@link #RESOURCES_PATH} to set.
+     * @since JavaUtilities 0.1.1
+     */
+    public static void setResourcesPath(final String resourcesPath) {
+        RESOURCES_PATH = resourcesPath;
+    }
+
+    /**
+     * Returns the current default {@link #ASSETS_PATH}.
+     *
+     * @return The default {@link #ASSETS_PATH}.
+     * @since JavaUtilities 0.1.1
+     */
+    public static String assetsPath() {
+        return ASSETS_PATH;
+    }
+
+    /**
+     * Sets a new default {@link #ASSETS_PATH}.
+     *
+     * @param assetsPath The new {@link #ASSETS_PATH} to set.
+     * @since JavaUtilities 0.1.1
+     */
+    public static void setAssetsPath(final String assetsPath) {
+        ASSETS_PATH = assetsPath;
+    }
+
+    /**
+     * Creates a {@link File} object at the specified location using the default
+     * resource path.
      *
      * @param relativePath Path relative to the default resource path.
      * @return The new file object.
      */
-    public static File getFile (final String relativePath) {
-        return getFile(relativePath, true);
+    public static File file(final String relativePath) {
+        return file(relativePath, true);
     }
 
     /**
@@ -41,7 +83,7 @@ public final class FileUtils {
      * @param useDefaultResourcePath Whether or not to use the default resources path.
      * @return The new file object.
      */
-    public static File getFile (final String path, final boolean useDefaultResourcePath) {
+    public static File file(final String path, final boolean useDefaultResourcePath) {
         return new File ((useDefaultResourcePath ? ASSETS_PATH : "") + path);
     }
 
@@ -52,32 +94,40 @@ public final class FileUtils {
      * @return The path including the assets path defined at the top of this class.
      * @since JavaUtilities 0.0.5
      */
-    public static String getInternalPath (final String relativePath) {
+    public static String internalPath(final String relativePath) {
         return ASSETS_PATH + relativePath;
     }
 
     /**
-     * Gets child files of a directory as list, or returns null if the file given is not a directory.
+     * Gets children files of a directory as {@link List}, or returns
+     * {@link Collections#emptyList()} if the specified given is not a directory.
      *
      * @param directory The directory.
      * @return The list of child file objects.
+     * @throws SecurityException If a security manager exists and its
+     *         {@link SecurityManager#checkRead(String)} method denies read access
+     *         to the directory
      */
-    @Nullable
-    public static List<File> getChildFiles (final File directory) {
-        return !directory.isDirectory() ? null : Arrays.asList(Objects.requireNonNull(directory.listFiles()));
+    public static List<File> filesAsList(final File directory) {
+        return !directory.isDirectory() ? Collections.emptyList() :
+                Arrays.asList(Objects.requireNonNull(directory.listFiles()));
     }
 
     /**
-     * Gets child files with the file extension given as a list, or returns null if the file given is not
-     * a directory.
+     * Gets children files with the file extension given as a {@link List}, or returns
+     * {@link Collections#emptyList()} if the specified file is not a directory.
      *
      * @param directory The directory.
      * @param fileExtension The file extension.
      * @return The list of child files objects.
      */
-    @Nullable
-    public static List<File> getChildFiles (final File directory, final String fileExtension) {
-        return !directory.isDirectory() ? null : Arrays.asList(Objects.requireNonNull(directory.listFiles(file -> file.getName().toLowerCase().endsWith(fileExtension.toLowerCase()))));
+    public static List<File> filesAsList(final File directory,
+                                         final String fileExtension) {
+        return !directory.isDirectory() ? Collections.emptyList() :
+                Arrays.asList(Objects.requireNonNull(directory
+                        .listFiles(file -> file.getName().toLowerCase()
+                                .endsWith(fileExtension.toLowerCase()))
+                ));
     }
 
 }
