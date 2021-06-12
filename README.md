@@ -6,6 +6,9 @@ The aims of this project include:
 - Providing features I believe should be included in the JDK. 
 - Minimising effort required to use features already included in the JDK.
 
+## Java 16
+Versions `0.1.1+` will require Java 16 or higher. Versions below this should work on any version from Java 8 upwards. 
+
 ## Gradle Setup
 *Don't reinvent the wheel, add it to your build.gradle!*
 
