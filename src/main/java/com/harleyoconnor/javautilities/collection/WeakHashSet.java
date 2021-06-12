@@ -31,6 +31,7 @@ import java.util.*;
  */
 public final class WeakHashSet<E> extends AbstractSet<E> implements Cloneable, Serializable {
 
+    @Serial
     static final long serialVersionUID = -8966555053544932555L;
 
     private transient WeakHashMap<E, Object> map;
@@ -208,6 +209,7 @@ public final class WeakHashSet<E> extends AbstractSet<E> implements Cloneable, S
      * @param s The stream to serialise to.
      * @throws IOException If an I/O error occurs.
      */
+    @Serial
     private void writeObject(ObjectOutputStream s)
             throws IOException {
         // Write out any hidden serialization magic.
@@ -247,6 +249,7 @@ public final class WeakHashSet<E> extends AbstractSet<E> implements Cloneable, S
      * @throws ClassNotFoundException If the class of the serialised object
      *                                could not be found.
      */
+    @Serial
     private void readObject(ObjectInputStream s)
             throws IOException, ClassNotFoundException {
         // Read in any hidden serialization magic.

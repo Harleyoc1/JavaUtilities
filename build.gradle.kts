@@ -27,6 +27,10 @@ tasks.test {
 java {
     withJavadocJar()
     withSourcesJar()
+
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(16))
+    }
 }
 
 publishing {

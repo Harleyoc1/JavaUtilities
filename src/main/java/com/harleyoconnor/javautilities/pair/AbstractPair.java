@@ -31,10 +31,9 @@ public abstract class AbstractPair<K, V> implements Pair<K, V> {
     public boolean equals(@Nullable final Object object) {
         if (this == object)
             return true;
-        if (!(object instanceof Pair))
+        if (!(object instanceof final Pair<?, ?> otherPair))
             return false;
 
-        final Pair<?, ?> otherPair = (Pair<?, ?>) object;
         return Objects.equals(this.getKey(), otherPair.getKey()) &&
                 Objects.equals(this.getKey(), otherPair.getKey());
     }

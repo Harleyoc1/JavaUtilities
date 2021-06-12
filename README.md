@@ -1,4 +1,4 @@
-# Java Utilities
+# Java Utilities ![](https://img.shields.io/badge/Java-16-green) [![GitHub](https://img.shields.io/github/license/Harleyoc1/JavaUtilities)](./LICENSE)
 My custom set of miscellaneous but useful utility classes for various Java projects.
 
 The aims of this project include: 
@@ -14,6 +14,7 @@ To add it to your `build.gradle`, first add the following code to the `repositor
 ```groovy
 maven {
     name 'Harley O\'Connor Maven'
+    allowInsecureProtocol = true
     url 'http://harleyoconnor.com/maven/'
 }
 ```
@@ -22,10 +23,4 @@ Next, add the following to your `dependencies` section to load java utilities:
 
 ```groovy
 implementation group: 'com.harleyoconnor.javautilities', name: 'JavaUtilities', version: '0.1.0'
-```
-
-Also note that as of Gradle 7 you will need to add the following line to the maven closure from above since my website does not currently have an SSL certificate:
-
-```groovy
-allowInsecureProtocol = true
 ```

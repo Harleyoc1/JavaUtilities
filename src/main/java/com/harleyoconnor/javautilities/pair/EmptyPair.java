@@ -73,10 +73,9 @@ public final class EmptyPair<K, V> implements Pair<K, V> {
     public boolean equals(Object object) {
         if (object instanceof EmptyPair)
             return true;
-        if (!(object instanceof Pair))
+        if (!(object instanceof final Pair<?, ?> pair))
             return false;
 
-        final Pair<?, ?> pair = ((Pair<?, ?>) object);
         return pair.getKey() == null && pair.getValue() == null;
     }
 
