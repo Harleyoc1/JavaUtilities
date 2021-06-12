@@ -32,7 +32,7 @@ import java.util.*;
 public final class WeakHashSet<E> extends AbstractSet<E> implements Cloneable, Serializable {
 
     @Serial
-    static final long serialVersionUID = -8966555053544932555L;
+    private static final long serialVersionUID = -641790799725457127L;
 
     private transient WeakHashMap<E, Object> map;
 
@@ -124,7 +124,7 @@ public final class WeakHashSet<E> extends AbstractSet<E> implements Cloneable, S
      * Returns {@code true} if this set contains the specified element.
      * More formally, returns {@code true} if and only if this set
      * contains an element {@code e} such that
-     * <tt>(object==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;object.equals(e))</tt>.
+     * {@code (object==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;object.equals(e))}.
      *
      * @param object An element whose presence in this set is to be tested.
      * @return {@code true} if this set contains the specified element;
@@ -139,7 +139,7 @@ public final class WeakHashSet<E> extends AbstractSet<E> implements Cloneable, S
      * Adds the specified element to this set if it is not already present.
      * More formally, adds the specified element {@code element} to this set if
      * this set contains no element {@code e2} such that
-     * <tt>(element==null&nbsp;?&nbsp;e2==null&nbsp;:&nbsp;element.equals(e2))</tt>.
+     * {@code element==null&nbsp;?&nbsp;e2==null&nbsp;:&nbsp;element.equals(e2)}.
      * If this set already contains the element, the call leaves the set
      * unchanged and returns {@code false}.
      *
@@ -155,7 +155,7 @@ public final class WeakHashSet<E> extends AbstractSet<E> implements Cloneable, S
     /**
      * Removes the specified element from this set if it is present.
      * More formally, removes an element {@code e} such that
-     * <tt>(object == null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;object.equals(e))</tt>,
+     * {@code object == null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;object.equals(e)},
      * if this set contains such an element.  Returns {@code true} if
      * this set contained the element (or equivalently, if this set
      * changed as a result of the call).  (This set will not contain the
