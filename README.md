@@ -1,4 +1,4 @@
-# Java Utilities ![](https://img.shields.io/badge/Java-16-green) [![GitHub](https://img.shields.io/github/license/Harleyoc1/JavaUtilities)](./LICENSE)
+# Java Utilities ![](https://img.shields.io/badge/Java-16-green) [![GitHub](https://img.shields.io/github/license/Harleyoc1/JavaUtilities)](./LICENSE) ![](https://img.shields.io/github/workflow/status/Harleyoc1/JavaUtilities/Java%20CI%20with%20Gradle) [![](https://img.shields.io/github/v/tag/Harleyoc1/JavaUtilities)](https://github.com/Harleyoc1/JavaUtilities/releases)
 My custom set of miscellaneous but useful utility classes for various Java projects.
 
 The aims of this project include: 
@@ -14,6 +14,7 @@ Versions `0.1.1+` will require Java 16 or higher. Versions below this should wor
 
 To add it to your `build.gradle`, first add the following code to the `repositories` section to load my maven repository:
 
+`build.gradle` - For Groovy build scripts.
 ```groovy
 maven {
     name 'Harley O\'Connor Maven'
@@ -22,8 +23,21 @@ maven {
 }
 ```
 
+`build.gradle.kts` - For Kotlin build scripts.
+```kotlin
+maven("http://harleyoconnor.com/maven/") {
+    this.isAllowInsecureProtocol = true
+}
+```
+
 Next, add the following to your `dependencies` section to load java utilities:
 
+`build.gradle` - For Groovy build scripts.
 ```groovy
 implementation group: 'com.harleyoconnor.javautilities', name: 'JavaUtilities', version: '0.1.0'
+```
+
+`build.gradle.kts` - For Kotlin build scripts.
+```kotlin
+implementation(group = "com.harleyoconnor.javautilities", name = "JavaUtilities", version = "0.1.0")
 ```
