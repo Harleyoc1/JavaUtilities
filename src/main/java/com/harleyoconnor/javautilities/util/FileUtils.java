@@ -1,10 +1,9 @@
 package com.harleyoconnor.javautilities.util;
 
 import java.io.File;
-import java.util.Arrays;
+import java.io.FileFilter;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Provides various useful {@code static} {@link File}-related functions.
@@ -99,35 +98,76 @@ public final class FileUtils {
     }
 
     /**
-     * Gets children files of a directory as {@link List}, or returns
-     * {@link Collections#emptyList()} if the specified given is not a directory.
+     * Returns a {@link List} of {@link File} objects denoting the files in the
+     * directory denoted by the specified {@code directory}.
      *
-     * @param directory The directory.
-     * @return The list of child file objects.
+     * <p>If there is an I/O error, the specified {@code directory} is not a
+     * directory, or the directory does not contain any files,
+     * {@link Collections#emptyList()} will be returned.</p>
+     *
+     * @param directory The directory, as a {@link File} object.
+     * @return Returns a {@link List} of {@link File} objects denoting the files
+     *         in the directory denoted by the specified {@code directory}, or
+     *         {@link Collections#emptyList()} if the specified {@code directory}
+     *         is not a directory, an I/O error occurs, or the directory contains
+     *         no files.
      * @throws SecurityException If a security manager exists and its
      *         {@link SecurityManager#checkRead(String)} method denies read access
      *         to the directory
      */
     public static List<File> filesAsList(final File directory) {
-        return !directory.isDirectory() ? Collections.emptyList() :
-                Arrays.asList(Objects.requireNonNull(directory.listFiles()));
+        final var files = directory.listFiles();
+        return files == null ? Collections.emptyList() : List.of(files);
     }
 
     /**
-     * Gets children files with the file extension given as a {@link List}, or returns
-     * {@link Collections#emptyList()} if the specified file is not a directory.
+     * Returns a {@link List} of {@link File} objects denoting the files in the
+     * directory denoted by the specified {@code directory}, filtered to those
+     * bearing the specified file {@code extension}.
      *
-     * @param directory The directory.
-     * @param fileExtension The file extension.
-     * @return The list of child files objects.
+     * <p>If there is an I/O error, the specified {@code directory} is not a
+     * directory, or the directory does not contain any files,
+     * {@link Collections#emptyList()} will be returned.</p>
+     *
+     * @param directory The directory, as a {@link File} object.
+     * @param extension The file extension to filter to.
+     * @return Returns a {@link List} of {@link File} objects denoting the files
+     *         in the directory denoted by the specified {@code directory},
+     *         filtered to those bearing the specified file {@code extension}, or
+     *         {@link Collections#emptyList()} if the specified {@code directory}
+     *         is not a directory, an I/O error occurs, or the directory contains
+     *         no files.
      */
     public static List<File> filesAsList(final File directory,
-                                         final String fileExtension) {
-        return !directory.isDirectory() ? Collections.emptyList() :
-                Arrays.asList(Objects.requireNonNull(directory
-                        .listFiles(file -> file.getName().toLowerCase()
-                                .endsWith(fileExtension.toLowerCase()))
-                ));
+                                         final String extension) {
+        return filesAsList(directory, file ->
+                file.getName().toLowerCase().endsWith(extension.toLowerCase()));
+    }
+
+    /**
+     * Returns a {@link List} of {@link File} objects denoting the files in the
+     * directory denoted by the specified {@code directory}, filtered to those
+     * that accepted by the specified {@code fileFilter}.
+     *
+     * <p>If there is an I/O error, the specified {@code directory} is not a
+     * directory, or the directory does not contain any files,
+     * {@link Collections#emptyList()} will be returned.</p>
+     *
+     * @param directory The directory, as a {@link File} object.
+     * @param fileFilter The {@link FileFilter}, by which to filter the returned
+     *                   files.
+     * @return Returns a {@link List} of {@link File} objects denoting the files
+     *         in the directory denoted by the specified {@code directory},
+     *         filtered to those accepted by the specified {@code fileFilter}, or
+     *         {@link Collections#emptyList()} if the specified {@code directory}
+     *         is not a directory, an I/O error occurs, or the directory contains
+     *         no files.
+     * @since JavaUtilities 0.1.1
+     */
+    public static List<File> filesAsList(final File directory,
+                                         final FileFilter fileFilter) {
+        final var files = directory.listFiles(fileFilter);
+        return files == null ? Collections.emptyList() : List.of(files);
     }
 
 }
