@@ -11,7 +11,11 @@ import java.util.Scanner;
  *
  * @author Harley O'Connor
  * @since JavaUtilities 0.0.1
+ * @deprecated The uses for this are limited due to its rigidity.
+ *             It will be replaced with a new console I/O system in
+ *             the future.
  */
+@Deprecated
 public final class InputUtils {
 
     /** Creates an initialises a {@link Scanner} instance for reading from {@link System#in}. */
