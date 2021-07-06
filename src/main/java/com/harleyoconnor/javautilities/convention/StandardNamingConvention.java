@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
  */
 public class StandardNamingConvention implements NamingConvention {
 
+    /** The name of the convention, returned by {@link #name()}. */
+    protected final String name;
     /** The first character {@link Function}, returned by {@link #firstCharacterFunction()}. */
     protected final Function<Character, Character> firstCharacterFunction;
     /** The separator {@link Predicate}, returned by {@link #separatorPredicate()}. */
@@ -31,6 +33,7 @@ public class StandardNamingConvention implements NamingConvention {
      * Constructs a {@link StandardNamingConvention} using the specified parameters,
      * setting the {@link #characterSeparator} to {@code true}.
      *
+     * @param name The name of the convention, see {@link #name()} for details.
      * @param firstCharacterFunction The first character {@link Function}, see
      *                               {@link #firstCharacterFunction()} for details.
      * @param separatorPredicate The separator {@link Predicate}, see
@@ -41,13 +44,14 @@ public class StandardNamingConvention implements NamingConvention {
      *                                      see {@link #intermediateCharacterFunction()}
      *                                      for details.
      */
-    public StandardNamingConvention(Function<Character, Character> firstCharacterFunction, Predicate<Character> separatorPredicate, Function<Character, String> separatorFunction, Function<Character, Character> intermediateCharacterFunction) {
-        this(firstCharacterFunction, separatorPredicate, separatorFunction, intermediateCharacterFunction, true);
+    public StandardNamingConvention(String name, Function<Character, Character> firstCharacterFunction, Predicate<Character> separatorPredicate, Function<Character, String> separatorFunction, Function<Character, Character> intermediateCharacterFunction) {
+        this(name, firstCharacterFunction, separatorPredicate, separatorFunction, intermediateCharacterFunction, true);
     }
 
     /**
      * Constructs a {@link StandardNamingConvention} using the specified parameters.
      *
+     * @param name The name of the convention, see {@link #name()} for details.
      * @param firstCharacterFunction The first character {@link Function}, see
      *                               {@link #firstCharacterFunction()} for details.
      * @param separatorPredicate The separator {@link Predicate}, see
@@ -60,7 +64,8 @@ public class StandardNamingConvention implements NamingConvention {
      * @param characterSeparator The character separator boolean, see
      *                           {@link #characterSeparator()} for details.
      */
-    public StandardNamingConvention(Function<Character, Character> firstCharacterFunction, Predicate<Character> separatorPredicate, Function<Character, String> separatorFunction, Function<Character, Character> intermediateCharacterFunction, boolean characterSeparator) {
+    public StandardNamingConvention(String name, Function<Character, Character> firstCharacterFunction, Predicate<Character> separatorPredicate, Function<Character, String> separatorFunction, Function<Character, Character> intermediateCharacterFunction, boolean characterSeparator) {
+        this.name = name;
         this.firstCharacterFunction = firstCharacterFunction;
         this.separatorPredicate = separatorPredicate;
         this.separatorFunction = separatorFunction;
@@ -176,6 +181,16 @@ public class StandardNamingConvention implements NamingConvention {
         }
 
         return convertedString.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return The name of this {@link NamingConvention}, in {@link #PASCAL_CASE}.
+     */
+    @Override
+    public String name() {
+        return this.name;
     }
 
     /**

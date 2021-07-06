@@ -1,6 +1,9 @@
 package com.harleyoconnor.javautilities.convention;
 
 import java.lang.annotation.ElementType;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -24,6 +27,7 @@ public interface NamingConvention {
      * another naming convention may not work as intended for many strings.
      */
     NamingConvention FLAT_CASE = new StandardNamingConvention(
+            "FlatCase",
             Character::toLowerCase,
             Character::isLowerCase,
             character -> character.toString().toLowerCase(),
@@ -39,7 +43,7 @@ public interface NamingConvention {
      * {@link ElementType#FIELD} elements which are not {@code static} and
      * {@code final}.</p>
      */
-    NamingConvention CAMEL_CASE = byCase(false);
+    NamingConvention CAMEL_CASE = byCase("CamelCase", false);
 
     /**
      * Pascal Case is a naming convention similar to {@link #CAMEL_CASE} in which word
@@ -50,14 +54,14 @@ public interface NamingConvention {
      * <p>This convention is used in Java for {@link ElementType#TYPE} and
      * {@link ElementType#ANNOTATION_TYPE} names.</p>
      */
-    NamingConvention PASCAL_CASE = byCase(true);
+    NamingConvention PASCAL_CASE = byCase("PascalCase",true);
 
     /**
      * Snake Case is a naming convention in which word separations are denoted by an
      * underscore placed between them. All other letters are lower case. For example:
      * {@code this_is_a_snake_case_string}.
      */
-    NamingConvention SNAKE_CASE = byChar('_', false, false, false);
+    NamingConvention SNAKE_CASE = byChar("SnakeCase", '_', false, false, false);
 
     /**
      * Screaming Snake Case is similar to {@link #SNAKE_CASE} in which word separations are
@@ -67,7 +71,7 @@ public interface NamingConvention {
      * <p>This convention is used in Java for {@link ElementType#FIELD} elements which are
      * {@code static} and {@code final}.</p>
      */
-    NamingConvention SCREAMING_SNAKE_CASE = byChar('_', true, true, true);
+    NamingConvention SCREAMING_SNAKE_CASE = byChar("ScreamingSnakeCase", '_', true, true, true);
 
     /**
      * Camel Snake Case is similar to {@link #SNAKE_CASE} in which word separations are
@@ -75,34 +79,34 @@ public interface NamingConvention {
      * first are capitalised, like in {@link #CAMEL_CASE}. For example:
      * {@code this_Is_A_Camel_Snake_Case_String}.
      */
-    NamingConvention CAMEL_SNAKE_CASE = byChar('_', false, true, false);
+    NamingConvention CAMEL_SNAKE_CASE = byChar("CamelSnakeCase", '_', false, true, false);
 
     /**
      * Pascal Snake Case is similar to {@link #SNAKE_CASE} in which word separations are
      * denoted by an underscore, however the first letter of each word is capitalised, like
      * in {@link #PASCAL_CASE}. For example: {@code This_Is_A_Pascal_Snake_Case_String}.
      */
-    NamingConvention PASCAL_SNAKE_CASE = byChar('_', true, true, false);
+    NamingConvention PASCAL_SNAKE_CASE = byChar("PascalSnakeCase", '_', true, true, false);
 
     /**
      * Kebab Case is a naming convention in which word separations are denoted by a dash.
      * All other letters are lower case. For example: {@code this-is-a-kebab-case-string}.
      */
-    NamingConvention KEBAB_CASE = byChar('-', false, false, false);
+    NamingConvention KEBAB_CASE = byChar("KebabCase", '-', false, false, false);
 
     /**
      * Screaming Kebab Case is similar to {@link #KEBAB_CASE} in which word separations
      * are denoted by a dash, however all other letters are also uppercase, as follows:
      * {@code THIS-IS-A-KEBAB-SNAKE-CASE-STRING}.
      */
-    NamingConvention SCREAMING_KEBAB_CASE = byChar('-', true, true, true);
+    NamingConvention SCREAMING_KEBAB_CASE = byChar("ScreamingKebabCase", '-', true, true, true);
 
     /**
      * Train Case is similar to {@link #KEBAB_CASE} in which word separations are denoted
      * by a dash, however the first letter of each word is capitalised, like in
      * {@link #PASCAL_CASE}, as follows: {@code This-Is-A-Train-Case-String}.
      */
-    NamingConvention TRAIN_CASE = byChar('-', true, true, false);
+    NamingConvention TRAIN_CASE = byChar("TrainCase", '-', true, true, false);
 
     /**
      * The default {@link Pattern} of acceptable characters, used for
@@ -151,48 +155,12 @@ public interface NamingConvention {
     String convertTo(NamingConvention toConvention, String string);
 
     /**
-     * Creates a new {@link StandardNamingConvention} which denotes separations by a case.
+     * Returns the name of this {@link NamingConvention}. This should be formatted using
+     * the {@link #PASCAL_CASE} convention.
      *
-     * @param pascal {@code true} if the convention should capitalise the first letter,
-     *               life in the {@link #PASCAL_CASE} convention.
-     * @return The instantiated {@link StandardNamingConvention}.
+     * @return The name of this {@link NamingConvention}, in {@link #PASCAL_CASE}.
      */
-    private static StandardNamingConvention byCase(final boolean pascal) {
-        return new StandardNamingConvention(
-                pascal ? Character::toUpperCase : Character::toLowerCase,
-                Character::isUpperCase,
-                character -> character.toString().toUpperCase(),
-                Character::toLowerCase,
-                false
-        );
-    }
-
-    /**
-     * Creates a new {@link StandardNamingConvention} which denotes separations by the
-     * specified {@code separator} character.
-     *
-     * @param separator The {@link Character} to the convention should use as a word
-     *                  separator.
-     * @param pascal {@code true} if the convention should capitalise the first letter
-     *               (like in the {@link #PASCAL_CASE} convention) {@code false}
-     *               otherwise.
-     * @param camel {@code true} if the convention should capitalise the first letter
-     *              after a word separation (like in the {@link #CAMEL_CASE} convention)
-     *              {@code false} otherwise.
-     * @param screaming {@code true} if all intermediate characters should be capitalised
-     *                  (like in the {@link #SCREAMING_SNAKE_CASE} convention)
-     *                  {@code false} otherwise.
-     * @return The instantiated {@link StandardNamingConvention}.
-     */
-    static StandardNamingConvention byChar(final char separator, final boolean pascal, final boolean camel, final boolean screaming) {
-        return new StandardNamingConvention(
-                pascal ? Character::toUpperCase : Character::toLowerCase,
-                character -> character == separator,
-                camel ? character -> separator + character.toString().toUpperCase()
-                        : character -> separator + character.toString().toLowerCase(),
-                screaming ? Character::toUpperCase : Character::toLowerCase
-        );
-    }
+    String name();
 
     /**
      * Returns a {@link Function} that takes the first character of a {@link String}
@@ -242,5 +210,110 @@ public interface NamingConvention {
      *         word separations, {@code false} otherwise.
      */
     boolean characterSeparator();
+
+    /**
+     * Stores all registered {@link NamingConvention} objects, enclosed in an inner
+     * class to restrict access.
+     *
+     * <p>To retrieve or register {@link NamingConvention} objects, use
+     * {@link #get(String)} and {@link #register(NamingConvention)} respectively.</p>
+     */
+    class Registry {
+        /** The {@link Set} of {@link NamingConvention} entries. */
+        private static final Set<NamingConvention> ENTRIES = new HashSet<>();
+
+        /**
+         * Suppresses default constructor, ensuring non-instantiability.
+         */
+        private Registry() {}
+    }
+
+    /**
+     * Appends the specified {@link NamingConvention} to the {@link Registry}. This
+     * is then also returned.
+     *
+     * @param convention The {@link NamingConvention} of type {@link N} to register.
+     * @param <N> The type of the {@link NamingConvention} to register.
+     * @return The specified {@link NamingConvention}.
+     * @throws IllegalArgumentException If a {@link NamingConvention} with the name
+     *                                  of the specfified {@link NamingConvention}
+     *                                  already existed in the {@link Registry}.
+     */
+    static <N extends NamingConvention> N register(final N convention) {
+        if (get(convention.name()).isPresent()) {
+            throw new IllegalArgumentException("Attempted to register convention with" +
+                    "name \"" + convention + "\", which was already registered.");
+        }
+
+        Registry.ENTRIES.add(convention);
+        return convention;
+    }
+
+    /**
+     * Attempts to retrieve a {@link NamingConvention} of the specified {@code name}
+     * from the {@link Registry}. Returns an {@link Optional} containing the
+     * corresponding convention, or {@link Optional#empty()} if one did not exist.
+     *
+     * @param name The name of the {@link NamingConvention} to retrieve.
+     * @return An {@link Optional} containing the corresponding convention, or
+     *         {@link Optional#empty()} if one did not exist.
+     */
+    static Optional<NamingConvention> get(final String name) {
+        return Registry.ENTRIES.stream()
+                .filter(namingConvention -> namingConvention.name().equals(name))
+                .findFirst();
+    }
+
+    /**
+     * Creates a new {@link StandardNamingConvention} which denotes separations by a case.
+     * This method also handles registering the instantiated object to the
+     * {@link NamingConvention} registry via {@link #register(NamingConvention)}.
+     *
+     * @param name The name of the convention, see {@link #name()} for details.
+     * @param pascal {@code true} if the convention should capitalise the first letter,
+     *               life in the {@link #PASCAL_CASE} convention.
+     * @return The instantiated {@link StandardNamingConvention}.
+     */
+    private static StandardNamingConvention byCase(final String name, final boolean pascal) {
+        return register(new StandardNamingConvention(
+                name,
+                pascal ? Character::toUpperCase : Character::toLowerCase,
+                Character::isUpperCase,
+                character -> character.toString().toUpperCase(),
+                Character::toLowerCase,
+                false
+        ));
+    }
+
+    /**
+     * Creates a new {@link StandardNamingConvention} which denotes separations by the
+     * specified {@code separator} character. This method also handles registering the
+     * instantiated object to the {@link NamingConvention} registry via
+     * {@link #register(NamingConvention)}.
+     *
+     * @param name The name of the convention, see {@link #name()} for details.
+     * @param separator The {@link Character} to the convention should use as a word
+     *                  separator.
+     * @param pascal {@code true} if the convention should capitalise the first letter
+     *               (like in the {@link #PASCAL_CASE} convention) {@code false}
+     *               otherwise.
+     * @param camel {@code true} if the convention should capitalise the first letter
+     *              after a word separation (like in the {@link #CAMEL_CASE} convention)
+     *              {@code false} otherwise.
+     * @param screaming {@code true} if all intermediate characters should be capitalised
+     *                  (like in the {@link #SCREAMING_SNAKE_CASE} convention)
+     *                  {@code false} otherwise.
+     * @return The instantiated {@link StandardNamingConvention}.
+     */
+    static StandardNamingConvention byChar(final String name, final char separator, final boolean pascal, final boolean camel, final boolean screaming) {
+        return register(new StandardNamingConvention(
+                name,
+                pascal ? Character::toUpperCase : Character::toLowerCase,
+                character -> character == separator,
+                camel ? character -> separator + character.toString().toUpperCase()
+                        : character -> separator + character.toString().toLowerCase(),
+                screaming ? Character::toUpperCase : Character::toLowerCase
+        ));
+    }
 
 }
