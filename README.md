@@ -34,10 +34,10 @@ Next, add the following to your `dependencies` section to load java utilities:
 
 `build.gradle` [for Groovy build scripts]
 ```groovy
-implementation group: 'com.harleyoconnor.javautilities', name: 'JavaUtilities', version: '0.1.1'
+implementation group: 'com.harleyoconnor.javautilities', name: 'JavaUtilities', version: '0.1.2'
 ```
 
 `build.gradle.kts` [for Kotlin build scripts]
 ```kotlin
-implementation(group = "com.harleyoconnor.javautilities", name = "JavaUtilities", version = "0.1.1")
+implementation(group = "com.harleyoconnor.javautilities", name = "JavaUtilities", version = "0.1.2")
 ```
