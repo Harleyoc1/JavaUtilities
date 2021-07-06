@@ -1,5 +1,7 @@
 package com.harleyoconnor.javautilities.function;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -38,7 +40,8 @@ public interface ThrowableSupplier<R, T extends Throwable> {
      * @param <T> The type that this supplier {@code throws}.
      * @return A new {@link ThrowableFunction}.
      */
-    static <R, T extends Throwable> ThrowableSupplier<R, T> proxy(final Supplier<R> supplier) {
+    static <R, T extends Throwable> ThrowableSupplier<R, T> proxy(@Nonnull final Supplier<R> supplier) {
+        Objects.requireNonNull(supplier);
         return supplier::get;
     }
 

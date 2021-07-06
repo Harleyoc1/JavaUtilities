@@ -1,5 +1,6 @@
 package com.harleyoconnor.javautilities.function;
 
+import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -49,7 +50,7 @@ public interface ThrowableTriFunction<U, S, Q, R, T extends Throwable> {
      *         applies the {@code after} function.
      * @throws NullPointerException If {@code after} is {@code null}.
      */
-    default <V> ThrowableTriFunction<U, S, Q, V, T> andThen(ThrowableFunction<? super R, ? extends V, T> after) {
+    default <V> ThrowableTriFunction<U, S, Q, V, T> andThen(@Nonnull ThrowableFunction<? super R, ? extends V, T> after) {
         Objects.requireNonNull(after);
         return (U u, S s, Q q) -> after.apply(this.apply(u, s, q));
     }
@@ -68,7 +69,8 @@ public interface ThrowableTriFunction<U, S, Q, R, T extends Throwable> {
      * @param <T> The type that the function {@code throws}.
      * @return A new {@link ThrowableFunction}.
      */
-    static <U, S, Q, R, T extends Throwable> ThrowableTriFunction<U, S, Q, R, T> proxy(final TriFunction<U, S, Q, R> function) {
+    static <U, S, Q, R, T extends Throwable> ThrowableTriFunction<U, S, Q, R, T> proxy(@Nonnull final TriFunction<U, S, Q, R> function) {
+        Objects.requireNonNull(function);
         return function::apply;
     }
 
