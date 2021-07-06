@@ -159,6 +159,7 @@ public interface NamingConvention {
      * the {@link #PASCAL_CASE} convention.
      *
      * @return The name of this {@link NamingConvention}, in {@link #PASCAL_CASE}.
+     * @since JavaUtilities 0.1.2
      */
     String name();
 
@@ -217,6 +218,10 @@ public interface NamingConvention {
      *
      * <p>To retrieve or register {@link NamingConvention} objects, use
      * {@link #get(String)} and {@link #register(NamingConvention)} respectively.</p>
+     *
+     * @see #register(NamingConvention)
+     * @see #get(String)
+     * @since JavaUtilities 0.1.2
      */
     class Registry {
         /** The {@link Set} of {@link NamingConvention} entries. */
@@ -238,6 +243,7 @@ public interface NamingConvention {
      * @throws IllegalArgumentException If a {@link NamingConvention} with the name
      *                                  of the specfified {@link NamingConvention}
      *                                  already existed in the {@link Registry}.
+     * @since JavaUtilities 0.1.2
      */
     static <N extends NamingConvention> N register(final N convention) {
         if (get(convention.name()).isPresent()) {
@@ -257,6 +263,7 @@ public interface NamingConvention {
      * @param name The name of the {@link NamingConvention} to retrieve.
      * @return An {@link Optional} containing the corresponding convention, or
      *         {@link Optional#empty()} if one did not exist.
+     * @since JavaUtilities 0.1.2
      */
     static Optional<NamingConvention> get(final String name) {
         return Registry.ENTRIES.stream()

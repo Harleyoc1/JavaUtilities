@@ -187,6 +187,7 @@ public class StandardNamingConvention implements NamingConvention {
      * {@inheritDoc}
      *
      * @return The name of this {@link NamingConvention}, in {@link #PASCAL_CASE}.
+     * @since JavaUtilities 0.1.2
      */
     @Override
     public String name() {
