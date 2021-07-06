@@ -6,6 +6,8 @@ The aims of this project include:
 - Providing features I believe should be included in the JDK. 
 - Minimising effort required to use features already included in the JDK.
 
+There is no documentation, however all public and protected classes, methods, and fields have Javadoc. 
+
 ## Java 16
 Versions `0.1.1+` will require Java 16 or higher. Versions below this should work on any version from Java 8 upwards. 
 
@@ -32,10 +34,10 @@ Next, add the following to your `dependencies` section to load java utilities:
 
 `build.gradle` [for Groovy build scripts]
 ```groovy
-implementation group: 'com.harleyoconnor.javautilities', name: 'JavaUtilities', version: '0.1.0'
+implementation group: 'com.harleyoconnor.javautilities', name: 'JavaUtilities', version: '0.1.1'
 ```
 
 `build.gradle.kts` [for Kotlin build scripts]
 ```kotlin
-implementation(group = "com.harleyoconnor.javautilities", name = "JavaUtilities", version = "0.1.0")
+implementation(group = "com.harleyoconnor.javautilities", name = "JavaUtilities", version = "0.1.1")
 ```
