@@ -14,13 +14,45 @@ import java.util.stream.Stream;
  * @since JavaUtilities 0.1.0
  */
 public enum Primitive {
+    /**
+     * Holds the primitive {@code boolean} class and its wrapper class,
+     * {@link Boolean}.
+     */
     BOOLEAN(boolean.class, Boolean.class),
+    /**
+     * Holds the primitive {@code byte} class and its wrapper class,
+     * {@link Byte}.
+     */
     BYTE(byte.class, Byte.class),
+    /**
+     * Holds the primitive {@code short} class and its wrapper class,
+     * {@link Short}.
+     */
     SHORT(short.class, Short.class),
+    /**
+     * Holds the primitive {@code int} class and its wrapper class,
+     * {@link Integer}.
+     */
     INT(int.class, Integer.class),
+    /**
+     * Holds the primitive {@code long} class and its wrapper class,
+     * {@link Long}.
+     */
     LONG(long.class, Long.class),
+    /**
+     * Holds the primitive {@code float} class and its wrapper class,
+     * {@link Float}.
+     */
     FLOAT(float.class, Float.class),
+    /**
+     * Holds the primitive {@code double} class and its wrapper class,
+     * {@link Double}.
+     */
     DOUBLE(double.class, Double.class),
+    /**
+     * Holds the primitive {@code char} class and its wrapper class,
+     * {@link Character}.
+     */
     CHAR(char.class, Character.class);
 
     private final Class<?> primitiveClass;
@@ -68,8 +100,11 @@ public enum Primitive {
      *         didn't exist.
      */
     public static Optional<Class<?>> from(final Class<?> wrapperClass) {
-        return Stream.of(values()).filter(primitive -> primitive.wrapperClass == wrapperClass)
-                .map(Primitive::getPrimitiveClass).findFirst().map(primitiveClass -> (Class<?>) primitiveClass);
+        return Stream.of(values())
+                .filter(primitive -> primitive.wrapperClass == wrapperClass)
+                .map(Primitive::getPrimitiveClass)
+                .findFirst()
+                .map(primitiveClass -> (Class<?>) primitiveClass);
     }
 
     /**
