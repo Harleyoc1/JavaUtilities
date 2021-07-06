@@ -5,32 +5,44 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Provides various useful {@code static} functions for reading from
- * standard input ({@link System#in}) using {@link #IN}, a simple
- * {@link Scanner}.
+ * Provides various useful {@code static} functions for reading from standard
+ * input ({@link System#in}) using {@link #IN}, a simple {@link Scanner}.
  *
  * @author Harley O'Connor
  * @since JavaUtilities 0.0.1
- * @deprecated The uses for this are limited due to its rigidity.
- *             It will be replaced with a new console I/O system in
- *             the future.
+ * @deprecated The uses for this are limited due to its rigidity. It will be
+ *             replaced with a new console I/O system in the future.
  */
 @Deprecated
 public final class InputUtils {
 
-    /** Creates an initialises a {@link Scanner} instance for reading from {@link System#in}. */
+    /**
+     * Creates an initialises a {@link Scanner} instance for reading from
+     * {@link System#in}.
+     */
     private static final Scanner IN = new Scanner(System.in);
 
+    /**
+     * Returns a {@link String} input, looping until the inputted {@link String}
+     * is not empty.
+     *
+     * @param prompt The message sent to the user informing them of what to
+     *               enter.
+     * @return The entered {@link String}.
+     */
     public static String getInput (final String prompt) {
         return getInput(prompt, true);
     }
 
     /**
-     * Gets a string input. Loops until a valid string is input according to the parameters given.
+     * Gets a {@link String} input. Loops until a valid string is input
+     * according to the parameters given.
      *
-     * @param prompt The message sent to the user informing them of what to enter.
-     * @param requireNotEmpty A boolean value stating whether or not the string must be set a value.
-     * @return The entered string.
+     * @param prompt The message sent to the user informing them of what to
+     *               enter.
+     * @param requireNotEmpty A boolean value stating whether or not the string
+     *                       must be set a value.
+     * @return The entered {@link String}.
      */
     public static String getInput (final String prompt, final boolean requireNotEmpty) {
         String strInput;
@@ -47,15 +59,24 @@ public final class InputUtils {
         return strInput;
     }
 
+    /**
+     * Returns an integer input. Loops until a positive, non-zero integer is
+     * inputted.
+     *
+     * @param prompt The message sent to the user informing them of what to enter.
+     * @return The integer input.
+     */
     public static int getIntInput (final String prompt) {
         return getIntInput(prompt, true, true);
     }
 
     /**
-     * Gets an integer input. Loops until a valid integer is input according to the parameters given.
+     * Gets an integer input. Loops until a valid integer is input according to
+     * the parameters given.
      *
      * @param prompt The message sent to the user informing them of what to enter.
-     * @param requirePositive A boolean value stating whether or not to allow negative values.
+     * @param requirePositive A boolean value stating whether or not to allow
+     *                        negative values.
      * @param requireNotZero A boolean value stating whether or not to allow zero.
      * @return The integer input.
      */
@@ -81,9 +102,12 @@ public final class InputUtils {
      * Gets an integer, or a string if one was input.
      *
      * @param prompt The message sent to the user informing them of what to enter.
-     * @param requirePositiveIfInt A boolean value stating whether or not to allow negative values if the inpout is an integer.
-     * @param requireNotZeroIfInt A boolean value stating whether or not to allow zero if the input is an integer.
-     * @return An integer, string, or null if it was an invalid integer (according to the parameters).
+     * @param requirePositiveIfInt A boolean value stating whether or not to allow
+     *                            negative values if the inpout is an integer.
+     * @param requireNotZeroIfInt A boolean value stating whether or not to allow
+     *                           zero if the input is an integer.
+     * @return An integer, string, or null if it was an invalid integer (according
+     *         to the parameters).
      */
     @Nullable
     public static Object getIntOrStringInput (final String prompt, final boolean requirePositiveIfInt, final boolean requireNotZeroIfInt) {
@@ -110,9 +134,12 @@ public final class InputUtils {
     }
 
     /**
-     * Presents the user with all the options in the possible selections list, returns the one they select.
+     * Presents the user with all the options in the possible selections list,
+     * returns the one they select.
      *
-     * @param prompt The message sent to the user informing them of what they are selecting. Note that the possible selections are added to this within the method.
+     * @param prompt The message sent to the user informing them of what they are
+     *               selecting. Note that the possible selections are added to this
+     *               within the method.
      * @param possibleSelections The list of possible selection strings.
      * @return The possible selection string inputted.
      */
@@ -148,7 +175,8 @@ public final class InputUtils {
     }
 
     /**
-     * Tells the user that what they entered was invalid and prepares the input scanner for new input.
+     * Tells the user that what they entered was invalid and prepares the input
+     * scanner for new input.
      *
      * @param invalidValue The name of the invalid type.
      */
