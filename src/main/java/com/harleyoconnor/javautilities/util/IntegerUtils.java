@@ -10,7 +10,14 @@ import java.util.Random;
  */
 public final class IntegerUtils {
 
+    /** The {@link Random} instance used by methods in this class. */
     public static final Random RANDOM = new Random();
+
+    /**
+     * Suppresses default constructor, ensuring non-instantiability.
+     */
+    private IntegerUtils() {
+    }
 
     /**
      * Gets a random number between the two parameters, inclusive.
@@ -52,7 +59,10 @@ public final class IntegerUtils {
      * @return The rounded number.
      * @since JavaUtilities 0.0.5
      * @author Archie Adams
+     * @deprecated Seriously? A rounding function in a class named "IntegerUtils"?
+     *             This will be moved in future versions.
      */
+    @Deprecated
     public static double round (final double number, final int decimalPlaces) {
         final int power = (int) Math.pow(10, decimalPlaces);
         return (double) Math.round(number * power) / power;
