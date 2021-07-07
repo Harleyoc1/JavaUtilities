@@ -51,9 +51,13 @@ publishing {
                 }
                 developers {
                     developer {
-                        id.set("harleyoconnor")
-                        name.set("Harley O\"Connor")
+                        id.set("Harleyoc1")
+                        name.set("Harley O'Connor")
                         email.set("harleyoc1@gmail.com")
+                    }
+                    developer {
+                        id.set("ArchieAdams")
+                        name.set("Archie Adams")
                     }
                 }
                 scm {
