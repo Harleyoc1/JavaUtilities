@@ -64,4 +64,17 @@ publishing {
             }
         }
     }
+    if (hasProperty("harleyOConnorMavenUsername") && hasProperty("harleyOConnorMavenPassword")) {
+        repositories {
+            maven {
+                url = uri("https://harleyoconnor.com/maven")
+                credentials {
+                    username = property("harleyOConnorMavenUsername")
+                    password = property("harleyOConnorMavenPassword")
+                }
+            }
+        }
+    } else {
+        logger.log(LogLevel.WARN, "Credentials for maven not detected; it will be disabled.")
+    }
 }
