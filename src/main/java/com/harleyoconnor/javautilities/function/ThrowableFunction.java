@@ -1,6 +1,7 @@
 package com.harleyoconnor.javautilities.function;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -46,7 +47,7 @@ public interface ThrowableFunction<U, R, T extends Throwable> {
      *
      * @see #andThen(ThrowableFunction)
      */
-    default <V> ThrowableFunction<V, R, T> compose(@Nonnull ThrowableFunction<? super V, ? extends U, T> before) {
+    default <V> ThrowableFunction<V, R, T> compose(@NotNull ThrowableFunction<? super V, ? extends U, T> before) {
         Objects.requireNonNull(before);
         return (V v) -> apply(before.apply(v));
     }
@@ -66,7 +67,7 @@ public interface ThrowableFunction<U, R, T extends Throwable> {
      *
      * @see #compose(ThrowableFunction)
      */
-    default <V> ThrowableFunction<U, V, T> andThen(@Nonnull ThrowableFunction<? super R, ? extends V, T> after) {
+    default <V> ThrowableFunction<U, V, T> andThen(@NotNull ThrowableFunction<? super R, ? extends V, T> after) {
         Objects.requireNonNull(after);
         return (U u) -> after.apply(apply(u));
     }
@@ -95,7 +96,7 @@ public interface ThrowableFunction<U, R, T extends Throwable> {
      * @return A new {@link ThrowableFunction}.
      * @throws NullPointerException If {@code function} is {@code null}.
      */
-    static <T, R, E extends Throwable> ThrowableFunction<T, R, E> proxy(@Nonnull final Function<T, R> function) {
+    static <T, R, E extends Throwable> ThrowableFunction<T, R, E> proxy(@NotNull final Function<T, R> function) {
         Objects.requireNonNull(function);
         return function::apply;
     }

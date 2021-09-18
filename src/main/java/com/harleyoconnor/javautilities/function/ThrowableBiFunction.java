@@ -1,7 +1,7 @@
 package com.harleyoconnor.javautilities.function;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -50,7 +50,7 @@ public interface ThrowableBiFunction<U, S, R, T extends Throwable> {
      *         applies the {@code after} function.
      * @throws NullPointerException If {@code after} is {@code null}.
      */
-    default <V> ThrowableBiFunction<U, S, V, T> andThen(@Nonnull ThrowableFunction<? super R, ? extends V, T> after) {
+    default <V> ThrowableBiFunction<U, S, V, T> andThen(@NotNull ThrowableFunction<? super R, ? extends V, T> after) {
         Objects.requireNonNull(after);
         return (U u, S s) -> after.apply(apply(u, s));
     }
@@ -68,7 +68,7 @@ public interface ThrowableBiFunction<U, S, R, T extends Throwable> {
      * @param <E> The type that the function {@code throws}.
      * @return A new {@link ThrowableFunction}.
      */
-    static <T, U, R, E extends Throwable> ThrowableBiFunction<T, U, R, E> proxy(@Nonnull final BiFunction<T, U, R> function) {
+    static <T, U, R, E extends Throwable> ThrowableBiFunction<T, U, R, E> proxy(@NotNull final BiFunction<T, U, R> function) {
         Objects.requireNonNull(function);
         return function::apply;
     }

@@ -1,6 +1,7 @@
 package com.harleyoconnor.javautilities.function;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -48,7 +49,7 @@ public interface TriFunction<T, U, S, R> {
      *         applies the {@code after} function.
      * @throws NullPointerException If after is null.
      */
-    default <V> TriFunction<T, U, S, V> andThen(@Nonnull Function<? super R, ? extends V> after) {
+    default <V> TriFunction<T, U, S, V> andThen(@NotNull Function<? super R, ? extends V> after) {
         Objects.requireNonNull(after);
         return (T t, U u, S s) -> after.apply(this.apply(t, u, s));
     }

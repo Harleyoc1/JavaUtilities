@@ -1,8 +1,8 @@
 package com.harleyoconnor.javautilities.collection;
 
 import com.harleyoconnor.javautilities.reflect.Reflect;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.io.*;
 import java.util.*;
 
@@ -93,7 +93,7 @@ public final class WeakHashSet<E> extends AbstractSet<E> implements Cloneable, S
      * @return An {@link Iterator} over the elements in this set.
      * @see ConcurrentModificationException
      */
-    @Nonnull
+    @NotNull
     @Override
     public Iterator<E> iterator() {
         return this.map.keySet().iterator();

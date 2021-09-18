@@ -1,4 +1,5 @@
 fun property(key: String) = project.findProperty(key).toString()
+fun depVersion(name: String) = property("dependency.$name.version")
 
 plugins {
     id("java")
@@ -14,9 +15,9 @@ repositories {
 }
 
 dependencies {
-    implementation(group = "com.google.code.findbugs", name = "jsr305", version = property("findBugsVersion"))
+    implementation(group = "org.jetbrains", name = "annotations", version = depVersion("annotations"))
 
-    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-api", version = property("junitVersion"))
+    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-api", version = depVersion("junit"))
     testRuntimeOnly(group = "org.junit.jupiter", name = "junit-jupiter-engine")
 }
 
