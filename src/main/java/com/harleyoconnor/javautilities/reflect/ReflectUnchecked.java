@@ -8,8 +8,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * An unchecked implementation of {@link Reflect}, using {@link ReflectChecked} as a
- * backing and catching any exceptions, throwing a runtime exception instead.
+ * An unchecked implementation of {@link Reflect}, using {@link ReflectChecked} as a backing and catching any
+ * exceptions, throwing a runtime exception instead.
  *
  * @author Harley O'Connor
  */
@@ -18,8 +18,7 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
     private final Reflect<T> reflect;
 
     /**
-     * Constructs a new {@link ReflectUnchecked} instance with the specified
-     * {@link ReflectChecked}.
+     * Constructs a new {@link ReflectUnchecked} instance with the specified {@link ReflectChecked}.
      *
      * @param reflect The {@link ReflectChecked}
      */
@@ -42,8 +41,7 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      *
      * @param name The {@link String} name of the {@link Field}.
      * @return The {@link Field} {@code object} reflecting the member {@code field}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#getField(String)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getField(String)}.
      */
     @Override
     public Field getField(final String name) {
@@ -55,8 +53,7 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      *
      * @param name The {@link String} name of the {@link Field}.
      * @return The {@link Field} {@code object} reflecting the member {@code field}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#getFieldAccessible(String)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getFieldAccessible(String)}.
      */
     @Override
     public Field getFieldAccessible(final String name) {
@@ -67,10 +64,9 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      * {@inheritDoc}
      *
      * @param field The {@link Field} {@code object} to get the value for.
-     * @param <V> The inferred type of the {@code field}.
+     * @param <V>   The inferred type of the {@code field}.
      * @return The value of the {@code field}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#getFieldValue(Field)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getFieldValue(Field)}.
      */
     @Override
     public <V> V getFieldValue(final Field field) {
@@ -81,10 +77,9 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      * {@inheritDoc}
      *
      * @param name The {@link String} name of the {@link Field}.
-     * @param <V> The inferred type of the {@code field}.
+     * @param <V>  The inferred type of the {@code field}.
      * @return The value of the {@code field}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#getField(String)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getField(String)}.
      */
     @Override
     public <V> V getFieldValue(final String name) {
@@ -94,12 +89,11 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
     /**
      * {@inheritDoc}
      *
-     * @param field The {@link Field} {@code object} to get the value for.
+     * @param field  The {@link Field} {@code object} to get the value for.
      * @param vClass The {@link Class} {@code object} of the value of the {@link Field}.
-     * @param <V> The type of the {@code field}.
+     * @param <V>    The type of the {@code field}.
      * @return The value of the {@code field}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#getFieldValue(Field, Class)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getFieldValue(Field, Class)}.
      */
     @Override
     public <V> V getFieldValue(final Field field, final Class<V> vClass) {
@@ -109,12 +103,11 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
     /**
      * {@inheritDoc}
      *
-     * @param name The {@link String} name of the {@link Field}.
+     * @param name   The {@link String} name of the {@link Field}.
      * @param vClass The {@link Class} {@code object} of the value of the {@link Field}.
-     * @param <V> The type of the {@code field}.
+     * @param <V>    The type of the {@code field}.
      * @return The value of the {@code field}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#getFieldValue(String, Class)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getFieldValue(String, Class)}.
      */
     @Override
     public <V> V getFieldValue(final String name, final Class<V> vClass) {
@@ -124,11 +117,10 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
     /**
      * {@inheritDoc}
      *
-     * @param name The {@link String} name of the {@link Method}.
+     * @param name           The {@link String} name of the {@link Method}.
      * @param parameterTypes The {@link Class} types the member {@code method} takes.
      * @return The {@link Method} {@code object} reflecting the member {@code method}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#getMethod(String, Class[])}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getMethod(String, Class[])}.
      */
     @Override
     public Method getMethod(final String name, final Class<?>... parameterTypes) {
@@ -138,11 +130,10 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
     /**
      * {@inheritDoc}
      *
-     * @param name The {@link String} name of the {@link Method}.
+     * @param name           The {@link String} name of the {@link Method}.
      * @param parameterTypes The {@link Class} types the member {@code method} takes.
      * @return The {@link Method} {@code object} reflecting the member {@code method}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#getMethod(String, List)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getMethod(String, List)}.
      */
     @Override
     public Method getMethod(final String name, final List<Class<?>> parameterTypes) {
@@ -152,11 +143,11 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
     /**
      * {@inheritDoc}
      *
-     * @param name The {@link String} name of the {@link Method}.
+     * @param name           The {@link String} name of the {@link Method}.
      * @param parameterTypes The {@link Class} types the member {@code method} takes.
      * @return The {@link Method} {@code object} reflecting the member {@code method}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#getMethodAccessible(String, Class[])}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getMethodAccessible(String,
+     *                          Class[])}.
      */
     @Override
     public Method getMethodAccessible(final String name, final Class<?>... parameterTypes) {
@@ -166,11 +157,10 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
     /**
      * {@inheritDoc}
      *
-     * @param name The {@link String} name of the {@link Method}.
+     * @param name           The {@link String} name of the {@link Method}.
      * @param parameterTypes The {@link Class} types the member {@code method} takes.
      * @return The {@link Method} {@code object} reflecting the member {@code method}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#getMethodAccessible(String, List)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getMethodAccessible(String, List)}.
      */
     @Override
     public Method getMethodAccessible(final String name, final List<Class<?>> parameterTypes) {
@@ -180,13 +170,11 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
     /**
      * {@inheritDoc}
      *
-     * @param name The {@link String} name of the {@link Method}.
-     * @param parameters The parameters to pass on invocation of the specified
-     *                   {@code method}.
-     * @param <V> The return type of the {@code method}.
+     * @param name       The {@link String} name of the {@link Method}.
+     * @param parameters The parameters to pass on invocation of the specified {@code method}.
+     * @param <V>        The return type of the {@code method}.
      * @return The value returned by the invocation of the {@code method}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#invoke(String, List)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#invoke(String, List)}.
      * @see Method#invoke(Object, Object...)
      */
     @Override
@@ -197,13 +185,11 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
     /**
      * {@inheritDoc}
      *
-     * @param name The {@link String} name of the {@link Method}.
-     * @param parameters The parameters to pass on invocation of the specified
-     *                   {@code method}.
-     * @param <V> The return type of the {@code method}.
+     * @param name       The {@link String} name of the {@link Method}.
+     * @param parameters The parameters to pass on invocation of the specified {@code method}.
+     * @param <V>        The return type of the {@code method}.
      * @return The value returned by the invocation of the {@code method}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#invoke(String, Object[])}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#invoke(String, Object[])}.
      * @see Method#invoke(Object, Object...)
      */
     @Override
@@ -214,13 +200,11 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
     /**
      * {@inheritDoc}
      *
-     * @param name The {@link String} name of the {@link Method}.
-     * @param parameters The parameters to pass on invocation of the specified
-     *                   {@code method}.
-     * @param <V> The return type of the {@code method}.
+     * @param name       The {@link String} name of the {@link Method}.
+     * @param parameters The parameters to pass on invocation of the specified {@code method}.
+     * @param <V>        The return type of the {@code method}.
      * @return The value returned by the invocation of the {@code method}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#invoke(String, List, List)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#invoke(String, List, List)}.
      * @see Method#invoke(Object, Object...)
      */
     @Override
@@ -233,8 +217,7 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      *
      * @param parameterTypes The {@link Class} types the member {@code constructor} takes.
      * @return The {@link Constructor} {@code object} reflecting the member {@code constructor}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#getConstructor(Class[])}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getConstructor(Class[])}.
      */
     @Override
     public Constructor<T> getConstructor(final Class<?>... parameterTypes) {
@@ -246,8 +229,7 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      *
      * @param parameterTypes The {@link Class} types the member {@code constructor} takes.
      * @return The {@link Constructor} {@code object} reflecting the member {@code constructor}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#getConstructor(List)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getConstructor(List)}.
      */
     @Override
     public Constructor<T> getConstructor(final List<Class<?>> parameterTypes) {
@@ -259,8 +241,7 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      *
      * @param parameterTypes The {@link Class} types the member {@code constructor} takes.
      * @return The {@link Constructor} {@code object} reflecting the member {@code constructor}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#getConstructorAccessible(Class[])}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getConstructorAccessible(Class[])}.
      */
     @Override
     public Constructor<T> getConstructorAccessible(final Class<?>... parameterTypes) {
@@ -272,8 +253,7 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      *
      * @param parameterTypes The {@link Class} types the member {@code constructor} takes.
      * @return The {@link Constructor} {@code object} reflecting the member {@code constructor}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#getConstructorAccessible(List)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getConstructorAccessible(List)}.
      */
     @Override
     public Constructor<T> getConstructorAccessible(final List<Class<?>> parameterTypes) {
@@ -283,11 +263,9 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
     /**
      * {@inheritDoc}
      *
-     * @param parameters The parameters to pass on instantiation of the specified
-     *                   {@code constructor}.
+     * @param parameters The parameters to pass on instantiation of the specified {@code constructor}.
      * @return The constructed {@link Object} of type {@link T}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#instantiate(Object...)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#instantiate(Object...)}.
      * @see Constructor#newInstance(Object...)
      */
     @Override
@@ -298,11 +276,9 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
     /**
      * {@inheritDoc}
      *
-     * @param parameters The parameters to pass on instantiation of the specified
-     *                   {@code constructor}.
+     * @param parameters The parameters to pass on instantiation of the specified {@code constructor}.
      * @return The constructed {@link Object} of type {@link T}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#instantiate(List)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#instantiate(List)}.
      * @see Constructor#newInstance(Object...)
      */
     @Override
@@ -313,11 +289,9 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
     /**
      * {@inheritDoc}
      *
-     * @param parameters The parameters to pass on instantiation of the specified
-     *                   {@code constructor}.
+     * @param parameters The parameters to pass on instantiation of the specified {@code constructor}.
      * @return The constructed {@link Object} of type {@link T}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#instantiate(List, List)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#instantiate(List, List)}.
      * @see Constructor#newInstance(Object...)
      */
     @Override
@@ -328,12 +302,10 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
     /**
      * {@inheritDoc}
      *
-     * @param parameters The parameters to pass on instantiation of the specified
-     *                   {@code constructor}.
-     * @param <V> The inferred type of the {@link T}.
+     * @param parameters The parameters to pass on instantiation of the specified {@code constructor}.
+     * @param <V>        The inferred type of the {@link T}.
      * @return The constructed {@link Object} of type {@link V}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#instantiateInferred(Object...)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#instantiateInferred(Object...)}.
      * @see Constructor#newInstance(Object...)
      */
     @Override
@@ -344,12 +316,10 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
     /**
      * {@inheritDoc}
      *
-     * @param parameters The parameters to pass on instantiation of the specified
-     *                   {@code constructor}.
-     * @param <V> The inferred type of the {@link T}.
+     * @param parameters The parameters to pass on instantiation of the specified {@code constructor}.
+     * @param <V>        The inferred type of the {@link T}.
      * @return The constructed {@link Object} of type {@link V}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#instantiateInferred(List)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#instantiateInferred(List)}.
      * @see Constructor#newInstance(Object...)
      */
     @Override
@@ -360,12 +330,10 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
     /**
      * {@inheritDoc}
      *
-     * @param parameters The parameters to pass on instantiation of the specified
-     *                   {@code constructor}.
-     * @param <V> The inferred type of the {@link T}.
+     * @param parameters The parameters to pass on instantiation of the specified {@code constructor}.
+     * @param <V>        The inferred type of the {@link T}.
      * @return The constructed {@link Object} of type {@link V}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#instantiateInferred(List, List)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#instantiateInferred(List, List)}.
      * @see Constructor#newInstance(Object...)
      */
     @Override
@@ -378,8 +346,7 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      *
      * @param name The {@link String} name of the {@code inner class}.
      * @return The {@link Class} {@code object} reflecting the member {@code inner class}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#getInnerClass(String)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getInnerClass(String)}.
      */
     @Override
     public Class<?> getInnerClass(final String name) {
@@ -390,10 +357,9 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      * {@inheritDoc}
      *
      * @param name The {@link String} name of the {@code inner class}.
-     * @param <I> The type of the {@code inner class} being reflected on.
+     * @param <I>  The type of the {@code inner class} being reflected on.
      * @return The {@link Class} {@code object} reflecting the member {@code inner class}.
-     * @throws RuntimeException If an exception was thrown by
-     *                          {@link ReflectChecked#reflectInnerClass(String)}.
+     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#reflectInnerClass(String)}.
      */
     @Override
     public <I> Reflect<I> reflectInnerClass(final String name) {
@@ -401,14 +367,12 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
     }
 
     /**
-     * Calls {@link ThrowableSupplier#get()} on the specified {@link ThrowableSupplier},
-     * catching any {@link Throwable}s thrown and creating a {@link RuntimeException}
-     * from them. If nothing is thrown then it returns the return value.
+     * Calls {@link ThrowableSupplier#get()} on the specified {@link ThrowableSupplier}, catching any {@link Throwable}s
+     * thrown and creating a {@link RuntimeException} from them. If nothing is thrown then it returns the return value.
      *
      * @param throwableSupplier The {@link ThrowableSupplier} to get.
-     * @param <V> The type to return.
-     * @return The {@code object} of type {@link V} returned by the specified
-     *         {@link ThrowableSupplier}.
+     * @param <V>               The type to return.
+     * @return The {@code object} of type {@link V} returned by the specified {@link ThrowableSupplier}.
      */
     public static <V> V getUnchecked(final ThrowableSupplier<V, ?> throwableSupplier) {
         try {

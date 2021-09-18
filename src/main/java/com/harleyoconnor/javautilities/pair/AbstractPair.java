@@ -5,16 +5,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /**
- * This class is an abstract implementation of a {@link Pair}, made for providing
- * {@link #equals(Object)}, {@link #hashCode()}, and {@link #toString()} methods
- * that are likely to be common for most implementations of {@link Pair}.
+ * This class is an abstract implementation of a {@link Pair}, made for providing {@link #equals(Object)}, {@link
+ * #hashCode()}, and {@link #toString()} methods that are likely to be common for most implementations of {@link Pair}.
  *
  * <p>If an implementation of {@link Pair} wishes to provide custom implementations
  * of any of the aforementioned methods, they should not extend this class.</p>
  *
  * @param <K> The type of the key.
  * @param <V> The type of the value.
- *
  * @author Harley O'Connor
  * @see Pair
  * @since JavaUtilities 0.0.8
@@ -25,15 +23,16 @@ public abstract class AbstractPair<K, V> implements Pair<K, V> {
      * {@inheritDoc}
      *
      * @param object The reference object with which to compare.
-     * @return {@code true} if this object is the same as the {@code obj}
-     *         argument; {@code false} otherwise.
+     * @return {@code true} if this object is the same as the {@code obj} argument; {@code false} otherwise.
      */
     @Override
     public boolean equals(@Nullable final Object object) {
-        if (this == object)
+        if (this == object) {
             return true;
-        if (!(object instanceof final Pair<?, ?> otherPair))
+        }
+        if (!(object instanceof final Pair<?, ?> otherPair)) {
             return false;
+        }
 
         return Objects.equals(this.getKey(), otherPair.getKey()) &&
                 Objects.equals(this.getKey(), otherPair.getKey());

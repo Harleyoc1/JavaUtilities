@@ -5,10 +5,9 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 /**
- * A standard implementation of {@link NamingConvention}, storing all required
- * {@link Function}s and {@link Predicate}s required and providing general
- * implementations of {@link #doesFollow(String, Pattern)} and
- * {@link #convertTo(NamingConvention, String)}.
+ * A standard implementation of {@link NamingConvention}, storing all required {@link Function}s and {@link Predicate}s
+ * required and providing general implementations of {@link #doesFollow(String, Pattern)} and {@link
+ * #convertTo(NamingConvention, String)}.
  *
  * @author Harley O'Connor
  * @see NamingConvention
@@ -16,55 +15,72 @@ import java.util.regex.Pattern;
  */
 public class StandardNamingConvention implements NamingConvention {
 
-    /** The name of the convention, returned by {@link #name()}. */
+    /**
+     * The name of the convention, returned by {@link #name()}.
+     */
     protected final String name;
-    /** The first character {@link Function}, returned by {@link #firstCharacterFunction()}. */
+    /**
+     * The first character {@link Function}, returned by {@link #firstCharacterFunction()}.
+     */
     protected final Function<Character, Character> firstCharacterFunction;
-    /** The separator {@link Predicate}, returned by {@link #separatorPredicate()}. */
+    /**
+     * The separator {@link Predicate}, returned by {@link #separatorPredicate()}.
+     */
     protected final Predicate<Character> separatorPredicate;
-    /** The separator {@link Function}, returned by {@link #separatorFunction()}. */
+    /**
+     * The separator {@link Function}, returned by {@link #separatorFunction()}.
+     */
     protected final Function<Character, String> separatorFunction;
-    /** The intermediate character {@link Function}, returned by {@link #intermediateCharacterFunction()}. */
+    /**
+     * The intermediate character {@link Function}, returned by {@link #intermediateCharacterFunction()}.
+     */
     protected final Function<Character, Character> intermediateCharacterFunction;
-    /** The character separator boolean, returned by {@link #characterSeparator()}. */
+    /**
+     * The character separator boolean, returned by {@link #characterSeparator()}.
+     */
     protected final boolean characterSeparator;
 
     /**
-     * Constructs a {@link StandardNamingConvention} using the specified parameters,
-     * setting the {@link #characterSeparator} to {@code true}.
+     * Constructs a {@link StandardNamingConvention} using the specified parameters, setting the {@link
+     * #characterSeparator} to {@code true}.
      *
-     * @param name The name of the convention, see {@link #name()} for details.
-     * @param firstCharacterFunction The first character {@link Function}, see
-     *                               {@link #firstCharacterFunction()} for details.
-     * @param separatorPredicate The separator {@link Predicate}, see
-     *                           {@link #separatorPredicate()} for details.
-     * @param separatorFunction The separator {@link Function}, see
-     *                          {@link #separatorFunction()} for details.
-     * @param intermediateCharacterFunction The intermediate character {@link Function},
-     *                                      see {@link #intermediateCharacterFunction()}
+     * @param name                          The name of the convention, see {@link #name()} for details.
+     * @param firstCharacterFunction        The first character {@link Function}, see {@link #firstCharacterFunction()}
      *                                      for details.
+     * @param separatorPredicate            The separator {@link Predicate}, see {@link #separatorPredicate()} for
+     *                                      details.
+     * @param separatorFunction             The separator {@link Function}, see {@link #separatorFunction()} for
+     *                                      details.
+     * @param intermediateCharacterFunction The intermediate character {@link Function}, see {@link
+     *                                      #intermediateCharacterFunction()} for details.
      */
-    public StandardNamingConvention(String name, Function<Character, Character> firstCharacterFunction, Predicate<Character> separatorPredicate, Function<Character, String> separatorFunction, Function<Character, Character> intermediateCharacterFunction) {
+    public StandardNamingConvention(String name, Function<Character, Character> firstCharacterFunction,
+                                    Predicate<Character> separatorPredicate,
+                                    Function<Character, String> separatorFunction,
+                                    Function<Character, Character> intermediateCharacterFunction) {
         this(name, firstCharacterFunction, separatorPredicate, separatorFunction, intermediateCharacterFunction, true);
     }
 
     /**
      * Constructs a {@link StandardNamingConvention} using the specified parameters.
      *
-     * @param name The name of the convention, see {@link #name()} for details.
-     * @param firstCharacterFunction The first character {@link Function}, see
-     *                               {@link #firstCharacterFunction()} for details.
-     * @param separatorPredicate The separator {@link Predicate}, see
-     *                           {@link #separatorPredicate()} for details.
-     * @param separatorFunction The separator {@link Function}, see
-     *                          {@link #separatorFunction()} for details.
-     * @param intermediateCharacterFunction The intermediate character {@link Function},
-     *                                      see {@link #intermediateCharacterFunction()}
+     * @param name                          The name of the convention, see {@link #name()} for details.
+     * @param firstCharacterFunction        The first character {@link Function}, see {@link #firstCharacterFunction()}
      *                                      for details.
-     * @param characterSeparator The character separator boolean, see
-     *                           {@link #characterSeparator()} for details.
+     * @param separatorPredicate            The separator {@link Predicate}, see {@link #separatorPredicate()} for
+     *                                      details.
+     * @param separatorFunction             The separator {@link Function}, see {@link #separatorFunction()} for
+     *                                      details.
+     * @param intermediateCharacterFunction The intermediate character {@link Function}, see {@link
+     *                                      #intermediateCharacterFunction()} for details.
+     * @param characterSeparator            The character separator boolean, see {@link #characterSeparator()} for
+     *                                      details.
      */
-    public StandardNamingConvention(String name, Function<Character, Character> firstCharacterFunction, Predicate<Character> separatorPredicate, Function<Character, String> separatorFunction, Function<Character, Character> intermediateCharacterFunction, boolean characterSeparator) {
+    public StandardNamingConvention(String name, Function<Character, Character> firstCharacterFunction,
+                                    Predicate<Character> separatorPredicate,
+                                    Function<Character, String> separatorFunction,
+                                    Function<Character, Character> intermediateCharacterFunction,
+                                    boolean characterSeparator) {
         this.name = name;
         this.firstCharacterFunction = firstCharacterFunction;
         this.separatorPredicate = separatorPredicate;
@@ -76,11 +92,10 @@ public class StandardNamingConvention implements NamingConvention {
     /**
      * {@inheritDoc}
      *
-     * @param string The {@link String} to check.
-     * @param acceptableCharacter A {@link Pattern} describing characters that are
-     *                            acceptable for use between separator characters.
-     * @return {@code true} if the {@code string} follows this {@link NamingConvention},
-     *         {@code false} otherwise.
+     * @param string              The {@link String} to check.
+     * @param acceptableCharacter A {@link Pattern} describing characters that are acceptable for use between separator
+     *                            characters.
+     * @return {@code true} if the {@code string} follows this {@link NamingConvention}, {@code false} otherwise.
      */
     @Override
     public boolean doesFollow(String string, Pattern acceptableCharacter) {
@@ -141,7 +156,7 @@ public class StandardNamingConvention implements NamingConvention {
      * {@inheritDoc}
      *
      * @param toConvention The {@link NamingConvention} to convert to.
-     * @param string The {@link String} to convert.
+     * @param string       The {@link String} to convert.
      * @return The converted {@link String}.
      */
     @Override
@@ -197,8 +212,7 @@ public class StandardNamingConvention implements NamingConvention {
     /**
      * {@inheritDoc}
      *
-     * @return The {@link Function} that computes the first character to fit this
-     *         {@link NamingConvention}.
+     * @return The {@link Function} that computes the first character to fit this {@link NamingConvention}.
      */
     @Override
     public Function<Character, Character> firstCharacterFunction() {
@@ -208,8 +222,7 @@ public class StandardNamingConvention implements NamingConvention {
     /**
      * {@inheritDoc}
      *
-     * @return The {@link Predicate} which validates that a separator fits this
-     *         {@link NamingConvention}.
+     * @return The {@link Predicate} which validates that a separator fits this {@link NamingConvention}.
      */
     @Override
     public Predicate<Character> separatorPredicate() {
@@ -219,8 +232,7 @@ public class StandardNamingConvention implements NamingConvention {
     /**
      * {@inheritDoc}
      *
-     * @return The {@link Function} that computes a separator to fit this
-     *         {@link NamingConvention}.
+     * @return The {@link Function} that computes a separator to fit this {@link NamingConvention}.
      */
     @Override
     public Function<Character, String> separatorFunction() {
@@ -230,8 +242,7 @@ public class StandardNamingConvention implements NamingConvention {
     /**
      * {@inheritDoc}
      *
-     * @return The {@link Function} that computer an intermediate character to fit
-     *         {@link NamingConvention}.
+     * @return The {@link Function} that computer an intermediate character to fit {@link NamingConvention}.
      */
     @Override
     public Function<Character, Character> intermediateCharacterFunction() {
@@ -241,9 +252,8 @@ public class StandardNamingConvention implements NamingConvention {
     /**
      * {@inheritDoc}
      *
-     * @return {@code true} if this {@link NamingConvention} uses an explicit extra
-     *         character, such as the underscore in {@link #SNAKE_CASE}, to denote
-     *         word separations, {@code false} otherwise.
+     * @return {@code true} if this {@link NamingConvention} uses an explicit extra character, such as the underscore in
+     * {@link #SNAKE_CASE}, to denote word separations, {@code false} otherwise.
      */
     @Override
     public boolean characterSeparator() {

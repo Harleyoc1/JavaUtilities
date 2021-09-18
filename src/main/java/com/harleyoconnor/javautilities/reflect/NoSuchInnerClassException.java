@@ -1,8 +1,7 @@
 package com.harleyoconnor.javautilities.reflect;
 
 /**
- * Thrown when a particular inner {@code class} or {@code interface} cannot
- * be found.
+ * Thrown when a particular inner {@code class} or {@code interface} cannot be found.
  *
  * @author Harley O'Connor
  * @since JavaUtilities 0.1.0

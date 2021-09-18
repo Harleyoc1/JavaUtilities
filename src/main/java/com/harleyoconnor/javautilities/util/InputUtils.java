@@ -6,53 +6,49 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Provides various useful {@code static} functions for reading from standard
- * input ({@link System#in}) using {@link #IN}, a simple {@link Scanner}.
+ * Provides various useful {@code static} functions for reading from standard input ({@link System#in}) using {@link
+ * #IN}, a simple {@link Scanner}.
  *
  * @author Harley O'Connor
  * @since JavaUtilities 0.0.1
- * @deprecated The uses for this are limited due to its rigidity. It will be
- *             replaced with a new console I/O system in the future.
+ * @deprecated The uses for this are limited due to its rigidity. It will be replaced with a new console I/O system in
+ * the future.
  */
 @Deprecated
 public final class InputUtils {
 
     /**
-     * Creates an initialises a {@link Scanner} instance for reading from
-     * {@link System#in}.
+     * Creates an initialises a {@link Scanner} instance for reading from {@link System#in}.
      */
     private static final Scanner IN = new Scanner(System.in);
 
     /**
-     * Returns a {@link String} input, looping until the inputted {@link String}
-     * is not empty.
+     * Returns a {@link String} input, looping until the inputted {@link String} is not empty.
      *
-     * @param prompt The message sent to the user informing them of what to
-     *               enter.
+     * @param prompt The message sent to the user informing them of what to enter.
      * @return The entered {@link String}.
      */
-    public static String getInput (final String prompt) {
+    public static String getInput(final String prompt) {
         return getInput(prompt, true);
     }
 
     /**
-     * Gets a {@link String} input. Loops until a valid string is input
-     * according to the parameters given.
+     * Gets a {@link String} input. Loops until a valid string is input according to the parameters given.
      *
-     * @param prompt The message sent to the user informing them of what to
-     *               enter.
-     * @param requireNotEmpty A boolean value stating whether or not the string
-     *                       must be set a value.
+     * @param prompt          The message sent to the user informing them of what to enter.
+     * @param requireNotEmpty A boolean value stating whether or not the string must be set a value.
      * @return The entered {@link String}.
      */
-    public static String getInput (final String prompt, final boolean requireNotEmpty) {
+    public static String getInput(final String prompt, final boolean requireNotEmpty) {
         String strInput;
 
         while (true) {
             System.out.print(prompt + " ");
             strInput = IN.next();
 
-            if (!strInput.equals("") || !requireNotEmpty) break;
+            if (!strInput.equals("") || !requireNotEmpty) {
+                break;
+            }
 
             invalidInput("string");
         }
@@ -61,27 +57,24 @@ public final class InputUtils {
     }
 
     /**
-     * Returns an integer input. Loops until a positive, non-zero integer is
-     * inputted.
+     * Returns an integer input. Loops until a positive, non-zero integer is inputted.
      *
      * @param prompt The message sent to the user informing them of what to enter.
      * @return The integer input.
      */
-    public static int getIntInput (final String prompt) {
+    public static int getIntInput(final String prompt) {
         return getIntInput(prompt, true, true);
     }
 
     /**
-     * Gets an integer input. Loops until a valid integer is input according to
-     * the parameters given.
+     * Gets an integer input. Loops until a valid integer is input according to the parameters given.
      *
-     * @param prompt The message sent to the user informing them of what to enter.
-     * @param requirePositive A boolean value stating whether or not to allow
-     *                        negative values.
-     * @param requireNotZero A boolean value stating whether or not to allow zero.
+     * @param prompt          The message sent to the user informing them of what to enter.
+     * @param requirePositive A boolean value stating whether or not to allow negative values.
+     * @param requireNotZero  A boolean value stating whether or not to allow zero.
      * @return The integer input.
      */
-    public static int getIntInput (final String prompt, final boolean requirePositive, final boolean requireNotZero) {
+    public static int getIntInput(final String prompt, final boolean requirePositive, final boolean requireNotZero) {
         int intInput;
 
         while (true) {
@@ -92,8 +85,9 @@ public final class InputUtils {
                 break;
             }
 
-            if (input != null)
+            if (input != null) {
                 System.out.println("\nYou must enter a valid integer.");
+            }
         }
 
         return intInput;
@@ -102,16 +96,15 @@ public final class InputUtils {
     /**
      * Gets an integer, or a string if one was input.
      *
-     * @param prompt The message sent to the user informing them of what to enter.
-     * @param requirePositiveIfInt A boolean value stating whether or not to allow
-     *                            negative values if the inpout is an integer.
-     * @param requireNotZeroIfInt A boolean value stating whether or not to allow
-     *                           zero if the input is an integer.
-     * @return An integer, string, or null if it was an invalid integer (according
-     *         to the parameters).
+     * @param prompt               The message sent to the user informing them of what to enter.
+     * @param requirePositiveIfInt A boolean value stating whether or not to allow negative values if the inpout is an
+     *                             integer.
+     * @param requireNotZeroIfInt  A boolean value stating whether or not to allow zero if the input is an integer.
+     * @return An integer, string, or null if it was an invalid integer (according to the parameters).
      */
     @Nullable
-    public static Object getIntOrStringInput (final String prompt, final boolean requirePositiveIfInt, final boolean requireNotZeroIfInt) {
+    public static Object getIntOrStringInput(final String prompt, final boolean requirePositiveIfInt,
+                                             final boolean requireNotZeroIfInt) {
         final String inputStr = getInput(prompt, true);
         final int intInput;
 
@@ -135,16 +128,14 @@ public final class InputUtils {
     }
 
     /**
-     * Presents the user with all the options in the possible selections list,
-     * returns the one they select.
+     * Presents the user with all the options in the possible selections list, returns the one they select.
      *
-     * @param prompt The message sent to the user informing them of what they are
-     *               selecting. Note that the possible selections are added to this
-     *               within the method.
+     * @param prompt             The message sent to the user informing them of what they are selecting. Note that the
+     *                           possible selections are added to this within the method.
      * @param possibleSelections The list of possible selection strings.
      * @return The possible selection string inputted.
      */
-    public static String getSelection (String prompt, final List<String> possibleSelections) {
+    public static String getSelection(String prompt, final List<String> possibleSelections) {
         StringBuilder promptBuilder = new StringBuilder(prompt);
 
         for (int i = 1; i <= possibleSelections.size(); i++) {
@@ -160,7 +151,8 @@ public final class InputUtils {
 
             try {
                 selection = possibleSelections.get(selectionIndex);
-            } catch (IndexOutOfBoundsException ignored) { }
+            } catch (IndexOutOfBoundsException ignored) {
+            }
 
             if (selection.equals("")) {
                 System.out.println("\nPlease enter a valid selection index.");
@@ -171,19 +163,20 @@ public final class InputUtils {
         }
     }
 
-    private static void invalidInput (final String invalidValue) {
+    private static void invalidInput(final String invalidValue) {
         invalidInput(invalidValue, true);
     }
 
     /**
-     * Tells the user that what they entered was invalid and prepares the input
-     * scanner for new input.
+     * Tells the user that what they entered was invalid and prepares the input scanner for new input.
      *
      * @param invalidValue The name of the invalid type.
      */
-    private static void invalidInput (final String invalidValue, final boolean readyNextInput) {
+    private static void invalidInput(final String invalidValue, final boolean readyNextInput) {
         System.out.println("\nYou must enter a valid " + invalidValue + ".");
-        if (readyNextInput) IN.next();
+        if (readyNextInput) {
+            IN.next();
+        }
     }
 
 }
