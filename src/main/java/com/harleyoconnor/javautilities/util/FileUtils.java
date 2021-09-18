@@ -10,7 +10,10 @@ import java.util.List;
  *
  * @author Harley O'Connor
  * @since JavaUtilities 0.0.2
+ * @deprecated accessing resources using a file is fundamentally flawed. Much of the functionality of this class will be
+ *             rewritten, refactored, and moved elsewhere.
  */
+@Deprecated(forRemoval = true)
 public final class FileUtils {
 
     /**
