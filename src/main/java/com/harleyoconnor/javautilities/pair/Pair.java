@@ -110,15 +110,15 @@ public interface Pair<K, V> {
     }
 
     /**
-     * Compares the specified {@code object} with this {@link Pair} for equality.  Returns {@code true} if the specified
-     * {@code object} is also a {@link Pair}, and the two have the same {@code key} and {@code value}.
+     * Compares the specified {@code other} with this {@link Pair} for equality.  Returns {@code true} if the specified
+     * {@code other} is also a {@link Pair}, and the two have the same {@code key} and {@code value}.
      *
-     * @param object The {@link Object} to be compared for equality with this {@link Pair}.
-     * @return {@code true} if the specified {@code object} is equal to this {@link Pair}.
+     * @param other The {@link Object} to be compared for equality with this {@link Pair}.
+     * @return {@code true} if the specified {@code other} is equal to this {@link Pair}.
      * @see Object#equals(Object)
      * @since JavaUtilities 0.1.0
      */
-    boolean equals(@Nullable final Object object);
+    boolean equals(@Nullable final Object other);
 
     /**
      * Returns the hash code value for this {@link Pair} object. More about how hash codes work can be found in {@link
@@ -147,22 +147,22 @@ public interface Pair<K, V> {
      * For example, if this is a {@link MutablePair} and is called with an {@link ImmutablePair}, {@code true} will be
      * returned if both have the same key and value.</p>
      *
-     * @param otherPair The reference {@link Pair} with which to compare.
+     * @param other The reference {@link Pair} with which to compare.
      * @return {@code true} if this object is the same as the {@code obj} argument or had an equal key and value; {@code
      * false} otherwise.
      * @deprecated Use {@link #equals(Object)} as it now does the same thing. This will be removed in {@code 0.0.11}.
      */
     @Deprecated
-    default boolean isEqual(@Nullable final Pair<?, ?> otherPair) {
-        if (this == otherPair) {
+    default boolean equalsContentOf(@Nullable final Pair<?, ?> other) {
+        if (this == other) {
             return true;
         }
-        if (otherPair == null) {
+        if (other == null) {
             return false;
         }
 
-        return Objects.equals(this.getKey(), otherPair.getKey()) &&
-                Objects.equals(this.getKey(), otherPair.getKey());
+        return Objects.equals(this.getKey(), other.getKey()) &&
+                Objects.equals(this.getValue(), other.getValue());
     }
 
     /**

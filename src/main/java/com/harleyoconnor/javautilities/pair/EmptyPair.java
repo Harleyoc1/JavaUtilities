@@ -60,15 +60,15 @@ public final class EmptyPair<K, V> implements Pair<K, V> {
      * only return {@code true} if the specified {@code object} is a {@link Pair} and also has both a {@code key} and
      * {@code value} which equate to {@code null}.</p>
      *
-     * @param object The {@link Object} to be compared for equality with this {@link EmptyPair}.
+     * @param other The {@link Object} to be compared for equality with this {@link EmptyPair}.
      * @return {@code true} if the specified {@code object} is a {@link Pair} and is empty; {@code false} otherwise.
      */
     @Override
-    public boolean equals(Object object) {
-        if (object instanceof EmptyPair) {
+    public boolean equals(Object other) {
+        if (other instanceof EmptyPair) {
             return true;
         }
-        if (!(object instanceof final Pair<?, ?> pair)) {
+        if (!(other instanceof final Pair<?, ?> pair)) {
             return false;
         }
 

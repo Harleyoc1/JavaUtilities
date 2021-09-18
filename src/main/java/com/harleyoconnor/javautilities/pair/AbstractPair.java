@@ -22,15 +22,15 @@ public abstract class AbstractPair<K, V> implements Pair<K, V> {
     /**
      * {@inheritDoc}
      *
-     * @param object The reference object with which to compare.
+     * @param other The reference object with which to compare.
      * @return {@code true} if this object is the same as the {@code obj} argument; {@code false} otherwise.
      */
     @Override
-    public boolean equals(@Nullable final Object object) {
-        if (this == object) {
+    public boolean equals(@Nullable final Object other) {
+        if (this == other) {
             return true;
         }
-        if (!(object instanceof final Pair<?, ?> otherPair)) {
+        if (!(other instanceof final Pair<?, ?> otherPair)) {
             return false;
         }
 
