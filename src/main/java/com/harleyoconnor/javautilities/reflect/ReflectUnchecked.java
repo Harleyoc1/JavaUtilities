@@ -287,8 +287,6 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      * @param parameterTypes the parameter types the member constructor takes. Must be in the same order in which they
      *                       are declared by the constructor.
      * @return the {@link Constructor} reflecting the member constructor
-     * @throws NoSuchMethodException if a constructor with the specified {@code parameterTypes} does not exist in the
-     *                               class being reflected on
      * @throws RuntimeException      if an exception was caught from the invocation of {@link
      *                               Reflect#getConstructorAccessible(List)} on the delegate
      */
@@ -358,6 +356,7 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      * this inferred method
      */
     @Deprecated(forRemoval = true, since = "0.1.3")
+    @SuppressWarnings("removal")
     @Override
     public <V> V instantiateInferred(final Object... arguments) {
         return getUnchecked(() -> this.delegate.instantiateInferred(arguments));
@@ -377,6 +376,7 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      * this inferred method
      */
     @Deprecated(forRemoval = true, since = "0.1.3")
+    @SuppressWarnings("removal")
     @Override
     public <V> V instantiateInferred(final List<Object> arguments) {
         return getUnchecked(() -> this.delegate.instantiateInferred(arguments));
@@ -398,6 +398,7 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      * this inferred method
      */
     @Deprecated(forRemoval = true, since = "0.1.3")
+    @SuppressWarnings({"unchecked", "removal"})
     @Override
     public <V> V instantiateInferred(final List<Class<?>> parameterTypes, final List<Object> arguments) {
         return getUnchecked(() -> this.delegate.instantiateInferred(parameterTypes, arguments));

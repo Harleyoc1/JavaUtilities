@@ -448,8 +448,8 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * this inferred method
      */
     @Deprecated(forRemoval = true, since = "0.1.3")
+    @SuppressWarnings({"unchecked", "removal"})
     @Override
-    @SuppressWarnings("unchecked")
     public <V> V instantiateInferred(final Object... arguments)
             throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         return (V) this.instantiate(arguments);
@@ -472,7 +472,7 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * this inferred method
      */
     @Deprecated(forRemoval = true, since = "0.1.3")
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "removal"})
     @Override
     public <V> V instantiateInferred(final List<Object> arguments)
             throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
@@ -496,7 +496,7 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @see Constructor#newInstance(Object...)
      */
     @Deprecated(forRemoval = true, since = "0.1.3")
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "removal"})
     @Override
     public <V> V instantiateInferred(final List<Class<?>> parameterTypes, final List<Object> arguments)
             throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
