@@ -1,7 +1,9 @@
 package com.harleyoconnor.javautilities.collection;
 
 import com.harleyoconnor.javautilities.reflect.Reflect;
+import com.harleyoconnor.javautilities.reflect.ReflectUnchecked;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InvalidObjectException;
@@ -68,7 +70,7 @@ public final class WeakHashSet<E> extends AbstractSet<E> implements Cloneable, S
      * @param c the collection whose elements are to be placed into this set
      * @throws NullPointerException if the specified collection is null
      */
-    public WeakHashSet(Collection<? extends E> c) {
+    public WeakHashSet(@NotNull Collection<? extends E> c) {
         this.map = new WeakHashMap<>(Math.max((int) (c.size() / .75f) + 1, 16));
         this.addAll(c);
     }
@@ -97,9 +99,9 @@ public final class WeakHashSet<E> extends AbstractSet<E> implements Cloneable, S
     }
 
     /**
-     * Returns an iterator over the elements in this set.  The elements are returned in no particular order.
+     * Returns an iterator over the elements in this set. The elements are returned in no particular order.
      *
-     * @return An {@link Iterator} over the elements in this set.
+     * @return an iterator over the elements in this set
      * @see ConcurrentModificationException
      */
     @NotNull
@@ -111,7 +113,7 @@ public final class WeakHashSet<E> extends AbstractSet<E> implements Cloneable, S
     /**
      * Returns the number of elements in this set (its cardinality).
      *
-     * @return The number of elements in this set (its cardinality).
+     * @return the number of elements in this set (its cardinality)
      */
     @Override
     public int size() {
@@ -121,7 +123,7 @@ public final class WeakHashSet<E> extends AbstractSet<E> implements Cloneable, S
     /**
      * Returns {@code true} if this set contains no elements.
      *
-     * @return {@code true} if this set contains no elements; {@code false} otherwise.
+     * @return {@code true} if this set contains no elements
      */
     @Override
     public boolean isEmpty() {
@@ -130,10 +132,11 @@ public final class WeakHashSet<E> extends AbstractSet<E> implements Cloneable, S
 
     /**
      * Returns {@code true} if this set contains the specified element. More formally, returns {@code true} if and only
-     * if this set contains an element {@code e} such that {@code (object==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;object.equals(e))}.
+     * if this set contains an element {@code e} such that {@code
+     * (object==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;object.equals(e))}.
      *
-     * @param object An element whose presence in this set is to be tested.
-     * @return {@code true} if this set contains the specified element; {@code false} otherwise.
+     * @param object an element whose presence in this set is to be tested
+     * @return {@code true} if this set contains the specified element
      */
     @Override
     public boolean contains(Object object) {
@@ -186,7 +189,7 @@ public final class WeakHashSet<E> extends AbstractSet<E> implements Cloneable, S
     public Object clone() {
         try {
             final WeakHashSet<E> newSet = (WeakHashSet<E>) super.clone();
-            newSet.map = Reflect.uncheckedOn(this.map).invoke("clone");
+            newSet.map = Reflect.on(this.map).unchecked().invoke("clone");
             return newSet;
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
@@ -196,21 +199,20 @@ public final class WeakHashSet<E> extends AbstractSet<E> implements Cloneable, S
     /**
      * Save the state of this {@link WeakHashSet} instance to a stream (that is, serialize it).
      *
-     * @param s The stream to serialise to.
-     * @throws IOException If an I/O error occurs.
+     * @param s the stream to serialise to
+     * @throws IOException if an I/O error occurs
      * @serialData The capacity of the backing {@link WeakHashMap} instance (int), and its load factor (float) are
      * emitted, followed by the size of the set (the number of elements it contains) (int), followed by all of its
      * elements (each an Object) in no particular order.
      */
     @Serial
-    private void writeObject(ObjectOutputStream s)
-            throws IOException {
+    private void writeObject(ObjectOutputStream s) throws IOException {
         // Write out any hidden serialization magic.
         s.defaultWriteObject();
 
         // Write out HashMap capacity and load factor.
         s.writeInt(this.getMapCapacity());
-        s.writeFloat(Reflect.uncheckedOn(this.map).getFieldValue("loadFactor"));
+        s.writeFloat(Reflect.on(this.map).unchecked().getFieldValue("loadFactor"));
 
         // Write out size.
         s.writeInt(map.size());
@@ -224,26 +226,26 @@ public final class WeakHashSet<E> extends AbstractSet<E> implements Cloneable, S
     /**
      * Gets the capacity of the backing {@link WeakHashMap}.
      *
-     * @return The capacity of the backing {@link WeakHashMap}.
+     * @return the capacity of the backing {@link WeakHashMap}
      */
     private int getMapCapacity() {
-        final Map.Entry<E, Object>[] table = Reflect.uncheckedOn(this.map).getFieldValue("table");
-        final int threshold = Reflect.uncheckedOn(this.map).getFieldValue("threshold");
+        final var map = Reflect.on(this.map).unchecked();
 
-        return (table != null) ? table.length : (threshold > 0) ? threshold :
-                Reflect.uncheckedOn(WeakHashMap.class).getFieldValue("DEFAULT_INITIAL_CAPACITY");
+        final Map.Entry<E, Object>[] table = map.getFieldValue("table");
+        final int threshold = map.getFieldValue("threshold");
+
+        return (table != null) ? table.length : (threshold > 0) ? threshold : 16;
     }
 
     /**
      * Reconstitute the {@link WeakHashSet} instance from a stream (that is, deserialize it).
      *
-     * @param s The stream to deserialise from.
-     * @throws IOException            If an I/O error occurs.
-     * @throws ClassNotFoundException If the class of the serialised object could not be found.
+     * @param s the stream to deserialise from
+     * @throws IOException            if an I/O error occurs
+     * @throws ClassNotFoundException if the class of the serialised object could not be found
      */
     @Serial
-    private void readObject(ObjectInputStream s)
-            throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
         // Read in any hidden serialization magic.
         s.defaultReadObject();
 
@@ -269,16 +271,15 @@ public final class WeakHashSet<E> extends AbstractSet<E> implements Cloneable, S
         }
         // Set the capacity according to the size and load factor ensuring that
         // the HashMap is at least 25% full but clamping to maximum capacity.
-        capacity = (int) Math.min(size * Math.min(1 / loadFactor, 4.0f),
-                Reflect.uncheckedOn(WeakHashMap.class).getFieldValue("MAXIMUM_CAPACITY", int.class));
+        capacity = (int) Math.min(size * Math.min(1 / loadFactor, 4.0f), 1073741824);
 
         // Constructing the backing map will lazily create an array when the first element is
         // added, so check it before construction. Call HashMap.tableSizeFor to compute the
         // actual allocation size. Check Map.Entry[].class since it's the nearest public type to
         // what is actually created.
 
-        Reflect.uncheckedOn(s).invoke("checkArray", Map.Entry[].class,
-                Reflect.uncheckedOn(HashMap.class).invoke("tableSizeFor", capacity));
+        Reflect.on(s).unchecked().invoke("checkArray", Map.Entry[].class,
+                Reflect.on(HashMap.class).unchecked().invoke("tableSizeFor", capacity));
 
         // Create backing HashMap.
         this.map = new WeakHashMap<>(capacity, loadFactor);
@@ -297,12 +298,15 @@ public final class WeakHashSet<E> extends AbstractSet<E> implements Cloneable, S
      * {@link Spliterator#DISTINCT}.  Overriding implementations should document the reporting of additional
      * characteristic values.</p>
      *
-     * @return A {@link Spliterator} over the elements in this set.
+     * @return a {@link Spliterator} over the elements in this set
      */
     @Override
     public Spliterator<E> spliterator() {
-        return Reflect.uncheckedOn(WeakHashMap.class).reflectInnerClass("KeySpliterator").unchecked()
-                .instantiateInferred(this.map, 0, -1, 0, 0);
+        return Reflect.on(WeakHashMap.class)
+                .unchecked()
+                .<Spliterator<E>>reflectInnerClass("KeySpliterator")
+                .unchecked()
+                .instantiate(this.map, 0, -1, 0, 0);
     }
 
 }

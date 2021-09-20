@@ -4,10 +4,10 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * Holds {@code primitive} classes and their {@code wrapper} equivalents.
+ * Holds {@code primitive} classes and their wrapper equivalents.
  *
- * <p>The main application of this is through the use of {@link #from(Class)},
- * providing a means to convert a wrapper {@link Class} to its {@code primitive} equivalent.</p>
+ * <p>The main application of this is through the use of {@link #from(Class)}, providing a means to convert a wrapper
+ * class to its primitive equivalent.</p>
  *
  * @author Harley O'Connor
  * @since JavaUtilities 0.1.0
@@ -50,11 +50,11 @@ public enum Primitive {
     private final Class<?> wrapperClass;
 
     /**
-     * Constructs a new {@link Primitive} {@code enum} for the specified {@code primitive} {@link Class} and its
-     * equivalent {@code wrapper} {@link Class}.
+     * Constructs a new {@link Primitive} {@code enum} for the specified {@code primitiveClass} and its equivalent
+     * {@code wrapperClass}.
      *
-     * @param primitiveClass The {@code primitive} {@link Class}.
-     * @param wrapperClass   The {@code wrapper} {@link Class}.
+     * @param primitiveClass the primitive class
+     * @param wrapperClass   the wrapper class
      */
     Primitive(final Class<?> primitiveClass, final Class<?> wrapperClass) {
         this.primitiveClass = primitiveClass;
@@ -62,30 +62,29 @@ public enum Primitive {
     }
 
     /**
-     * Gets the {@link #primitiveClass} for this {@link Primitive}.
+     * Returns the primitive class for this primitive.
      *
-     * @return The {@link #primitiveClass} for this {@link Primitive}.
+     * @return the primitive class for this primitive
      */
     public Class<?> getPrimitiveClass() {
         return this.primitiveClass;
     }
 
     /**
-     * Gets the {@link #wrapperClass} for this {@link Primitive}.
+     * Returns the wrapper class for this primitive.
      *
-     * @return The {@link #wrapperClass} for this {@link Primitive}.
+     * @return the wrapper class for this primitive
      */
     public Class<?> getWrapperClass() {
         return this.wrapperClass;
     }
 
     /**
-     * Returns an {@link Optional} containing the {@code primitive} {@link Class} equivalent for the specified {@code
-     * wrapper} {@link Class}, if it exists.
+     * Returns an optional containing the primitive equivalent for the specified {@code wrapperClass}, if one exists.
      *
-     * @param wrapperClass The {@code wrapper} {@link Class}.
-     * @return An {@link Optional} containing the {@code primitive} {@link Class}, or an {@link Optional#empty()} if one
-     * didn't exist.
+     * @param wrapperClass the wrapper class to get the equivalent primitive class for
+     * @return an optional containing the primitive equivalent for the specified {@code wrapperClass}, or {@linkplain
+     * Optional#empty() an empty optional} if one does not exist
      */
     public static Optional<Class<?>> from(final Class<?> wrapperClass) {
         return Stream.of(values())
@@ -96,11 +95,10 @@ public enum Primitive {
     }
 
     /**
-     * Returns the {@code primitive} {@link Class} equivalent for the specified {@link Class}, or itself if one didn't
-     * exist.
+     * Returns the primitive equivalent for the specified {@code wrapperClass}, or itself if one doesn't exist.
      *
-     * @param wrapperClass The {@code wrapper} {@link Class}.
-     * @return The {@code primitive} {@link Class} equivalent, or the specified {@link Class} if one didn't exist.
+     * @param wrapperClass the wrapper class to get the equivalent primitive class for
+     * @return the primitive equivalent for the specified {@code wrapperClass}, or itself if one doesn't exist
      */
     public static Class<?> fromOrSelf(final Class<?> wrapperClass) {
         return from(wrapperClass).orElse(wrapperClass);

@@ -1,11 +1,11 @@
 package com.harleyoconnor.javautilities.pair;
 
 /**
- * Implementation of {@link Pair} in which the {@link #key} is {@code final} - or in other words immutable - but the
+ * Implementation of {@link Pair} in which the key is final (or in other words immutable) but the
  * {@link #value} is non-final and can be mutated using {@link #setValue(Object)}.
  *
- * @param <K> The type of the key.
- * @param <V> The type of the value.
+ * @param <K> the type of the key
+ * @param <V> the type of the value
  * @author Harley O'Connor
  * @see Pair
  * @see ImmutablePair
@@ -18,31 +18,30 @@ public final class PartiallyMutablePair<K, V> extends AbstractPair<K, V> {
     private V value;
 
     /**
-     * Constructs a new {@link PartiallyMutablePair} object with the given {@code key} and no value (meaning it will be
-     * {@code null}).
+     * Constructs a new {@link PartiallyMutablePair} object with the specified {@code key} and a {@code null} value.
      *
-     * @param key The {@link #key} to set.
+     * @param key the key
      */
     public PartiallyMutablePair(final K key) {
         this.key = key;
     }
 
     /**
-     * Constructs a new {@link PartiallyMutablePair} object with the given {@code key} and {@code initialValue} objects
-     * assigned to {@link #key} and {@link #value}.
+     * Constructs a new {@link PartiallyMutablePair} object with the specified {@code key} and {@code value} objects
+     * assigned to {@link #key} and {@link #value} respectively.
      *
-     * @param key          The {@link #key} to set.
-     * @param initialValue The initial {@link #value} to set.
+     * @param key   the key
+     * @param value the initial value
      */
-    public PartiallyMutablePair(final K key, final V initialValue) {
+    public PartiallyMutablePair(final K key, final V value) {
         this.key = key;
-        this.value = initialValue;
+        this.value = value;
     }
 
     /**
      * {@inheritDoc}
      *
-     * @return The {@link #key} for this {@link PartiallyMutablePair}.
+     * @return the key for this pair
      */
     @Override
     public K getKey() {
@@ -52,7 +51,7 @@ public final class PartiallyMutablePair<K, V> extends AbstractPair<K, V> {
     /**
      * {@inheritDoc}
      *
-     * @return The {@link #value} for this {@link PartiallyMutablePair}.
+     * @return the value for this pair
      */
     @Override
     public V getValue() {
@@ -62,8 +61,8 @@ public final class PartiallyMutablePair<K, V> extends AbstractPair<K, V> {
     /**
      * {@inheritDoc}
      *
-     * @param value The new {@link #value} for this {@link PartiallyMutablePair}.
-     * @return This {@link PartiallyMutablePair} for chaining.
+     * @param value the new value
+     * @return this pair, for chaining operations
      */
     @Override
     public Pair<K, V> setValue(final V value) {
@@ -74,7 +73,7 @@ public final class PartiallyMutablePair<K, V> extends AbstractPair<K, V> {
     /**
      * {@inheritDoc}
      *
-     * @return The duplicated {@link PartiallyMutablePair}.
+     * @return the duplicated pair
      */
     @Override
     public PartiallyMutablePair<K, V> duplicate() {

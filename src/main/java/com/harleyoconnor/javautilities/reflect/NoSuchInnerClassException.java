@@ -1,13 +1,16 @@
 package com.harleyoconnor.javautilities.reflect;
 
+import java.io.Serial;
+
 /**
- * Thrown when a particular inner {@code class} or {@code interface} cannot be found.
+ * Thrown when a particular inner class or interface cannot be found.
  *
  * @author Harley O'Connor
  * @since JavaUtilities 0.1.0
  */
 public final class NoSuchInnerClassException extends ReflectiveOperationException {
 
+    @Serial
     private static final long serialVersionUID = 3719968328942105078L;
 
     /**
@@ -19,7 +22,7 @@ public final class NoSuchInnerClassException extends ReflectiveOperationExceptio
     /**
      * Constructs a {@link NoSuchInnerClassException} with a detail message.
      *
-     * @param message The detail message.
+     * @param message the detail message
      */
     public NoSuchInnerClassException(String message) {
         super(message);

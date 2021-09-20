@@ -5,8 +5,8 @@ package com.harleyoconnor.javautilities.pair;
  * non-final and can be mutated by the use of {@link #setKey(Object)}, {@link #setValue(Object)}, and {@link
  * #setKeyValue(Object, Object)}.
  *
- * @param <K> The type of the key.
- * @param <V> The type of the value.
+ * @param <K> the type of the key
+ * @param <V> the type of the value
  * @author Harley O'Connor
  * @see Pair
  * @see PartiallyMutablePair
@@ -19,28 +19,27 @@ public final class MutablePair<K, V> extends AbstractPair<K, V> {
     private V value;
 
     /**
-     * Constructs an (initially) empty {@link MutablePair}, or in other words one in which both the {@link #key} and
-     * {@link #value} are null.
+     * Constructs an empty {@link MutablePair}, or in other words one in which both the key and value are {@code null}.
      */
     public MutablePair() {
     }
 
     /**
-     * Constructs a new {@link MutablePair} object with the given {@code initialKey} and {@code initialValue} objects
-     * assigned to {@link #key} and {@link #value}.
+     * Constructs a new {@link MutablePair} object with the specified {@code key} and {@code value} objects
+     * assigned to {@link #key} and {@link #value} respectively.
      *
-     * @param initialKey   The initial {@link #key} to set.
-     * @param initialValue The initial {@link #value} to set.
+     * @param key   the initial key
+     * @param value the initial value
      */
-    public MutablePair(final K initialKey, final V initialValue) {
-        this.key = initialKey;
-        this.value = initialValue;
+    public MutablePair(final K key, final V value) {
+        this.key = key;
+        this.value = value;
     }
 
     /**
      * {@inheritDoc}
      *
-     * @return The {@link #key} for this {@link MutablePair}.
+     * @return the key for this pair
      */
     @Override
     public K getKey() {
@@ -50,8 +49,8 @@ public final class MutablePair<K, V> extends AbstractPair<K, V> {
     /**
      * {@inheritDoc}
      *
-     * @param key The new {@link #key} for this {@link MutablePair}.
-     * @return This {@link MutablePair} for chaining.
+     * @param key the new key
+     * @return this pair, for chaining operations
      */
     @Override
     public MutablePair<K, V> setKey(final K key) {
@@ -62,7 +61,7 @@ public final class MutablePair<K, V> extends AbstractPair<K, V> {
     /**
      * {@inheritDoc}
      *
-     * @return The {@link #value} for this {@link MutablePair}.
+     * @return the value for this pair
      */
     @Override
     public V getValue() {
@@ -72,8 +71,8 @@ public final class MutablePair<K, V> extends AbstractPair<K, V> {
     /**
      * {@inheritDoc}
      *
-     * @param value The new {@link #value} for this {@link MutablePair}.
-     * @return This {@link MutablePair} for chaining.
+     * @param value the new value
+     * @return this pair, for chaining operations
      */
     @Override
     public MutablePair<K, V> setValue(final V value) {
@@ -84,9 +83,9 @@ public final class MutablePair<K, V> extends AbstractPair<K, V> {
     /**
      * {@inheritDoc}
      *
-     * @param key   The new {@link #key} for this {@link Pair}.
-     * @param value The new {@link #value} for this {@link Pair}.
-     * @return This {@link MutablePair} for chaining.
+     * @param value the new value
+     * @param key   the new key
+     * @return this pair, for chaining operations
      */
     @Override
     public Pair<K, V> setKeyValue(final K key, final V value) {
@@ -96,7 +95,7 @@ public final class MutablePair<K, V> extends AbstractPair<K, V> {
     /**
      * {@inheritDoc}
      *
-     * @return The duplicated {@link ImmutablePair}.
+     * @return the duplicated pair
      */
     @Override
     public MutablePair<K, V> duplicate() {

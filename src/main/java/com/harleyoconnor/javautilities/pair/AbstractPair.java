@@ -11,8 +11,8 @@ import java.util.Objects;
  * <p>If an implementation of {@link Pair} wishes to provide custom implementations
  * of any of the aforementioned methods, they should not extend this class.</p>
  *
- * @param <K> The type of the key.
- * @param <V> The type of the value.
+ * @param <K> the type of the key
+ * @param <V> the type of the value
  * @author Harley O'Connor
  * @see Pair
  * @since JavaUtilities 0.0.8
@@ -22,8 +22,8 @@ public abstract class AbstractPair<K, V> implements Pair<K, V> {
     /**
      * {@inheritDoc}
      *
-     * @param other The reference object with which to compare.
-     * @return {@code true} if this object is the same as the {@code obj} argument; {@code false} otherwise.
+     * @param other the reference object with which to compare
+     * @return {@code true} if this object is the same as the specified {@code other} object
      */
     @Override
     public boolean equals(@Nullable final Object other) {
@@ -41,7 +41,7 @@ public abstract class AbstractPair<K, V> implements Pair<K, V> {
     /**
      * {@inheritDoc}
      *
-     * @return The hash code for this {@link Pair} object.
+     * @return the hash code for this pair
      * @see Object#hashCode()
      * @see Objects#hash(Object...)
      */
@@ -53,7 +53,7 @@ public abstract class AbstractPair<K, V> implements Pair<K, V> {
     /**
      * {@inheritDoc}
      *
-     * @return The {@link String} representation of this {@link Pair}.
+     * @return the string representation of this pair
      */
     @Override
     public String toString() {

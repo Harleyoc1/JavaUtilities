@@ -1,6 +1,8 @@
 package com.harleyoconnor.javautilities.reflect;
 
+import com.harleyoconnor.javautilities.collection.WeakHashSet;
 import com.harleyoconnor.javautilities.function.ThrowableSupplier;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -8,28 +10,32 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * An unchecked implementation of {@link Reflect}, using {@link ReflectChecked} as a backing and catching any
- * exceptions, throwing a runtime exception instead.
+ * An unchecked implementation of {@link Reflect}, using another {@link Reflect} as a backing and catching any
+ * {@link Throwable}s, throwing a runtime exception instead.
  *
+ * @param <T> the type of the class being reflected on
  * @author Harley O'Connor
  */
 public final class ReflectUnchecked<T> implements Reflect<T> {
 
-    private final Reflect<T> reflect;
+    /**
+     * The object to delegate method calls to.
+     */
+    private final Reflect<T> delegate;
 
     /**
      * Constructs a new {@link ReflectUnchecked} instance with the specified {@link ReflectChecked}.
      *
-     * @param reflect The {@link ReflectChecked}
+     * @param delegate the {@link Reflect} to delegate to
      */
-    ReflectUnchecked(Reflect<T> reflect) {
-        this.reflect = reflect;
+    ReflectUnchecked(@NotNull Reflect<T> delegate) {
+        this.delegate = delegate;
     }
 
     /**
      * Returns {@code this}, since it's already a {@link ReflectUnchecked}.
      *
-     * @return This {@link ReflectUnchecked}.
+     * @return {@code this}
      */
     @Override
     public ReflectUnchecked<T> unchecked() {
@@ -39,344 +45,404 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
     /**
      * {@inheritDoc}
      *
-     * @param name The {@link String} name of the {@link Field}.
-     * @return The {@link Field} {@code object} reflecting the member {@code field}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getField(String)}.
+     * @param name the name of the member field
+     * @return the {@link Field} object reflecting the member field
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getField(String)} on
+     *                          the delegate
      */
     @Override
     public Field getField(final String name) {
-        return getUnchecked(() -> this.reflect.getField(name));
+        return getUnchecked(() -> this.delegate.getField(name));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param name The {@link String} name of the {@link Field}.
-     * @return The {@link Field} {@code object} reflecting the member {@code field}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getFieldAccessible(String)}.
+     * @param name the name of the member field
+     * @return the {@link Field} reflecting the member field
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getFieldAccessible(String)}
+     *                          (String)} on the delegate
      */
     @Override
     public Field getFieldAccessible(final String name) {
-        return getUnchecked(() -> this.reflect.getFieldAccessible(name));
+        return getUnchecked(() -> this.delegate.getFieldAccessible(name));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param field The {@link Field} {@code object} to get the value for.
-     * @param <V>   The inferred type of the {@code field}.
-     * @return The value of the {@code field}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getFieldValue(Field)}.
+     * @param field the {@link Field}; reflects the member field to get the value of
+     * @param <V>   the inferred type of the field
+     * @return the value of the field
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getFieldValue(Field)}
+     *                          on the delegate
      */
     @Override
     public <V> V getFieldValue(final Field field) {
-        return getUnchecked(() -> this.reflect.getFieldValue(field));
+        return getUnchecked(() -> this.delegate.getFieldValue(field));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param name The {@link String} name of the {@link Field}.
-     * @param <V>  The inferred type of the {@code field}.
-     * @return The value of the {@code field}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getField(String)}.
+     * @param name the name of the member field to get the value of
+     * @param <V>  the inferred type of the field
+     * @return the value of the field
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getFieldValue(String)}
+     *                          on the delegate
      */
     @Override
     public <V> V getFieldValue(final String name) {
-        return getUnchecked(() -> this.reflect.getFieldValue(name));
+        return getUnchecked(() -> this.delegate.getFieldValue(name));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param field  The {@link Field} {@code object} to get the value for.
-     * @param vClass The {@link Class} {@code object} of the value of the {@link Field}.
-     * @param <V>    The type of the {@code field}.
-     * @return The value of the {@code field}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getFieldValue(Field, Class)}.
+     * @param field the {@link Field}; reflects the member field to get the value of
+     * @param type  the class type of the field
+     * @param <V>   the type of the field
+     * @return the value of the field
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getFieldValue(Field,
+     *                          Class)} on the delegate
      */
     @Override
-    public <V> V getFieldValue(final Field field, final Class<V> vClass) {
-        return getUnchecked(() -> this.reflect.getFieldValue(field, vClass));
+    public <V> V getFieldValue(final Field field, final Class<V> type) {
+        return getUnchecked(() -> this.delegate.getFieldValue(field, type));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param name   The {@link String} name of the {@link Field}.
-     * @param vClass The {@link Class} {@code object} of the value of the {@link Field}.
-     * @param <V>    The type of the {@code field}.
-     * @return The value of the {@code field}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getFieldValue(String, Class)}.
+     * @param name the name of the member field to get the value of
+     * @param type the class type of the field
+     * @param <V>  the type of the field
+     * @return the value of the field
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getFieldValue(String,
+     *                          Class)} on the delegate
      */
     @Override
-    public <V> V getFieldValue(final String name, final Class<V> vClass) {
-        return getUnchecked(() -> this.reflect.getFieldValue(name, vClass));
+    public <V> V getFieldValue(final String name, final Class<V> type) {
+        return getUnchecked(() -> this.delegate.getFieldValue(name, type));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param name           The {@link String} name of the {@link Method}.
-     * @param parameterTypes The {@link Class} types the member {@code method} takes.
-     * @return The {@link Method} {@code object} reflecting the member {@code method}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getMethod(String, Class[])}.
+     * @param name           the name of the member method
+     * @param parameterTypes the parameter types the member method takes. Must be in the same order they are declared by
+     *                       the method.
+     * @return the {@link Method} reflecting the member method
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getMethod(String,
+     *                          Class[])} on the delegate
      */
     @Override
     public Method getMethod(final String name, final Class<?>... parameterTypes) {
-        return getUnchecked(() -> this.reflect.getMethod(name, parameterTypes));
+        return getUnchecked(() -> this.delegate.getMethod(name, parameterTypes));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param name           The {@link String} name of the {@link Method}.
-     * @param parameterTypes The {@link Class} types the member {@code method} takes.
-     * @return The {@link Method} {@code object} reflecting the member {@code method}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getMethod(String, List)}.
+     * @param name           the name of the member method
+     * @param parameterTypes the parameter types the member method takes. Must be in the same order they are declared by
+     *                       the method.
+     * @return the {@link Method} reflecting the member method
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getMethod(String,
+     *                          List)} on the delegate
      */
     @Override
     public Method getMethod(final String name, final List<Class<?>> parameterTypes) {
-        return getUnchecked(() -> this.reflect.getMethod(name, parameterTypes));
+        return getUnchecked(() -> this.delegate.getMethod(name, parameterTypes));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param name           The {@link String} name of the {@link Method}.
-     * @param parameterTypes The {@link Class} types the member {@code method} takes.
-     * @return The {@link Method} {@code object} reflecting the member {@code method}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getMethodAccessible(String,
-     *                          Class[])}.
+     * @param name           the name of the member method
+     * @param parameterTypes the parameter types the member method takes. Must be in the same order they are declared by
+     *                       the method.
+     * @return the {@link Method} reflecting the member method
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getMethodAccessible(String,
+     *                          Class[])} on the delegate
      */
     @Override
     public Method getMethodAccessible(final String name, final Class<?>... parameterTypes) {
-        return getUnchecked(() -> this.reflect.getMethod(name, parameterTypes));
+        return getUnchecked(() -> this.delegate.getMethod(name, parameterTypes));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param name           The {@link String} name of the {@link Method}.
-     * @param parameterTypes The {@link Class} types the member {@code method} takes.
-     * @return The {@link Method} {@code object} reflecting the member {@code method}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getMethodAccessible(String, List)}.
+     * @param name           the name of the member method
+     * @param parameterTypes the parameter types the member method takes. Must be in the same order they are declared by
+     *                       the method.
+     * @return the {@link Method} reflecting the member method
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getMethodAccessible(String,
+     *                          List)} on the delegate
      */
     @Override
     public Method getMethodAccessible(final String name, final List<Class<?>> parameterTypes) {
-        return getUnchecked(() -> this.reflect.getMethod(name, parameterTypes));
+        return getUnchecked(() -> this.delegate.getMethod(name, parameterTypes));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param name       The {@link String} name of the {@link Method}.
-     * @param parameters The parameters to pass on invocation of the specified {@code method}.
-     * @param <V>        The return type of the {@code method}.
-     * @return The value returned by the invocation of the {@code method}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#invoke(String, List)}.
+     * @param name      the name of the member method to invoke
+     * @param arguments the arguments to pass on invocation of the method. Must be in the same order in which the
+     *                  corresponding parameter is declared by the method.
+     * @param <V>       the inferred return type of the method
+     * @return the value returned by the invocation of the method
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#invoke(String,
+     *                          Object...)} on the delegate
      * @see Method#invoke(Object, Object...)
      */
     @Override
-    public <V> V invoke(final String name, final List<Object> parameters) {
-        return getUnchecked(() -> this.reflect.invoke(name, parameters));
+    public <V> V invoke(final String name, Object... arguments) {
+        return getUnchecked(() -> this.delegate.invoke(name, arguments));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param name       The {@link String} name of the {@link Method}.
-     * @param parameters The parameters to pass on invocation of the specified {@code method}.
-     * @param <V>        The return type of the {@code method}.
-     * @return The value returned by the invocation of the {@code method}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#invoke(String, Object[])}.
+     * @param name      the name of the member method to invoke
+     * @param arguments the arguments to pass on invocation of the method. Must be in the same order in which the
+     *                  corresponding parameter is declared by the method.
+     * @param <V>       the inferred return type of the method
+     * @return the value returned by the invocation of the method
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#invoke(String, List)}
+     *                          on the delegate
      * @see Method#invoke(Object, Object...)
      */
     @Override
-    public <V> V invoke(final String name, Object... parameters) {
-        return getUnchecked(() -> this.reflect.invoke(name, parameters));
+    public <V> V invoke(final String name, final List<Object> arguments) {
+        return getUnchecked(() -> this.delegate.invoke(name, arguments));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param name       The {@link String} name of the {@link Method}.
-     * @param parameters The parameters to pass on invocation of the specified {@code method}.
-     * @param <V>        The return type of the {@code method}.
-     * @return The value returned by the invocation of the {@code method}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#invoke(String, List, List)}.
+     * @param name           the name of the member method
+     * @param parameterTypes the parameter types the member method takes. Must be in the same order in which they are
+     *                       declared by the method.
+     * @param arguments      the arguments to pass on invocation of the method. Must be in the same order in which the
+     *                       corresponding parameter is declared by the method.
+     * @param <V>            the inferred return type of the method
+     * @return the value returned by the invocation of the method
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#invoke(String, List,
+     *                          List)} on the delegate
      * @see Method#invoke(Object, Object...)
      */
     @Override
-    public <V> V invoke(final String name, final List<Class<?>> parameterTypes, final List<Object> parameters) {
-        return getUnchecked(() -> this.reflect.invoke(name, parameterTypes, parameters));
+    public <V> V invoke(final String name, final List<Class<?>> parameterTypes, final List<Object> arguments) {
+        return getUnchecked(() -> this.delegate.invoke(name, parameterTypes, arguments));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param parameterTypes The {@link Class} types the member {@code constructor} takes.
-     * @return The {@link Constructor} {@code object} reflecting the member {@code constructor}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getConstructor(Class[])}.
+     * @param parameterTypes the parameter types the member constructor takes. Must be in the same order in which they
+     *                       are declared by the constructor.
+     * @return the {@link Constructor} reflecting the member constructor
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getConstructor(Class[])}
+     *                          on the delegate
      */
     @Override
     public Constructor<T> getConstructor(final Class<?>... parameterTypes) {
-        return getUnchecked(() -> this.reflect.getConstructor(parameterTypes));
+        return getUnchecked(() -> this.delegate.getConstructor(parameterTypes));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param parameterTypes The {@link Class} types the member {@code constructor} takes.
-     * @return The {@link Constructor} {@code object} reflecting the member {@code constructor}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getConstructor(List)}.
+     * @param parameterTypes the parameter types the member constructor takes. Must be in the same order in which they
+     *                       are declared by the constructor.
+     * @return the {@link Constructor} reflecting the member constructor
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getConstructor(List)}
+     *                          on the delegate
      */
     @Override
     public Constructor<T> getConstructor(final List<Class<?>> parameterTypes) {
-        return getUnchecked(() -> this.reflect.getConstructor(parameterTypes));
+        return getUnchecked(() -> this.delegate.getConstructor(parameterTypes));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param parameterTypes The {@link Class} types the member {@code constructor} takes.
-     * @return The {@link Constructor} {@code object} reflecting the member {@code constructor}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getConstructorAccessible(Class[])}.
+     * @param parameterTypes the parameter types the member constructor takes. Must be in the same order in which they
+     *                       are declared by the constructor.
+     * @return the {@link Constructor} reflecting the member constructor
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getConstructorAccessible(Class[])}
+     *                          on the delegate
      */
     @Override
     public Constructor<T> getConstructorAccessible(final Class<?>... parameterTypes) {
-        return getUnchecked(() -> this.reflect.getConstructorAccessible(parameterTypes));
+        return getUnchecked(() -> this.delegate.getConstructorAccessible(parameterTypes));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param parameterTypes The {@link Class} types the member {@code constructor} takes.
-     * @return The {@link Constructor} {@code object} reflecting the member {@code constructor}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getConstructorAccessible(List)}.
+     * @param parameterTypes the parameter types the member constructor takes. Must be in the same order in which they
+     *                       are declared by the constructor.
+     * @return the {@link Constructor} reflecting the member constructor
+     * @throws NoSuchMethodException if a constructor with the specified {@code parameterTypes} does not exist in the
+     *                               class being reflected on
+     * @throws RuntimeException      if an exception was caught from the invocation of {@link
+     *                               Reflect#getConstructorAccessible(List)} on the delegate
      */
     @Override
     public Constructor<T> getConstructorAccessible(final List<Class<?>> parameterTypes) {
-        return getUnchecked(() -> this.reflect.getConstructorAccessible(parameterTypes));
+        return getUnchecked(() -> this.delegate.getConstructorAccessible(parameterTypes));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param parameters The parameters to pass on instantiation of the specified {@code constructor}.
-     * @return The constructed {@link Object} of type {@link T}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#instantiate(Object...)}.
+     * @param arguments the arguments to pass on invocation of the constructor. Must be in the same order in which the
+     *                  corresponding parameter is declared by the constructor.
+     * @return the instantiated object of type {@link T}
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#instantiate(Object...)}
+     *                          on the delegate
      * @see Constructor#newInstance(Object...)
      */
     @Override
-    public T instantiate(final Object... parameters) {
-        return getUnchecked(() -> this.reflect.instantiate(parameters));
+    public T instantiate(final Object... arguments) {
+        return getUnchecked(() -> this.delegate.instantiate(arguments));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param parameters The parameters to pass on instantiation of the specified {@code constructor}.
-     * @return The constructed {@link Object} of type {@link T}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#instantiate(List)}.
+     * @param arguments the arguments to pass on invocation of the constructor. Must be in the same order in which the
+     *                  corresponding parameter is declared by the constructor.
+     * @return the instantiated object of type {@link T}
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#instantiate(List)} on
+     *                          the delegate
      * @see Constructor#newInstance(Object...)
      */
     @Override
-    public T instantiate(final List<Object> parameters) {
-        return getUnchecked(() -> this.reflect.instantiate(parameters));
+    public T instantiate(final List<Object> arguments) {
+        return getUnchecked(() -> this.delegate.instantiate(arguments));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param parameters The parameters to pass on instantiation of the specified {@code constructor}.
-     * @return The constructed {@link Object} of type {@link T}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#instantiate(List, List)}.
+     * @param parameterTypes the parameter types the member constructor takes. Must be in the same order in which they
+     *                       are declared by the method.
+     * @param arguments      the arguments to pass on invocation of the constructor. Must be in the same order in which
+     *                       the corresponding parameter is declared by the constructor.
+     * @return the instantiated object of type {@link T}
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#instantiate(List,
+     *                          List)} on the delegate
      * @see Constructor#newInstance(Object...)
      */
     @Override
-    public T instantiate(final List<Class<?>> parameterTypes, final List<Object> parameters) {
-        return getUnchecked(() -> this.reflect.instantiate(parameterTypes, parameters));
+    public T instantiate(final List<Class<?>> parameterTypes, final List<Object> arguments) {
+        return getUnchecked(() -> this.delegate.instantiate(parameterTypes, arguments));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param parameters The parameters to pass on instantiation of the specified {@code constructor}.
-     * @param <V>        The inferred type of the {@link T}.
-     * @return The constructed {@link Object} of type {@link V}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#instantiateInferred(Object...)}.
+     * @param arguments the arguments to pass on invocation of the constructor. Must be in the same order in which the
+     *                  corresponding parameter is declared by the constructor.
+     * @param <V>       the inferred type of the instantiated object
+     * @return the instantiated object of type {@link T}
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#instantiateInferred(Object...)}
+     *                          on the delegate
      * @see Constructor#newInstance(Object...)
+     * @deprecated see {@link WeakHashSet#spliterator()} for an example of instantiating an inner class without needing
+     * this inferred method
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     @Override
-    public <V> V instantiateInferred(final Object... parameters) {
-        return getUnchecked(() -> this.reflect.instantiateInferred(parameters));
+    public <V> V instantiateInferred(final Object... arguments) {
+        return getUnchecked(() -> this.delegate.instantiateInferred(arguments));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param parameters The parameters to pass on instantiation of the specified {@code constructor}.
-     * @param <V>        The inferred type of the {@link T}.
-     * @return The constructed {@link Object} of type {@link V}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#instantiateInferred(List)}.
+     * @param arguments the arguments to pass on invocation of the constructor. Must be in the same order in which the
+     *                  corresponding parameter is declared by the constructor.
+     * @param <V>       the inferred type of the instantiated object
+     * @return the instantiated object of type {@link T}
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#instantiateInferred(List)}
+     *                          on the delegate
      * @see Constructor#newInstance(Object...)
+     * @deprecated see {@link WeakHashSet#spliterator()} for an example of instantiating an inner class without needing
+     * this inferred method
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     @Override
-    public <V> V instantiateInferred(final List<Object> parameters) {
-        return getUnchecked(() -> this.reflect.instantiateInferred(parameters));
+    public <V> V instantiateInferred(final List<Object> arguments) {
+        return getUnchecked(() -> this.delegate.instantiateInferred(arguments));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param parameters The parameters to pass on instantiation of the specified {@code constructor}.
-     * @param <V>        The inferred type of the {@link T}.
-     * @return The constructed {@link Object} of type {@link V}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#instantiateInferred(List, List)}.
+     * @param parameterTypes the parameter types the member constructor takes. Must be in the same order in which they
+     *                       are declared by the method.
+     * @param arguments      the arguments to pass on invocation of the constructor. Must be in the same order in which
+     *                       the corresponding parameter is declared by the constructor.
+     * @param <V>            the inferred type of the instantiated object
+     * @return the instantiated object of type {@link T}
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#instantiateInferred(List,
+     *                          List)} on the delegate
      * @see Constructor#newInstance(Object...)
+     * @deprecated see {@link WeakHashSet#spliterator()} for an example of instantiating an inner class without needing
+     * this inferred method
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     @Override
-    public <V> V instantiateInferred(final List<Class<?>> parameterTypes, final List<Object> parameters) {
-        return getUnchecked(() -> this.reflect.instantiateInferred(parameterTypes, parameters));
+    public <V> V instantiateInferred(final List<Class<?>> parameterTypes, final List<Object> arguments) {
+        return getUnchecked(() -> this.delegate.instantiateInferred(parameterTypes, arguments));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param name The {@link String} name of the {@code inner class}.
-     * @return The {@link Class} {@code object} reflecting the member {@code inner class}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#getInnerClass(String)}.
+     * @param name the simple name of the inner class
+     * @return the {@link Class} reflecting the inner class with the specified {@code name}
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getInnerClass(String)}
+     *                          on the delegate
      */
     @Override
     public Class<?> getInnerClass(final String name) {
-        return getUnchecked(() -> this.reflect.getInnerClass(name));
+        return getUnchecked(() -> this.delegate.getInnerClass(name));
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param name The {@link String} name of the {@code inner class}.
-     * @param <I>  The type of the {@code inner class} being reflected on.
-     * @return The {@link Class} {@code object} reflecting the member {@code inner class}.
-     * @throws RuntimeException If an exception was thrown by {@link ReflectChecked#reflectInnerClass(String)}.
+     * @param name the simple name of the inner class
+     * @param <I>  the inferred type of the inner class to reflect
+     * @return a {@link Reflect} for the inner class with the specified {@code name}
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#reflectInnerClass(String)}
+     *                          on the delegate
      */
     @Override
     public <I> Reflect<I> reflectInnerClass(final String name) {
-        return getUnchecked(() -> this.reflect.reflectInnerClass(name));
+        return getUnchecked(() -> this.delegate.reflectInnerClass(name));
     }
 
     /**
-     * Calls {@link ThrowableSupplier#get()} on the specified {@link ThrowableSupplier}, catching any {@link Throwable}s
-     * thrown and creating a {@link RuntimeException} from them. If nothing is thrown then it returns the return value.
+     * Calls {@link ThrowableSupplier#get()} on the specified {@code supplier}, catching any thrown {@link Throwable}s
+     * and creating a {@link RuntimeException} from them. If nothing is thrown, returns the return value.
      *
-     * @param throwableSupplier The {@link ThrowableSupplier} to get.
-     * @param <V>               The type to return.
-     * @return The {@code object} of type {@link V} returned by the specified {@link ThrowableSupplier}.
+     * @param supplier the throwable supplier to attempt to get from
+     * @param <V>      the type the specified {@code supplier} returns
+     * @return the value returned by the specified {@code supplier}
+     * @throws RuntimeException if the specified {@code supplier} threw an exception on invocation of {@link
+     *                          ThrowableSupplier#get()}
      */
-    public static <V> V getUnchecked(final ThrowableSupplier<V, ?> throwableSupplier) {
+    private static <V> V getUnchecked(final ThrowableSupplier<V, ?> supplier) {
         try {
-            return throwableSupplier.get();
+            return supplier.get();
         } catch (final Throwable throwable) {
             throw new RuntimeException(throwable);
         }

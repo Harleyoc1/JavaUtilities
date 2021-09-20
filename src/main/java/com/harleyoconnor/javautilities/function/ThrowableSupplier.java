@@ -8,11 +8,10 @@ import java.util.function.Supplier;
 /**
  * Mirrors the {@link Supplier}, except that {@link #get()} can throw a {@link Throwable} of type {@link T}.
  *
- * <p>This is a {@link FunctionalInterface} whose functional method is
- * {@link #get()}.
+ * <p>This is a {@link FunctionalInterface} whose functional method is {@link #get()}.
  *
- * @param <R> The type of the result supplied by this supplier.
- * @param <T> The type that this supplier {@code throws}.
+ * @param <R> the type of the result supplied by this supplier
+ * @param <T> the type that this supplier {@code throws}
  * @author Harley O'Connor
  * @see Supplier
  * @since JavaUtilities 0.1.0
@@ -23,20 +22,20 @@ public interface ThrowableSupplier<R, T extends Throwable> {
     /**
      * Gets a result of type {@link R}, or throws {@link T}.
      *
-     * @return A result.
-     * @throws T The supplier {@link Throwable}.
+     * @return a result
+     * @throws T if the supplier throws
      */
     R get() throws T;
 
     /**
-     * Creates a {@link ThrowableSupplier} that acts as a "proxy" to the given {@link Supplier} (calling {@link
+     * Creates a throwable supplier that acts as a "proxy" to the specified {@code supplier} (calling {@link
      * Supplier#get()} when {@link #get()} is called on it). It can throw a {@link Throwable} of inferred type {@link
      * T}.
      *
-     * @param supplier The {@link Supplier} to act as proxy to.
-     * @param <R>      The type of the result supplied by this supplier.
-     * @param <T>      The type that this supplier {@code throws}.
-     * @return A new {@link ThrowableFunction}.
+     * @param supplier the supplier to act as proxy to
+     * @param <R>      the type of the result supplied by this supplier
+     * @param <T>      the type that this supplier {@code throws}
+     * @return a new throwable supplier
      */
     static <R, T extends Throwable> ThrowableSupplier<R, T> proxy(@NotNull final Supplier<R> supplier) {
         Objects.requireNonNull(supplier);

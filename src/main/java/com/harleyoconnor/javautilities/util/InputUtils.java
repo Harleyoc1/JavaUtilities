@@ -14,7 +14,7 @@ import java.util.Scanner;
  * @deprecated The uses for this are limited due to its rigidity. It will be replaced with a new console I/O system in
  * the future.
  */
-@Deprecated(forRemoval = true)
+@Deprecated(forRemoval = true, since = "0.1.1")
 public final class InputUtils {
 
     /**

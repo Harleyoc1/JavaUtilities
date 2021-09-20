@@ -1,21 +1,23 @@
 package com.harleyoconnor.javautilities.reflect;
 
+import com.harleyoconnor.javautilities.collection.WeakHashSet;
+
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InaccessibleObjectException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * Implementations will handle reflective operations. This aims to make reflection much simpler, especially when using
- * unchecked operations (see {@link ReflectUnchecked}).
+ * Implementations will handle reflective operations. Effectively a utility class for effortlessly reflecting an {@link
+ * AccessibleObject}.
  * <p>
- * For using the default implementations, call {@link #on(Class)} for reflecting on {@code static} members, or {@link
- * #on(Object)} for reflecting on {@code non-static} methods within the specified {@code object}. Both functions have an
- * "unchecked" version, which create a {@link ReflectUnchecked} {@code object}.
+ * For using the default implementations, call {@link #on(Class)} for reflecting on static members, or {@link
+ * #on(Object)} for reflecting on non-static members within the specified {@code object}.
  *
- * @param <T> The type of the {@link Class} being reflected on.
+ * @param <T> the type of the class being reflected on
  * @author Harley O'Connor
  * @see ReflectChecked
  * @see ReflectUnchecked
@@ -24,423 +26,442 @@ import java.util.List;
 public interface Reflect<T> {
 
     /**
-     * Returns a {@link ReflectUnchecked} object from this {@link Reflect} object.
+     * Returns a new {@link ReflectUnchecked} object that delegates to this.
      *
-     * @return A {@link ReflectUnchecked} of this {@link Reflect}.
+     * @return a new {@link ReflectUnchecked} object that delegates to this
      */
     ReflectUnchecked<T> unchecked();
 
     /**
-     * Gets the {@link Field} {@code object} which reflects the member {@code field} (of the {@link Class} of type
-     * {@link T}) with the specified {@code name}.
+     * Returns the {@link Field} reflecting the member field with the specified {@code name} in the class (or object if
+     * non-static) being reflected on.
+     * <p>
+     * If the field is inaccessible from the invoker, certain operations on the returned {@link Field} throw {@link
+     * IllegalAccessException}. In this case, {@link #getFieldAccessible(String)} can be used to bypass this (unless a
+     * {@link SecurityManager} prevents it).
      *
-     * <p>If the field is inaccessible from the calling method, certain operations on the
-     * returned {@link Field} {@code object} may throw {@link IllegalAccessException}. In this case, {@link
-     * #getFieldAccessible(String)} can be used to bypass this (unless a {@link SecurityManager} prevents it).</p>
-     *
-     * @param name The {@link String} name of the {@link Field}.
-     * @return The {@link Field} {@code object} reflecting the member {@code field}.
-     * @throws NoSuchFieldException If a {@code field} with the specified {@code name} does not exist in the {@link
-     *                              Class} currently being reflected on.
+     * @param name the name of the member field
+     * @return the {@link Field} object reflecting the member field
+     * @throws NoSuchFieldException if a field with the specified {@code name} does not exist in the class being
+     *                              reflected on
      */
     Field getField(String name) throws NoSuchFieldException;
 
     /**
-     * Gets the {@link Field} {@code object} which reflects the member {@code field} (of the {@link Class} of type
-     * {@link T}) with the specified {@code name}, making it accessible.
+     * Returns the {@link Field} reflecting the member field with the specified {@code name} in the class (or object if
+     * non-static) being reflected on. The returned {@link Field} is also made accessible via {@link
+     * Field#setAccessible(boolean)}.
+     * <p>
+     * This allows access to a field which is usually inaccessible, such as allowing access to a private member field
+     * from outside the parent class.
      *
-     * <p>This allows the calling methods to access {@code field}s which are usually
-     * inaccessible, such as allowing access to a {@code private} member {@code field} from outside the {@link
-     * Class}.</p>
-     *
-     * @param name The {@link String} name of the {@link Field}.
-     * @return The {@link Field} {@code object} reflecting the member {@code field}.
-     * @throws NoSuchFieldException If a {@code field} with the specified {@code name} does not exist in the {@link
-     *                              Class} currently being reflected on.
+     * @param name the name of the member field
+     * @return the {@link Field} reflecting the member field
+     * @throws NoSuchFieldException if a field with the specified {@code name} does not exist in the class being
+     *                              reflected on
      */
     Field getFieldAccessible(String name) throws NoSuchFieldException;
 
     /**
-     * Gets the value of the specified {@link Field} {@code object} in the {@link Class} (and {@code object} if {@code
-     * non-static}) currently being reflected on.
+     * Returns the value of the specified {@code field}'s reflected member field in the class (or object if non-static)
+     * being reflected on.
      *
-     * @param field The {@link Field} {@code object} to get the value for.
-     * @param <V>   The inferred type of the {@code field}.
-     * @return The value of the {@code field}.
-     * @throws IllegalAccessException If the {@link Field} could not be accessed by this method.
+     * @param field the {@link Field}; reflects the member field to get the value of
+     * @param <V>   the inferred type of the field
+     * @return the value of the field
+     * @throws IllegalAccessException if the field cannot be accessed from this method
      */
     <V> V getFieldValue(Field field) throws IllegalAccessException;
 
     /**
-     * Gets the value of the {@link Field} {@code object} obtained from the specified {@code name} in the {@link Class}
-     * (and {@code object} if {@code non-static}) currently being reflected on.
+     * Returns the value of the field with the specified {@code name} in the class (or object if non-static) being
+     * reflected on.
      *
-     * @param name The {@link String} name of the {@link Field}.
-     * @param <V>  The inferred type of the {@code field}.
-     * @return The value of the {@code field}.
-     * @throws NoSuchFieldException   If a {@code field} with the specified {@code name} does not exist in the {@link
-     *                                Class} currently being reflected on.
-     * @throws IllegalAccessException If the {@link Field} could not be accessed by this method.
+     * @param name the name of the member field to get the value of
+     * @param <V>  the inferred type of the field
+     * @return the value of the field
+     * @throws NoSuchFieldException   if a field with the specified {@code name} does not exist in the class being
+     *                                reflected on
+     * @throws IllegalAccessException if the field cannot be accessed from this method
      */
     <V> V getFieldValue(String name) throws NoSuchFieldException, IllegalAccessException;
 
     /**
-     * Gets the value of the specified {@link Field} {@code object} in the {@link Class} (and {@code object} if {@code
-     * non-static}) currently being reflected on.
+     * Returns the value of the specified {@code field}'s reflected member field in the class (or object if non-static)
+     * being reflected on. The type of the field is cast to the specified {@code type}, instead of inferring the type as
+     * is the case in {@link #getFieldValue(Field)}.
      *
-     * @param field  The {@link Field} {@code object} to get the value for.
-     * @param vClass The {@link Class} {@code object} of the value of the {@link Field}.
-     * @param <V>    The type of the {@code field}.
-     * @return The value of the {@code field}.
-     * @throws IllegalAccessException If the {@link Field} could not be accessed by this method.
+     * @param field the {@link Field}; reflects the member field to get the value of
+     * @param type  the class type of the field
+     * @param <V>   the type of the field
+     * @return the value of the field
+     * @throws IllegalAccessException if the field cannot be accessed from this method
      */
-    <V> V getFieldValue(Field field, Class<V> vClass) throws IllegalAccessException;
+    <V> V getFieldValue(Field field, Class<V> type) throws IllegalAccessException;
 
     /**
-     * Gets the value of the {@link Field} {@code object} obtained from the specified {@code name} in the {@link Class}
-     * (and {@code object} if {@code non-static}) currently being reflected on.
+     * Returns the value of the field with the specified {@code name} in the class (or object if non-static) being
+     * reflected on. The type of the field is cast to the specified {@code type}, instead of inferring the type as is
+     * the case in {@link #getFieldValue(String)}.
      *
-     * @param name   The {@link String} name of the {@link Field}.
-     * @param vClass The {@link Class} {@code object} of the value of the {@link Field}.
-     * @param <V>    The type of the {@code field}.
-     * @return The value of the {@code field}.
-     * @throws NoSuchFieldException   If a {@code field} with the specified {@code name} does not exist in the {@link
-     *                                Class} currently being reflected on.
-     * @throws IllegalAccessException If the {@link Field} could not be accessed by this method.
+     * @param name the name of the member field to get the value of
+     * @param type the class type of the field
+     * @param <V>  the type of the field
+     * @return the value of the field
+     * @throws NoSuchFieldException   if a field with the specified {@code name} does not exist in the class being
+     *                                reflected on
+     * @throws IllegalAccessException if the field cannot be accessed from this method
      */
-    <V> V getFieldValue(String name, Class<V> vClass) throws NoSuchFieldException, IllegalAccessException;
+    <V> V getFieldValue(String name, Class<V> type) throws NoSuchFieldException, IllegalAccessException;
 
     /**
-     * Gets the {@link Method} {@code object} which reflects the member {@code method} (of the {@link Class} of type
-     * {@link T}) with the specified {@code name} with the specified parameters {@link Class} types.
+     * Returns the {@link Method} reflecting the member method with the specified {@code name} and {@code
+     * parameterTypes} in the class (or object if non-static) being reflected on.
+     * <p>
+     * If the method is inaccessible from the invoker, certain operations on the returned {@link Method} throw {@link
+     * IllegalAccessException}. In this case, {@link #getMethodAccessible(String, Class[])} can be used to bypass this
+     * (unless a {@link SecurityManager} prevents it).
      *
-     * <p>If the method is inaccessible from the calling method, certain operations on the
-     * returned {@link Method} {@code object} may throw {@link IllegalAccessException}. In this case, {@link
-     * #getMethodAccessible(String, Class[])} can be used to bypass this (unless a {@link SecurityManager} prevents
-     * it).</p>
-     *
-     * @param name           The {@link String} name of the {@link Method}.
-     * @param parameterTypes The {@link Class} types the member {@code method} takes.
-     * @return The {@link Method} {@code object} reflecting the member {@code method}.
-     * @throws NoSuchMethodException If a {@code method} with the specified {@code name} and {@code parameter} types
-     *                               does not exist in the {@link Class} currently being reflected on.
+     * @param name           the name of the member method
+     * @param parameterTypes the parameter types the member method takes. Must be in the same order in which they are
+     *                       declared by the method.
+     * @return the {@link Method} reflecting the member method
+     * @throws NoSuchMethodException if a method with the specified {@code name} and {@code parameterTypes} does not
+     *                               exist in the class being reflected on
      */
     Method getMethod(String name, Class<?>... parameterTypes) throws NoSuchMethodException;
 
     /**
-     * Gets the {@link Method} {@code object} which reflects the member {@code method} (of the {@link Class} of type
-     * {@link T}) with the specified {@code name} with the specified parameters {@link Class} types.
+     * Returns the {@link Method} reflecting the member method with the specified {@code name} and {@code
+     * parameterTypes} in the class (or object if non-static) being reflected on.
+     * <p>
+     * If the method is inaccessible from the invoker, certain operations on the returned {@link Method} throw {@link
+     * IllegalAccessException}. In this case, {@link #getMethodAccessible(String, Class[])} can be used to bypass this
+     * (unless a {@link SecurityManager} prevents it).
      *
-     * <p>If the method is inaccessible from the calling method, certain operations on the
-     * returned {@link Method} {@code object} may throw {@link IllegalAccessException}. In this case, {@link
-     * #getMethodAccessible(String, Class[])} can be used to bypass this (unless a {@link SecurityManager} prevents
-     * it).</p>
-     *
-     * @param name           The {@link String} name of the {@link Method}.
-     * @param parameterTypes The {@link Class} types the member {@code method} takes.
-     * @return The {@link Method} {@code object} reflecting the member {@code method}.
-     * @throws NoSuchMethodException If a {@code method} with the specified {@code name} and {@code parameter} types
-     *                               does not exist in the {@link Class} currently being reflected on.
+     * @param name           the name of the member method
+     * @param parameterTypes the parameter types the member method takes. Must be in the same order in which they are
+     *                       declared by the method.
+     * @return the {@link Method} reflecting the member method
+     * @throws NoSuchMethodException if a method with the specified {@code name} and {@code parameterTypes} does not
+     *                               exist in the class being reflected on
      */
     Method getMethod(String name, List<Class<?>> parameterTypes) throws NoSuchMethodException;
 
     /**
-     * Gets the {@link Method} {@code object} which reflects the member {@code method} (of the {@link Class} of type
-     * {@link T}) with the specified {@code name} with the specified parameters {@link Class} types.
+     * Returns the {@link Method} reflecting the member method with the specified {@code name} in the class (or object
+     * if non-static) being reflected on. The returned {@link Method} is also made accessible via {@link
+     * Method#setAccessible(boolean)}.
+     * <p>
+     * This allows access to a method which is usually inaccessible, such as allowing access to a private member method
+     * from outside the parent class.
      *
-     * <p>This allows the calling methods to access {@code method}s which are usually
-     * inaccessible, such as allowing access to a {@code private} member {@code method} from outside the {@link
-     * Class}.</p>
-     *
-     * @param name           The {@link String} name of the {@link Method}.
-     * @param parameterTypes The {@link Class} types the member {@code method} takes.
-     * @return The {@link Method} {@code object} reflecting the member {@code method}.
-     * @throws NoSuchMethodException If a {@code method} with the specified {@code name} and {@code parameter} types
-     *                               does not exist in the {@link Class} currently being reflected on.
+     * @param name           the name of the member method
+     * @param parameterTypes the parameter types the member method takes. Must be in the same order in which they are
+     *                       declared by the method.
+     * @return the {@link Method} reflecting the member method
+     * @throws NoSuchMethodException if a method with the specified {@code name} and {@code parameterTypes} does not
+     *                               exist in the class being reflected on
      */
     Method getMethodAccessible(String name, Class<?>... parameterTypes) throws NoSuchMethodException;
 
     /**
-     * Gets the {@link Method} {@code object} which reflects the member {@code method} (of the {@link Class} of type
-     * {@link T}) with the specified {@code name} with the specified parameters {@link Class} types.
+     * Returns the {@link Method} reflecting the member method with the specified {@code name} in the class (or object
+     * if non-static) being reflected on. The returned {@link Method} is also made accessible via {@link
+     * Method#setAccessible(boolean)}.
+     * <p>
+     * This allows access to a method which is usually inaccessible, such as allowing access to a private member method
+     * from outside the parent class.
      *
-     * <p>This allows the calling methods to access {@code method}s which are usually
-     * inaccessible, such as allowing access to a {@code private} member {@code method} from outside the {@link
-     * Class}.</p>
-     *
-     * @param name           The {@link String} name of the {@link Method}.
-     * @param parameterTypes The {@link Class} types the member {@code method} takes.
-     * @return The {@link Method} {@code object} reflecting the member {@code method}.
-     * @throws NoSuchMethodException If a {@code method} with the specified {@code name} and {@code parameter} types
-     *                               does not exist in the {@link Class} currently being reflected on.
+     * @param name           the name of the member method
+     * @param parameterTypes the parameter types the member method takes. Must be in the same order in which they are
+     *                       declared by the method.
+     * @return the {@link Method} reflecting the member method
+     * @throws NoSuchMethodException if a method with the specified {@code name} and {@code parameterTypes} does not
+     *                               exist in the class being reflected on
      */
     Method getMethodAccessible(String name, List<Class<?>> parameterTypes) throws NoSuchMethodException;
 
     /**
-     * Invokes the {@link Method} {@code object} obtained from the specified {@code name} and {@code parameter} {@link
-     * Object}s in the {@link Class} (and {@code object} if {@code non-static}) currently being reflected on.
+     * Invokes the member method with the specified {@code name} and parameter types corresponding to the specified
+     * {@code arguments} in the class (or object if non-static) being reflected on.
      *
-     * @param name       The {@link String} name of the {@link Method}.
-     * @param parameters The parameters to pass on invocation of the specified {@code method}.
-     * @param <V>        The return type of the {@code method}.
-     * @return The value returned by the invocation of the {@code method}.
-     * @throws NoSuchMethodException     If a {@code method} with the specified {@code name} and inferred {@code
-     *                                   parameter} types does not exist in the {@link Class} currently being reflected
-     *                                   on.
-     * @throws IllegalAccessException    If the {@link Method} could not be accessed by this method.
-     * @throws InvocationTargetException If the underlying method invoked throws an exception.
+     * @param name      the name of the member method to invoke
+     * @param arguments the arguments to pass on invocation of the method. Must be in the same order in which the
+     *                  corresponding parameter is declared by the method.
+     * @param <V>       the inferred return type of the method
+     * @return the value returned by the invocation of the method
+     * @throws NoSuchMethodException     if a method with the specified {@code name} and parameter types (as determined
+     *                                   by the specified {@code arguments}) does not exist in the class being reflected
+     *                                   on
+     * @throws IllegalAccessException    if the member method could not be accessed
+     * @throws InvocationTargetException if the underlying method invoked throws an exception
      * @see Method#invoke(Object, Object...)
      */
-    <V> V invoke(String name, Object... parameters)
+    <V> V invoke(String name, Object... arguments)
             throws InvocationTargetException, NoSuchMethodException, IllegalAccessException;
 
     /**
-     * Invokes the {@link Method} {@code object} obtained from the specified {@code name} and {@code parameter} {@link
-     * Object}s in the {@link Class} (and {@code object} if {@code non-static}) currently being reflected on.
+     * Invokes the member method with the specified {@code name} and parameter types corresponding to the specified
+     * {@code arguments} in the class (or object if non-static) being reflected on.
      *
-     * @param name       The {@link String} name of the {@link Method}.
-     * @param parameters The parameters to pass on invocation of the specified {@code method}.
-     * @param <V>        The return type of the {@code method}.
-     * @return The value returned by the invocation of the {@code method}.
-     * @throws NoSuchMethodException     If a {@code method} with the specified {@code name} and {@code parameter} types
-     *                                   does not exist in the {@link Class} currently being reflected on.
-     * @throws IllegalAccessException    If the {@link Method} could not be accessed by this method.
-     * @throws InvocationTargetException If the underlying method invoked throws an exception.
+     * @param name      the name of the member method to invoke
+     * @param arguments the arguments to pass on invocation of the method. Must be in the same order in which the
+     *                  corresponding parameter is declared by the method.
+     * @param <V>       the inferred return type of the method
+     * @return the value returned by the invocation of the method
+     * @throws NoSuchMethodException     if a method with the specified {@code name} and parameter types (as determined
+     *                                   by the specified {@code arguments}) does not exist in the class being reflected
+     *                                   on
+     * @throws IllegalAccessException    if the member method could not be accessed
+     * @throws InvocationTargetException if the underlying method invoked throws an exception
      * @see Method#invoke(Object, Object...)
      */
-    <V> V invoke(String name, List<Object> parameters)
+    <V> V invoke(String name, List<Object> arguments)
             throws InvocationTargetException, NoSuchMethodException, IllegalAccessException;
 
     /**
-     * Invokes the {@link Method} {@code object} obtained from the specified {@code name} with the specified {@code
-     * parameter} {@link Object}s in the {@link Class} (and {@code object} if {@code non-static}) currently being
-     * reflected on.
+     * Invokes the member method with the specified {@code name} and {@code parameterTypes} in the class (or object if
+     * non-static) being reflected on.
+     * <p>
+     * This method will use the specified {@code parameterTypes} rather than obtaining them from calling {@link
+     * Object#getClass()} on the specified {@code arguments}.
      *
-     * <p>This method will use the specified {@code parameterTypes} rather than assuming them
-     * from calling {@link Object#getClass()} on the specified {@code parameter}s.</p>
-     *
-     * @param name           The {@link String} name of the {@link Method}.
-     * @param parameterTypes The {@link Class} types the member {@code method} takes.
-     * @param parameters     The parameters to pass on invocation of the specified {@code method}.
-     * @param <V>            The return type of the {@code method}.
-     * @return The value returned by the invocation of the {@code method}.
-     * @throws NoSuchMethodException     If a {@code method} with the specified {@code name} and {@code parameter} types
-     *                                   does not exist in the {@link Class} currently being reflected on.
-     * @throws IllegalAccessException    If the {@link Method} could not be accessed by this method.
-     * @throws InvocationTargetException If the underlying method invoked throws an exception.
+     * @param name           the name of the member method
+     * @param parameterTypes the parameter types the member method takes. Must be in the same order in which they are
+     *                       declared by the method.
+     * @param arguments      the arguments to pass on invocation of the method. Must be in the same order in which the
+     *                       corresponding parameter is declared by the method.
+     * @param <V>            the inferred return type of the method
+     * @return the value returned by the invocation of the method
+     * @throws NoSuchMethodException     if a method with the specified {@code name} and parameter types (as determined
+     *                                   by the specified {@code arguments}) does not exist in the class being reflected
+     *                                   on
+     * @throws IllegalAccessException    if the member method could not be accessed
+     * @throws InvocationTargetException if the underlying method invoked throws an exception
      * @see Method#invoke(Object, Object...)
      */
-    <V> V invoke(String name, List<Class<?>> parameterTypes, List<Object> parameters)
+    <V> V invoke(String name, List<Class<?>> parameterTypes, List<Object> arguments)
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException;
 
     /**
-     * Gets the {@link Constructor} {@code object} which reflects the member {@code constructor} (of the {@link Class}
-     * of type {@link T}) with the specified the specified parameters {@link Class} types.
+     * Returns the {@link Constructor} reflecting the member constructor with the specified and {@code parameterTypes}
+     * in the class (or object if non-static) being reflected on.
+     * <p>
+     * If the constructor is inaccessible from the invoker, certain operations on the returned {@link Constructor} throw
+     * {@link IllegalAccessException}. In this case, {@link #getConstructorAccessible(Class[])} can be used to bypass
+     * this (unless a {@link SecurityManager} prevents it).
      *
-     * <p>If the constructor is inaccessible from the calling method, certain operations on
-     * the returned {@link Constructor} {@code object} may throw {@link IllegalAccessException}. In this case, {@link
-     * #getConstructorAccessible(Class...)} can be used to bypass this (unless a {@link SecurityManager} prevents
-     * it).</p>
-     *
-     * @param parameterTypes The {@link Class} types the member {@code constructor} takes.
-     * @return The {@link Constructor} {@code object} reflecting the member {@code constructor}.
-     * @throws NoSuchMethodException If a {@code constructor} with the specified {@code parameter} types does not exist
-     *                               in the {@link Class} currently being reflected on.
+     * @param parameterTypes the parameter types the member constructor takes. Must be in the same order in which they
+     *                       are declared by the constructor.
+     * @return the {@link Constructor} reflecting the member constructor
+     * @throws NoSuchMethodException if a constructor with the specified {@code parameterTypes} does not exist in the
+     *                               class being reflected on
      */
     Constructor<T> getConstructor(final Class<?>... parameterTypes) throws NoSuchMethodException;
 
     /**
-     * Gets the {@link Constructor} {@code object} which reflects the member {@code constructor} (of the {@link Class}
-     * of type {@link T}) with the specified the specified parameters {@link Class} types.
+     * Returns the {@link Constructor} reflecting the member constructor with the specified and {@code parameterTypes}
+     * in the class (or object if non-static) being reflected on.
+     * <p>
+     * If the constructor is inaccessible from the invoker, certain operations on the returned {@link Constructor} throw
+     * {@link IllegalAccessException}. In this case, {@link #getConstructorAccessible(Class[])} can be used to bypass
+     * this (unless a {@link SecurityManager} prevents it).
      *
-     * <p>If the constructor is inaccessible from the calling method, certain operations on
-     * the returned {@link Constructor} {@code object} may throw {@link IllegalAccessException}. In this case, {@link
-     * #getConstructorAccessible(Class...)} can be used to bypass this (unless a {@link SecurityManager} prevents
-     * it).</p>
-     *
-     * @param parameterTypes The {@link Class} types the member {@code constructor} takes.
-     * @return The {@link Constructor} {@code object} reflecting the member {@code constructor}.
-     * @throws NoSuchMethodException If a {@code constructor} with the specified {@code parameter} types does not exist
-     *                               in the {@link Class} currently being reflected on.
+     * @param parameterTypes the parameter types the member constructor takes. Must be in the same order in which they
+     *                       are declared by the constructor.
+     * @return the {@link Constructor} reflecting the member constructor
+     * @throws NoSuchMethodException if a constructor with the specified {@code parameterTypes} does not exist in the
+     *                               class being reflected on
      */
     Constructor<T> getConstructor(final List<Class<?>> parameterTypes) throws NoSuchMethodException;
 
     /**
-     * Gets the {@link Constructor} {@code object} which reflects the member {@code constructor} (of the {@link Class}
-     * of type {@link T}) with the specified the specified parameters {@link Class} types.
+     * Returns the {@link Constructor} reflecting the member constructor with the specified {@code name} in the class
+     * (or object if non-static) being reflected on. The returned {@link Constructor} is also made accessible via {@link
+     * Constructor#setAccessible(boolean)}.
+     * <p>
+     * This allows access to a constructor which is usually inaccessible, such as allowing access to a private member
+     * constructor from outside the parent class.
      *
-     * <p>This allows the calling methods to access {@code constructors}s which are usually
-     * inaccessible, such as allowing access to a {@code private} member {@code constructor} from outside the {@link
-     * Class}.</p>
-     *
-     * @param parameterTypes The {@link Class} types the member {@code constructor} takes.
-     * @return The {@link Constructor} {@code object} reflecting the member {@code constructor}.
-     * @throws NoSuchMethodException If a {@code constructor} with the specified {@code parameter} types does not exist
-     *                               in the {@link Class} currently being reflected on.
+     * @param parameterTypes the parameter types the member constructor takes. Must be in the same order in which they
+     *                       are declared by the constructor.
+     * @return the {@link Constructor} reflecting the member constructor
+     * @throws NoSuchMethodException if a constructor with the specified {@code parameterTypes} does not exist in the
+     *                               class being reflected on
      */
     Constructor<T> getConstructorAccessible(final Class<?>... parameterTypes) throws NoSuchMethodException;
 
     /**
-     * Gets the {@link Constructor} {@code object} which reflects the member {@code constructor} (of the {@link Class}
-     * of type {@link T}) with the specified the specified parameters {@link Class} types.
+     * Returns the {@link Constructor} reflecting the member constructor with the specified {@code name} in the class
+     * (or object if non-static) being reflected on. The returned {@link Constructor} is also made accessible via {@link
+     * Constructor#setAccessible(boolean)}.
+     * <p>
+     * This allows access to a constructor which is usually inaccessible, such as allowing access to a private member
+     * constructor from outside the parent class.
      *
-     * <p>This allows the calling methods to access {@code constructors}s which are usually
-     * inaccessible, such as allowing access to a {@code private} member {@code constructor} from outside the {@link
-     * Class}.</p>
-     *
-     * @param parameterTypes The {@link Class} types the member {@code constructor} takes.
-     * @return The {@link Constructor} {@code object} reflecting the member {@code constructor}.
-     * @throws NoSuchMethodException If a {@code constructor} with the specified {@code parameter} types does not exist
-     *                               in the {@link Class} currently being reflected on.
+     * @param parameterTypes the parameter types the member constructor takes. Must be in the same order in which they
+     *                       are declared by the constructor.
+     * @return the {@link Constructor} reflecting the member constructor
+     * @throws NoSuchMethodException if a constructor with the specified {@code parameterTypes} does not exist in the
+     *                               class being reflected on
      */
     Constructor<T> getConstructorAccessible(final List<Class<?>> parameterTypes) throws NoSuchMethodException;
 
     /**
-     * Instantiates a new instance of the {@link Class} (or {@link Object}) currently being reflected on using the
-     * {@link Constructor} {@code object} obtained from the specified {@code parameter} {@link Object}s, calling it with
-     * these parameters.
+     * Instantiates the class being reflected on using the constructor with the parameter types corresponding to the
+     * specified {@code arguments}.
      *
-     * @param parameters The parameters to pass on instantiation of the specified {@code constructor}.
-     * @return The constructed {@link Object} of type {@link T}.
-     * @throws NoSuchMethodException     If a {@code constructor} with the specified, inferred {@code parameter} types
-     *                                   does not exist in the {@link Class} currently being reflected on.
-     * @throws IllegalAccessException    If the {@link Constructor} could not be accessed by this method.
-     * @throws InvocationTargetException If the underlying constructor invoked throws an exception.
-     * @throws InstantiationException    If the {@link Class} declaring the underlying constructor is abstract.
+     * @param arguments the arguments to pass on invocation of the constructor. Must be in the same order in which the
+     *                  corresponding parameter is declared by the constructor.
+     * @return the instantiated object of type {@link T}
+     * @throws NoSuchMethodException     if a constructor with the parameter types as determined by the specified {@code
+     *                                   arguments} does not exist in the class being reflected on
+     * @throws IllegalAccessException    if the member constructor could not be accessed
+     * @throws InvocationTargetException if the underlying constructor invoked throws an exception
+     * @throws InstantiationException    if the class being reflected on is abstract
      * @see Constructor#newInstance(Object...)
      */
-    T instantiate(Object... parameters)
+    T instantiate(Object... arguments)
             throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException;
 
     /**
-     * Instantiates a new instance of the {@link Class} (or {@link Object}) currently being reflected on using the
-     * {@link Constructor} {@code object} obtained from the specified {@code parameter} {@link Object}s, calling it with
-     * these parameters.
+     * Instantiates the class being reflected on using the constructor with the parameter types corresponding to the
+     * specified {@code arguments}.
      *
-     * @param parameters The parameters to pass on instantiation of the specified {@code constructor}.
-     * @return The constructed {@link Object} of type {@link T}.
-     * @throws NoSuchMethodException     If a {@code constructor} with the specified, inferred {@code parameter} types
-     *                                   does not exist in the {@link Class} currently being reflected on.
-     * @throws IllegalAccessException    If the {@link Constructor} could not be accessed by this method.
-     * @throws InvocationTargetException If the underlying constructor invoked throws an exception.
-     * @throws InstantiationException    If the {@link Class} declaring the underlying constructor is abstract.
+     * @param arguments the arguments to pass on invocation of the constructor. Must be in the same order in which the
+     *                  corresponding parameter is declared by the constructor.
+     * @return the instantiated object of type {@link T}
+     * @throws NoSuchMethodException     if a constructor with the parameter types as determined by the specified {@code
+     *                                   arguments} does not exist in the class being reflected on
+     * @throws IllegalAccessException    if the member constructor could not be accessed
+     * @throws InvocationTargetException if the underlying constructor invoked throws an exception
+     * @throws InstantiationException    if the class being reflected on is abstract
      * @see Constructor#newInstance(Object...)
      */
-    T instantiate(List<Object> parameters)
+    T instantiate(List<Object> arguments)
             throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException;
 
     /**
-     * Instantiates a new instance of the {@link Class} (or {@link Object}) currently being reflected on using the
-     * {@link Constructor} {@code object} obtained from the specified {@code parameter} {@link Class} types, calling it
-     * with the specified parameters {@link Object}s.
+     * Instantiates the class being reflected on using the constructor with the specified {@code parameterTypes}.
      *
-     * @param parameterTypes The {@link Class} types the member {@code constructor} takes.
-     * @param parameters     The parameters to pass on instantiation of the specified {@code constructor}.
-     * @return The constructed {@link Object} of type {@link T}.
-     * @throws NoSuchMethodException     If a {@code constructor} with the specified {@code parameter} types does not
-     *                                   exist in the {@link Class} currently being reflected on.
-     * @throws IllegalAccessException    If the {@link Constructor} could not be accessed by this method.
-     * @throws InvocationTargetException If the underlying constructor invoked throws an exception.
-     * @throws InstantiationException    If the {@link Class} declaring the underlying constructor is abstract.
+     * @param parameterTypes the parameter types the member constructor takes. Must be in the same order in which they
+     *                       are declared by the method.
+     * @param arguments      the arguments to pass on invocation of the constructor. Must be in the same order in which
+     *                       the corresponding parameter is declared by the constructor.
+     * @return the instantiated object of type {@link T}
+     * @throws NoSuchMethodException     if a constructor with the specified {@code parameterTypes} does not exist in
+     *                                   the class being reflected on
+     * @throws IllegalAccessException    if the member constructor could not be accessed
+     * @throws InvocationTargetException if the underlying constructor invoked throws an exception
+     * @throws InstantiationException    if the class being reflected on is abstract
      * @see Constructor#newInstance(Object...)
      */
-    T instantiate(List<Class<?>> parameterTypes, List<Object> parameters)
+    T instantiate(List<Class<?>> parameterTypes, List<Object> arguments)
             throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException;
 
     /**
-     * Instantiates a new instance of the {@link Class} (or {@link Object}) currently being reflected on using the
-     * {@link Constructor} {@code object} obtained from the specified {@code parameter} {@link Object}s, calling it with
-     * these parameters.
+     * Instantiates the class being reflected on using the constructor with the parameter types corresponding to the
+     * specified {@code arguments}.
+     * <p>
+     * This alternate {@link #instantiate(Object...)} method infers the returned type. This is mainly for when creating
+     * inner classes in which the actual type is not known, but a super-type is.
      *
-     * <p>This modification of {@link #instantiate(Object...)} infers the {@link Class} type.
-     * This is mainly for when creating inner classes in which the actual type is not known.</p>
-     *
-     * @param parameters The parameters to pass on instantiation of the specified {@code constructor}.
-     * @param <V>        The inferred type of the {@link T}.
-     * @return The constructed {@link Object} of type {@link V}.
-     * @throws NoSuchMethodException     If a {@code constructor} with the specified, inferred {@code parameter} types
-     *                                   does not exist in the {@link Class} currently being reflected on.
-     * @throws IllegalAccessException    If the {@link Constructor} could not be accessed by this method.
-     * @throws InvocationTargetException If the underlying constructor invoked throws an exception.
-     * @throws InstantiationException    If the {@link Class} declaring the underlying constructor is abstract.
+     * @param arguments the arguments to pass on invocation of the constructor. Must be in the same order in which the
+     *                  corresponding parameter is declared by the constructor.
+     * @param <V>       the inferred type of the instantiated object
+     * @return the instantiated object of type {@link T}
+     * @throws NoSuchMethodException     if a constructor with the parameter types as determined by the specified {@code
+     *                                   arguments} does not exist in the class being reflected on
+     * @throws IllegalAccessException    if the member constructor could not be accessed
+     * @throws InvocationTargetException if the underlying constructor invoked throws an exception
+     * @throws InstantiationException    if the class being reflected on is abstract
      * @see Constructor#newInstance(Object...)
+     * @deprecated see {@link WeakHashSet#spliterator()} for an example of instantiating an inner class without needing
+     * this inferred method
      */
-    <V> V instantiateInferred(Object... parameters)
+    @Deprecated(forRemoval = true, since = "0.1.3")
+    <V> V instantiateInferred(Object... arguments)
             throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException;
 
     /**
-     * Instantiates a new instance of the {@link Class} (or {@link Object}) currently being reflected on using the
-     * {@link Constructor} {@code object} obtained from the specified {@code parameter} {@link Object}s, calling it with
-     * these parameters.
+     * Instantiates the class being reflected on using the constructor with the parameter types corresponding to the
+     * specified {@code arguments}.
+     * <p>
+     * This alternate {@link #instantiate(List)} method infers the returned type. This is mainly for when creating inner
+     * classes in which the actual type is not known, but a super-type is.
      *
-     * <p>This modification of {@link #instantiate(List)} infers the {@link Class} type.
-     * This is mainly for when creating inner classes in which the actual type is not known.</p>
-     *
-     * @param parameters The parameters to pass on instantiation of the specified {@code constructor}.
-     * @param <V>        The inferred type of the {@link T}.
-     * @return The constructed {@link Object} of type {@link V}.
-     * @throws NoSuchMethodException     If a {@code constructor} with the specified, inferred {@code parameter} types
-     *                                   does not exist in the {@link Class} currently being reflected on.
-     * @throws IllegalAccessException    If the {@link Constructor} could not be accessed by this method.
-     * @throws InvocationTargetException If the underlying constructor invoked throws an exception.
-     * @throws InstantiationException    If the {@link Class} declaring the underlying constructor is abstract.
+     * @param arguments the arguments to pass on invocation of the constructor. Must be in the same order in which the
+     *                  corresponding parameter is declared by the constructor.
+     * @param <V>       the inferred type of the instantiated object
+     * @return the instantiated object of type {@link T}
+     * @throws NoSuchMethodException     if a constructor with the parameter types as determined by the specified {@code
+     *                                   arguments} does not exist in the class being reflected on
+     * @throws IllegalAccessException    if the member constructor could not be accessed
+     * @throws InvocationTargetException if the underlying constructor invoked throws an exception
+     * @throws InstantiationException    if the class being reflected on is abstract
      * @see Constructor#newInstance(Object...)
+     * @deprecated see {@link WeakHashSet#spliterator()} for an example of instantiating an inner class without needing
+     * this inferred method
      */
-    <V> V instantiateInferred(List<Object> parameters)
+    @Deprecated(forRemoval = true, since = "0.1.3")
+    <V> V instantiateInferred(List<Object> arguments)
             throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException;
 
     /**
-     * Instantiates a new instance of the {@link Class} (or {@link Object}) currently being reflected on using the
-     * {@link Constructor} {@code object} obtained from the specified {@code parameter} {@link Class} types, calling it
-     * with the specified parameters {@link Object}s.
+     * Instantiates the class being reflected on using the constructor with the specified {@code parameterTypes}.
+     * <p>
+     * This alternate {@link #instantiate(List, List)} method infers the returned type. This is mainly for when creating
+     * inner classes in which the actual type is not known, but a super-type is.
      *
-     * <p>This modification of {@link #instantiate(List)} infers the {@link Class} type.
-     * This is mainly for when creating inner classes in which the actual type is not known.</p>
-     *
-     * @param parameterTypes The {@link Class} types the member {@code constructor} takes.
-     * @param parameters     The parameters to pass on instantiation of the specified {@code constructor}.
-     * @param <V>            The inferred type of the {@link T}.
-     * @return The constructed {@link Object} of type {@link V}.
-     * @throws NoSuchMethodException     If a {@code constructor} with the specified {@code parameter} types does not
-     *                                   exist in the {@link Class} currently being reflected on.
-     * @throws IllegalAccessException    If the {@link Constructor} could not be accessed by this method.
-     * @throws InvocationTargetException If the underlying constructor invoked throws an exception.
-     * @throws InstantiationException    If the {@link Class} declaring the underlying constructor is abstract.
+     * @param parameterTypes the parameter types the member constructor takes. Must be in the same order in which they
+     *                       are declared by the method.
+     * @param arguments      the arguments to pass on invocation of the constructor. Must be in the same order in which
+     *                       the corresponding parameter is declared by the constructor.
+     * @param <V>            the inferred type of the instantiated object
+     * @return the instantiated object of type {@link T}
+     * @throws NoSuchMethodException     if a constructor with the specified {@code parameterTypes} does not exist in
+     *                                   the class being reflected on
+     * @throws IllegalAccessException    if the member constructor could not be accessed
+     * @throws InvocationTargetException if the underlying constructor invoked throws an exception
+     * @throws InstantiationException    if the class being reflected on is abstract
      * @see Constructor#newInstance(Object...)
      */
-    <V> V instantiateInferred(List<Class<?>> parameterTypes, List<Object> parameters)
+    @Deprecated(forRemoval = true, since = "0.1.3")
+    <V> V instantiateInferred(List<Class<?>> parameterTypes, List<Object> arguments)
             throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException;
 
     /**
-     * Gets the {@link Class} {@code object} which reflects the member {@code inner class} (of the {@link Class} of type
-     * {@link T}) with the specified {@code name}.
+     * Returns the {@link Class} reflecting the inner class with the specified {@code name} in the class being reflected
+     * on.
      *
-     * @param name The {@link String} name of the {@code inner class}.
-     * @return The {@link Class} {@code object} reflecting the member {@code inner class}.
-     * @throws NoSuchInnerClassException If an {@code inner class} with the specified {@code name} does not exist in the
-     *                                   {@link Class} currently being reflected on.
+     * @param name the simple name of the inner class
+     * @return the {@link Class} reflecting the inner class with the specified {@code name}
+     * @throws NoSuchInnerClassException if an inner class with the specified {@code name} does not exist in the class
+     *                                   being reflected on
      */
     Class<?> getInnerClass(String name) throws NoSuchInnerClassException;
 
     /**
-     * Reflects on the {@link Class} {@code object} which reflects the member {@code inner class} (of the {@link Class}
-     * of type {@link T}) with the specified {@code name}.
+     * Returns a {@link Reflect} for the inner class with the specified {@code name} in the class being reflected on.
      *
-     * @param name The {@link String} name of the {@code inner class}.
-     * @param <I>  The type of the {@code inner class} being reflected on.
-     * @return The {@link Class} {@code object} reflecting the member {@code inner class}.
-     * @throws NoSuchInnerClassException If an {@code inner class} with the specified {@code name} does not exist in the
-     *                                   {@link Class} currently being reflected on.
+     * @param name the simple name of the inner class
+     * @param <I>  the inferred type of the inner class to reflect
+     * @return a {@link Reflect} for the inner class with the specified {@code name}
+     * @throws NoSuchInnerClassException if an inner class with the specified {@code name} does not exist in the class
+     *                                   being reflected on
      */
     <I> Reflect<I> reflectInnerClass(String name) throws NoSuchInnerClassException;
 
     /**
-     * Tries to give access to the specified {@link AccessibleObject} using {@link AccessibleObject#setAccessible(boolean)}.
-     * Ensure a {@link SecurityManager} is not in place before calling this or methods using this.
+     * Attempts to give access to the specified {@code accessibleObject} using {@link
+     * AccessibleObject#setAccessible(boolean)}.
      *
-     * @param accessibleObject The {@link AccessibleObject} to set as accessible.
-     * @param <A>              The type of the specified {@link AccessibleObject}.
-     * @return The specified {@link AccessibleObject}, for in-line calls.
+     * @param accessibleObject the object to set as accessible
+     * @param <A>              the type of the specified {@code accessibleObject}
+     * @return the specified {@code accessibleObject}
+     * @throws InaccessibleObjectException if access cannot be enabled
+     * @throws SecurityException           if the request is denied by the security manager
      */
     static <A extends AccessibleObject> A setAccessible(final A accessibleObject) {
         accessibleObject.setAccessible(true);
@@ -448,50 +469,53 @@ public interface Reflect<T> {
     }
 
     /**
-     * Begins checked reflection on the specified {@link Class} object, returning a new instance of {@link
-     * ReflectChecked}.
+     * Begins checked reflection on the specified {@code clazz}, returning a new instance of {@link ReflectChecked}.
      *
-     * @param tClass The {@link Class} object to reflect on.
-     * @param <T>    The type of the {@link Class} being reflected on.
-     * @return The {@link ReflectChecked} instance created.
+     * @param clazz the {@link Class} reflecting the class to reflect on
+     * @param <T>   the type of the class to reflect on
+     * @return a new {@link ReflectChecked} for the specified {@code clazz}
      */
-    static <T> ReflectChecked<T> on(final Class<T> tClass) {
-        return new ReflectChecked<>(tClass);
+    static <T> ReflectChecked<T> on(final Class<T> clazz) {
+        return new ReflectChecked<>(clazz);
     }
 
     /**
-     * Begins checked reflection on the specified {@link Object}, returning a new instance of {@link ReflectChecked}.
+     * Begins checked reflection on the specified {@code object}, returning a new instance of {@link ReflectChecked}.
      *
-     * @param object The {@link Object} to reflect on.
-     * @param <T>    The type of the {@link Object} being reflected on.
-     * @return The {@link ReflectChecked} instance created.
+     * @param object the object to reflect on
+     * @param <T>    the type of the class to reflect on
+     * @return a new {@link ReflectChecked} for the specified {@code object}
      */
     static <T> ReflectChecked<T> on(final T object) {
         return new ReflectChecked<>(object);
     }
 
     /**
-     * Begins unchecked reflection on the specified {@link Class} object, returning a new instance of {@link
+     * Begins unchecked reflection on the specified {@code clazz}, returning a new instance of {@link
      * ReflectUnchecked}.
      *
-     * @param tClass The {@link Class} object to reflect on.
-     * @param <T>    The type of the {@link Class} being reflected on.
-     * @return The {@link ReflectUnchecked} instance created.
+     * @param clazz the {@link Class} reflecting the class to reflect on
+     * @param <T>   the type of the class to reflect on
+     * @return a new {@link ReflectChecked} for the specified {@code clazz}
+     * @deprecated use {@link #on(Class)} and invoke {@link #unchecked()}
      */
-    static <T> ReflectUnchecked<T> uncheckedOn(final Class<T> tClass) {
-        return new ReflectChecked<>(tClass).unchecked();
+    @Deprecated(forRemoval = true, since = "0.1.3")
+    static <T> ReflectUnchecked<T> uncheckedOn(final Class<T> clazz) {
+        return on(clazz).unchecked();
     }
 
     /**
-     * Begins unchecked reflection on the specified {@link Object}, returning a new instance of {@link
+     * Begins unchecked reflection on the specified {@code object}, returning a new instance of {@link
      * ReflectUnchecked}.
      *
-     * @param object The {@link Object} to reflect on.
-     * @param <T>    The type of the {@link Object} being reflected on.
-     * @return The {@link ReflectUnchecked} instance created.
+     * @param object the object to reflect on
+     * @param <T>    the type of the class to reflect on
+     * @return a new {@link ReflectUnchecked} for the specified {@code object}
+     * @deprecated use {@link #on(Object)} and invoke {@link #unchecked()}
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     static <T> ReflectUnchecked<T> uncheckedOn(final T object) {
-        return new ReflectChecked<>(object).unchecked();
+        return on(object).unchecked();
     }
 
 }

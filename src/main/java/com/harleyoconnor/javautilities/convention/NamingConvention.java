@@ -111,97 +111,92 @@ public interface NamingConvention {
     Pattern ACCEPTABLE_CHARACTERS = Pattern.compile("[A-z0-9]");
 
     /**
-     * Checks if the specified {@code string} follows this {@link NamingConvention}, using the default acceptable
-     * characters, {@link #ACCEPTABLE_CHARACTERS}.
+     * Checks the specified {@code string} follows this convention, using the {@linkplain #ACCEPTABLE_CHARACTERS default
+     * acceptable characters}.
      *
-     * @param string The {@link String} to check.
-     * @return {@code true} if the {@code string} follows this {@link NamingConvention}, {@code false} otherwise.
+     * @param string the string to check
+     * @return {@code true} if the specified {@code string} follows this convention
      */
     default boolean doesFollow(String string) {
         return this.doesFollow(string, ACCEPTABLE_CHARACTERS);
     }
 
     /**
-     * Checks if the specified {@code string} follows this {@link NamingConvention}.
+     * Checks the specified {@code string} follows this convention.
      *
-     * @param string              The {@link String} to check.
-     * @param acceptableCharacter A {@link Pattern} describing characters that are acceptable for use between separator
-     *                            characters.
-     * @return {@code true} if the {@code string} follows this {@link NamingConvention}, {@code false} otherwise.
+     * @param string              the string to check
+     * @param acceptableCharacter a pattern describing characters that are acceptable for use between separator
+     *                            characters
+     * @return {@code true} if the specified {@code string} follows this convention
      */
     boolean doesFollow(String string, Pattern acceptableCharacter);
 
     /**
-     * Attempts to convert the specified {@code string} from this {@link NamingConvention} to the specified {@code
-     * toConvention}.
+     * Attempts to convert the specified {@code string} from this convention to the specified {@code toConvention}.
      *
-     * <p>Invokers should note that naming conventions like {@link #FLAT_CASE} may be
-     * impossible to accurately convert to another convention.</p>
+     * <p>Invokers should note that naming conventions like {@link #FLAT_CASE} may be impossible to accurately convert
+     * to another convention.</p>
      *
-     * @param toConvention The {@link NamingConvention} to convert to.
-     * @param string       The {@link String} to convert.
-     * @return The converted {@link String}.
+     * @param toConvention the convention to convert to
+     * @param string       the string to convert
+     * @return the converted string
      */
     String convertTo(NamingConvention toConvention, String string);
 
     /**
-     * Returns the name of this {@link NamingConvention}. This should be formatted using the {@link #PASCAL_CASE}
-     * convention.
+     * Returns the name of this convention. This should be formatted using the {@linkplain #PASCAL_CASE pascal case
+     * convention}.
      *
-     * @return The name of this {@link NamingConvention}, in {@link #PASCAL_CASE}.
+     * @return the name of this convention, in pascal case
      * @since JavaUtilities 0.1.2
      */
     String name();
 
     /**
-     * Returns a {@link Function} that takes the first character of a {@link String} and transforms it to fit this
-     * {@link NamingConvention}.
+     * Returns a function that computes the first character to fit this convention from the given character.
      *
-     * @return The {@link Function} that computes the first character to fit this {@link NamingConvention}.
+     * @return a function that computes the first character to fit this convention from the given character
      */
     Function<Character, Character> firstCharacterFunction();
 
     /**
-     * Returns a {@link Predicate} that determines if the specified {@link Character} if a valid separator for this
-     * {@link NamingConvention}.
+     * Returns a predicate that determines if the given character is a separator.
      *
-     * @return The {@link Predicate} which validates that a separator fits this {@link NamingConvention}.
+     * @return a predicate that determines if the given character is a separator
      */
     Predicate<Character> separatorPredicate();
 
     /**
-     * Returns a {@link Function} that takes the first {@link Character} of a new word and transforms it to fit this
-     * {@link NamingConvention}, returning a {@link String} separator to use in place of this.
+     * Returns a function that takes the first character of a new word and transforms it to fit this convention,
+     * returning a string separator to use in place of it.
      *
-     * @return The {@link Function} that computes a separator to fit this {@link NamingConvention}.
+     * @return a function that computes a separator string to fit this convention from the given first character of a
+     * new word
      */
     Function<Character, String> separatorFunction();
 
     /**
-     * Returns a {@link Function} that takes an intermediate {@link Character} (one that is not the first character of a
-     * word) and transforms it to fit this {@link NamingConvention}.
+     * Returns a function that takes an intermediate character (one that is not the first character of a word) and
+     * transforms it to fit this convention.
      *
-     * @return The {@link Function} that computer an intermediate character to fit {@link NamingConvention}.
+     * @return a function that computer an intermediate character to fit this convention
      */
     Function<Character, Character> intermediateCharacterFunction();
 
     /**
-     * Returns {@code true} if this {@link NamingConvention} uses an explicit extra character, such as the underscore in
-     * {@link #SNAKE_CASE}, to denote word separations.
+     * Returns {@code true} if this convention uses an explicit extra character, such as the underscore in {@linkplain
+     * #SNAKE_CASE snake case}, to denote word separations.
      *
-     * @return {@code true} if this {@link NamingConvention} uses an explicit extra character, such as the underscore in
-     * {@link #SNAKE_CASE}, to denote word separations, {@code false} otherwise.
+     * @return {@code true} if this {@link NamingConvention} uses an explicit extra character to denote word separations
      */
     boolean characterSeparator();
 
     /**
      * Stores all registered {@link NamingConvention} objects, enclosed in an inner class to restrict access.
      *
-     * <p>To retrieve or register {@link NamingConvention} objects, use
-     * {@link #get(String)} and {@link #register(NamingConvention)} respectively.</p>
+     * <p>To retrieve or register conventions, use {@link #get(String)} and {@link #register(NamingConvention)}
+     * respectively.</p>
      *
-     * @see #register(NamingConvention)
-     * @see #get(String)
      * @since JavaUtilities 0.1.2
      */
     class Registry {
@@ -218,13 +213,13 @@ public interface NamingConvention {
     }
 
     /**
-     * Appends the specified {@link NamingConvention} to the {@link Registry}. This is then also returned.
+     * Appends the specified {@code convention} to the {@linkplain Registry registry}, then returning it.
      *
-     * @param convention The {@link NamingConvention} of type {@link N} to register.
-     * @param <N>        The type of the {@link NamingConvention} to register.
-     * @return The specified {@link NamingConvention}.
-     * @throws IllegalArgumentException If a {@link NamingConvention} with the name of the specfified {@link
-     *                                  NamingConvention} already existed in the {@link Registry}.
+     * @param convention the convention of type {@link N} to register
+     * @param <N>        the type of the specified {@code convention} to register
+     * @return the specified {@code convention}
+     * @throws IllegalArgumentException if a convention with the name of the specified {@code convention} already
+     *                                  existed in the {@linkplain Registry registry}.
      * @since JavaUtilities 0.1.2
      */
     static <N extends NamingConvention> N register(final N convention) {
@@ -238,12 +233,13 @@ public interface NamingConvention {
     }
 
     /**
-     * Attempts to retrieve a {@link NamingConvention} of the specified {@code name} from the {@link Registry}. Returns
-     * an {@link Optional} containing the corresponding convention, or {@link Optional#empty()} if one did not exist.
+     * Attempts to retrieve a convention of the specified {@code name} from the {@linkplain Registry registry}. Returns
+     * an optional containing the corresponding convention, or {@linkplain Optional#empty() an empty optional} if one
+     * did not exist.
      *
-     * @param name The name of the {@link NamingConvention} to retrieve.
-     * @return An {@link Optional} containing the corresponding convention, or {@link Optional#empty()} if one did not
-     * exist.
+     * @param name the name of the convention to retrieve
+     * @return an optional containing the convention corresponding to the specified {@code name}, or {@linkplain
+     * Optional#empty() an empty optional} if one did not exist
      * @since JavaUtilities 0.1.2
      */
     static Optional<NamingConvention> get(final String name) {
@@ -253,14 +249,14 @@ public interface NamingConvention {
     }
 
     /**
-     * Creates a new {@link StandardNamingConvention} which denotes separations by a case. This method also handles
-     * registering the instantiated object to the {@link NamingConvention} registry via {@link
+     * Creates a new {@link StandardNamingConvention} instance which denotes separations by a case change. This method
+     * also handles registering the instantiated object to the {@linkplain Registry registry} via {@link
      * #register(NamingConvention)}.
      *
-     * @param name   The name of the convention, see {@link #name()} for details.
-     * @param pascal {@code true} if the convention should capitalise the first letter, life in the {@link #PASCAL_CASE}
-     *               convention.
-     * @return The instantiated {@link StandardNamingConvention}.
+     * @param name   the name of the convention; see {@link #name()} for details
+     * @param pascal {@code true} if the convention should capitalise the first letter, like in the {@linkplain
+     *               #PASCAL_CASE pascal case convention}
+     * @return the instantiated {@link StandardNamingConvention}
      */
     private static StandardNamingConvention byCase(final String name, final boolean pascal) {
         return register(new StandardNamingConvention(
@@ -275,18 +271,18 @@ public interface NamingConvention {
 
     /**
      * Creates a new {@link StandardNamingConvention} which denotes separations by the specified {@code separator}
-     * character. This method also handles registering the instantiated object to the {@link NamingConvention} registry
-     * via {@link #register(NamingConvention)}.
+     * character. This method also handles registering the instantiated object to the {@linkplain Registry registry} via
+     * {@link #register(NamingConvention)}.
      *
-     * @param name      The name of the convention, see {@link #name()} for details.
-     * @param separator The {@link Character} to the convention should use as a word separator.
-     * @param pascal    {@code true} if the convention should capitalise the first letter (like in the {@link
-     *                  #PASCAL_CASE} convention) {@code false} otherwise.
+     * @param name      the name of the convention; see {@link #name()} for details
+     * @param separator the character the convention should use as a word separator
+     * @param pascal    {@code true} if the convention should capitalise the first letter (like in the {@linkplain
+     *                  #PASCAL_CASE pascal case convention})
      * @param camel     {@code true} if the convention should capitalise the first letter after a word separation (like
-     *                  in the {@link #CAMEL_CASE} convention) {@code false} otherwise.
-     * @param screaming {@code true} if all intermediate characters should be capitalised (like in the {@link
-     *                  #SCREAMING_SNAKE_CASE} convention) {@code false} otherwise.
-     * @return The instantiated {@link StandardNamingConvention}.
+     *                  in the {@linkplain #CAMEL_CASE camel case convention})
+     * @param screaming {@code true} if all intermediate characters should be capitalised (like in the {@linkplain
+     *                  #SCREAMING_SNAKE_CASE screaming snake case convention})
+     * @return the instantiated {@link StandardNamingConvention}
      */
     static StandardNamingConvention byChar(final String name, final char separator, final boolean pascal,
                                            final boolean camel, final boolean screaming) {

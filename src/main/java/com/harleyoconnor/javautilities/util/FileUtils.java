@@ -11,9 +11,9 @@ import java.util.List;
  * @author Harley O'Connor
  * @since JavaUtilities 0.0.2
  * @deprecated accessing resources using a file is fundamentally flawed. Much of the functionality of this class will be
- *             rewritten, refactored, and moved elsewhere.
+ * rewritten, refactored, and moved elsewhere.
  */
-@Deprecated(forRemoval = true)
+@Deprecated(forRemoval = true, since = "0.1.3")
 public final class FileUtils {
 
     /**
@@ -33,9 +33,9 @@ public final class FileUtils {
     private static String ASSETS_PATH = RESOURCES_PATH + "assets/";
 
     /**
-     * Returns the current default {@link #RESOURCES_PATH}.
+     * Returns the current default resources path.
      *
-     * @return The default {@link #RESOURCES_PATH}.
+     * @return the current default resources path
      * @since JavaUtilities 0.1.1
      */
     public static String resourcePath() {
@@ -43,9 +43,9 @@ public final class FileUtils {
     }
 
     /**
-     * Sets a new default {@link #RESOURCES_PATH}.
+     * Sets a new default resources path.
      *
-     * @param resourcesPath The new {@link #RESOURCES_PATH} to set.
+     * @param resourcesPath the new default resources path
      * @since JavaUtilities 0.1.1
      */
     public static void setResourcesPath(final String resourcesPath) {
@@ -53,9 +53,9 @@ public final class FileUtils {
     }
 
     /**
-     * Returns the current default {@link #ASSETS_PATH}.
+     * Returns the current default assets path.
      *
-     * @return The default {@link #ASSETS_PATH}.
+     * @return the current default assets path
      * @since JavaUtilities 0.1.1
      */
     public static String assetsPath() {
@@ -63,9 +63,9 @@ public final class FileUtils {
     }
 
     /**
-     * Sets a new default {@link #ASSETS_PATH}.
+     * Sets a new default assets path.
      *
-     * @param assetsPath The new {@link #ASSETS_PATH} to set.
+     * @param assetsPath the new default assets path
      * @since JavaUtilities 0.1.1
      */
     public static void setAssetsPath(final String assetsPath) {
@@ -73,21 +73,21 @@ public final class FileUtils {
     }
 
     /**
-     * Creates a {@link File} object at the specified location using the default resource path.
+     * Returns a new {@link File} at the specified location using the default resource path.
      *
-     * @param relativePath Path relative to the default resource path.
-     * @return The new file object.
+     * @param path the path relative to the resources directory
+     * @return the file at the specified {@code path}
      */
-    public static File file(final String relativePath) {
-        return file(relativePath, true);
+    public static File file(final String path) {
+        return file(path, true);
     }
 
     /**
-     * Creates a {@link File} object at the specified location.
+     * Returns a new {@link File} at the specified location.
      *
-     * @param path                   The file path.
-     * @param useDefaultResourcePath Whether or not to use the default resources path.
-     * @return The new file object.
+     * @param path                   the path
+     * @param useDefaultResourcePath {@code true} if the default resources path should be prefixed
+     * @return the file at the specified {@code path}
      */
     public static File file(final String path, final boolean useDefaultResourcePath) {
         return new File((useDefaultResourcePath ? ASSETS_PATH : "") + path);

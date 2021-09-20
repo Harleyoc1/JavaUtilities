@@ -23,7 +23,7 @@ public final class EmptyPair<K, V> implements Pair<K, V> {
     static final Pair<?, ?> INSTANCE = new EmptyPair<>();
 
     /**
-     * {@inheritDoc} This is an {@link EmptyPair}, so this will only ever be {@code null}.
+     * {@inheritDoc} This is an empty pair, so this will only ever be {@code null}.
      *
      * @return {@code null}
      */
@@ -33,7 +33,7 @@ public final class EmptyPair<K, V> implements Pair<K, V> {
     }
 
     /**
-     * {@inheritDoc} This is an {@link EmptyPair}, so this will only ever be {@code null}.
+     * {@inheritDoc} This is an empty pair, so this will only ever be {@code null}.
      *
      * @return {@code null}
      */
@@ -43,10 +43,9 @@ public final class EmptyPair<K, V> implements Pair<K, V> {
     }
 
     /**
-     * Returns this {@link EmptyPair} instance, since in most cases an {@link EmptyPair} wouldn't need to be
-     * duplicated.
+     * Returns this empty pair, since an empty pair is a immutable and so shouldn't need to be duplicated.
      *
-     * @return This {@link EmptyPair} instance.
+     * @return this empty pair
      */
     @Override
     public EmptyPair<K, V> duplicate() {
@@ -55,13 +54,12 @@ public final class EmptyPair<K, V> implements Pair<K, V> {
 
     /**
      * {@inheritDoc}
+     * <p>
+     * Since this is an {@link EmptyPair}, this implementation will only return {@code true} if the specified {@code
+     * other} is a {@link Pair} and also has both a key and value which equate to {@code null}.
      *
-     * <p>Since this is an {@link EmptyPair}, this implementation will
-     * only return {@code true} if the specified {@code object} is a {@link Pair} and also has both a {@code key} and
-     * {@code value} which equate to {@code null}.</p>
-     *
-     * @param other The {@link Object} to be compared for equality with this {@link EmptyPair}.
-     * @return {@code true} if the specified {@code object} is a {@link Pair} and is empty; {@code false} otherwise.
+     * @param other the reference object with which to compare
+     * @return {@code true} if this object is the same as the specified {@code other} object
      */
     @Override
     public boolean equals(Object other) {

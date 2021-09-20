@@ -22,21 +22,21 @@ public final class IntegerUtils {
     }
 
     /**
-     * Gets a random number between the two parameters, inclusive.
+     * Gets a random integer between the two parameters, inclusive.
      *
-     * @param min The minimum value.
-     * @param max The maximum value.
-     * @return A random number between the parameters.
+     * @param min the minimum returned value
+     * @param max the maximum returned value
+     * @return a random number between the two parameters, inclusive
      */
     public static int getRandomIntBetween(final int min, final int max) {
         return RANDOM.nextInt((max - min) + 1) + min;
     }
 
     /**
-     * Checks if a number is prime.
+     * Returns {@code true} if the specified {@code number} is prime.
      *
-     * @param number The number to check.
-     * @return Whether or not it was prime.
+     * @param number the number to check
+     * @return {@code true} if the specified {@code number} is prime
      * @author Archie Adams
      * @since JavaUtilities 0.0.3
      */
@@ -55,17 +55,17 @@ public final class IntegerUtils {
     }
 
     /**
-     * Rounds number to given number of decimal places.
+     * Returns the specified {@code number} rounded to the specified {@code decimalPlaces} number of decimal places.
      *
-     * @param number        The number to round.
-     * @param decimalPlaces The number to of places to round to.
-     * @return The rounded number.
+     * @param number        the number to round
+     * @param decimalPlaces the number of decimal places to round to
+     * @return the rounded number
      * @author Archie Adams
      * @since JavaUtilities 0.0.5
-     * @deprecated Seriously? A rounding function in a class named "IntegerUtils"? This will be moved in future
-     * versions.
+     * @deprecated seriously? A rounding function in a class named "IntegerUtils"? This will be moved in a future
+     * version.
      */
-    @Deprecated
+    @Deprecated(since = "0.1.1")
     public static double round(final double number, final int decimalPlaces) {
         final int power = (int) Math.pow(10, decimalPlaces);
         return (double) Math.round(number * power) / power;
