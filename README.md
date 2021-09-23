@@ -16,8 +16,7 @@ Versions `0.1.1+` will require Java 16 or higher. Versions below this should wor
 
 To add it to your `build.gradle`, first add the following code to the `repositories` section to load my maven repository:
 
-`build.gradle` [for Groovy build scripts]
-
+#### Groovy | `build.gradle`
 ```groovy
 maven {
     name 'Harley O\'Connor Maven'
@@ -25,19 +24,19 @@ maven {
 }
 ```
 
-`build.gradle.kts` [for Kotlin build scripts]
+#### Kotlin | `build.gradle.kts`
 ```kotlin
 maven("https://harleyoconnor.com/maven/")
 ```
 
 Next, add the following to your `dependencies` section to load java utilities:
 
-`build.gradle` [for Groovy build scripts]
+#### Groovy | `build.gradle`
 ```groovy
-implementation group: 'com.harleyoconnor.javautilities', name: 'JavaUtilities', version: '0.1.2'
+implementation group: 'com.harleyoconnor.javautilities', name: 'JavaUtilities', version: '0.1.3'
 ```
 
-`build.gradle.kts` [for Kotlin build scripts]
+#### Kotlin | `build.gradle.kts`
 ```kotlin
-implementation(group = "com.harleyoconnor.javautilities", name = "JavaUtilities", version = "0.1.2")
+implementation(group = "com.harleyoconnor.javautilities", name = "JavaUtilities", version = "0.1.3")
 ```
