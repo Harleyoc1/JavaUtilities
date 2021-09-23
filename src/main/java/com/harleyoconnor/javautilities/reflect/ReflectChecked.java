@@ -265,7 +265,6 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @throws NoSuchMethodException     if a method with the specified {@code name} and parameter types (as determined
      *                                   by the specified {@code arguments}) does not exist in the class being reflected
      *                                   on
-     * @throws IllegalAccessException    if the member method could not be accessed
      * @throws InvocationTargetException if the underlying method invoked throws an exception
      * @see Method#invoke(Object, Object...)
      */
@@ -308,7 +307,6 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @throws NoSuchMethodException     if a method with the specified {@code name} and parameter types (as determined
      *                                   by the specified {@code arguments}) does not exist in the class being reflected
      *                                   on
-     * @throws IllegalAccessException    if the member method could not be accessed
      * @throws InvocationTargetException if the underlying method invoked throws an exception
      * @see Method#invoke(Object, Object...)
      */
