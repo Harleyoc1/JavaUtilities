@@ -34,11 +34,8 @@ public interface Reflect<T> {
 
     /**
      * Returns the {@link Field} reflecting the member field with the specified {@code name} in the class (or object if
-     * non-static) being reflected on.
-     * <p>
-     * If the field is inaccessible from the invoker, certain operations on the returned {@link Field} throw {@link
-     * IllegalAccessException}. In this case, {@link #getFieldAccessible(String)} can be used to bypass this (unless a
-     * {@link SecurityManager} prevents it).
+     * non-static) being reflected on. The returned {@link Field} is also made accessible via {@link
+     * Field#setAccessible(boolean)}.
      *
      * @param name the name of the member field
      * @return the {@link Field} object reflecting the member field
@@ -59,7 +56,9 @@ public interface Reflect<T> {
      * @return the {@link Field} reflecting the member field
      * @throws NoSuchFieldException if a field with the specified {@code name} does not exist in the class being
      *                              reflected on
+     * @deprecated replaced by {@link #getField(String)}, which should now always sets the field as accessible.
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     Field getFieldAccessible(String name) throws NoSuchFieldException;
 
     /**
@@ -69,9 +68,8 @@ public interface Reflect<T> {
      * @param field the {@link Field}; reflects the member field to get the value of
      * @param <V>   the inferred type of the field
      * @return the value of the field
-     * @throws IllegalAccessException if the field cannot be accessed from this method
      */
-    <V> V getFieldValue(Field field) throws IllegalAccessException;
+    <V> V getFieldValue(Field field);
 
     /**
      * Returns the value of the field with the specified {@code name} in the class (or object if non-static) being
@@ -80,11 +78,10 @@ public interface Reflect<T> {
      * @param name the name of the member field to get the value of
      * @param <V>  the inferred type of the field
      * @return the value of the field
-     * @throws NoSuchFieldException   if a field with the specified {@code name} does not exist in the class being
-     *                                reflected on
-     * @throws IllegalAccessException if the field cannot be accessed from this method
+     * @throws NoSuchFieldException if a field with the specified {@code name} does not exist in the class being
+     *                              reflected on
      */
-    <V> V getFieldValue(String name) throws NoSuchFieldException, IllegalAccessException;
+    <V> V getFieldValue(String name) throws NoSuchFieldException;
 
     /**
      * Returns the value of the specified {@code field}'s reflected member field in the class (or object if non-static)
@@ -95,9 +92,8 @@ public interface Reflect<T> {
      * @param type  the class type of the field
      * @param <V>   the type of the field
      * @return the value of the field
-     * @throws IllegalAccessException if the field cannot be accessed from this method
      */
-    <V> V getFieldValue(Field field, Class<V> type) throws IllegalAccessException;
+    <V> V getFieldValue(Field field, Class<V> type);
 
     /**
      * Returns the value of the field with the specified {@code name} in the class (or object if non-static) being
@@ -108,11 +104,10 @@ public interface Reflect<T> {
      * @param type the class type of the field
      * @param <V>  the type of the field
      * @return the value of the field
-     * @throws NoSuchFieldException   if a field with the specified {@code name} does not exist in the class being
-     *                                reflected on
-     * @throws IllegalAccessException if the field cannot be accessed from this method
+     * @throws NoSuchFieldException if a field with the specified {@code name} does not exist in the class being
+     *                              reflected on
      */
-    <V> V getFieldValue(String name, Class<V> type) throws NoSuchFieldException, IllegalAccessException;
+    <V> V getFieldValue(String name, Class<V> type) throws NoSuchFieldException;
 
     /**
      * Returns the {@link Method} reflecting the member method with the specified {@code name} and {@code
@@ -133,11 +128,8 @@ public interface Reflect<T> {
 
     /**
      * Returns the {@link Method} reflecting the member method with the specified {@code name} and {@code
-     * parameterTypes} in the class (or object if non-static) being reflected on.
-     * <p>
-     * If the method is inaccessible from the invoker, certain operations on the returned {@link Method} throw {@link
-     * IllegalAccessException}. In this case, {@link #getMethodAccessible(String, Class[])} can be used to bypass this
-     * (unless a {@link SecurityManager} prevents it).
+     * parameterTypes} in the class (or object if non-static) being reflected on. The returned {@link Method} is also
+     * made accessible via {@link AccessibleObject#setAccessible(boolean)}.
      *
      * @param name           the name of the member method
      * @param parameterTypes the parameter types the member method takes. Must be in the same order in which they are
@@ -162,7 +154,10 @@ public interface Reflect<T> {
      * @return the {@link Method} reflecting the member method
      * @throws NoSuchMethodException if a method with the specified {@code name} and {@code parameterTypes} does not
      *                               exist in the class being reflected on
+     * @deprecated replaced by {@link #getMethod(String, Class[])}, which should now always sets the method as
+     * accessible.
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     Method getMethodAccessible(String name, Class<?>... parameterTypes) throws NoSuchMethodException;
 
     /**
@@ -179,7 +174,9 @@ public interface Reflect<T> {
      * @return the {@link Method} reflecting the member method
      * @throws NoSuchMethodException if a method with the specified {@code name} and {@code parameterTypes} does not
      *                               exist in the class being reflected on
+     * @deprecated replaced by {@link #getMethod(String, List)}, which should now always sets the method as accessible.
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     Method getMethodAccessible(String name, List<Class<?>> parameterTypes) throws NoSuchMethodException;
 
     /**
@@ -194,12 +191,11 @@ public interface Reflect<T> {
      * @throws NoSuchMethodException     if a method with the specified {@code name} and parameter types (as determined
      *                                   by the specified {@code arguments}) does not exist in the class being reflected
      *                                   on
-     * @throws IllegalAccessException    if the member method could not be accessed
      * @throws InvocationTargetException if the underlying method invoked throws an exception
      * @see Method#invoke(Object, Object...)
      */
     <V> V invoke(String name, Object... arguments)
-            throws InvocationTargetException, NoSuchMethodException, IllegalAccessException;
+            throws InvocationTargetException, NoSuchMethodException;
 
     /**
      * Invokes the member method with the specified {@code name} and parameter types corresponding to the specified
@@ -213,12 +209,11 @@ public interface Reflect<T> {
      * @throws NoSuchMethodException     if a method with the specified {@code name} and parameter types (as determined
      *                                   by the specified {@code arguments}) does not exist in the class being reflected
      *                                   on
-     * @throws IllegalAccessException    if the member method could not be accessed
      * @throws InvocationTargetException if the underlying method invoked throws an exception
      * @see Method#invoke(Object, Object...)
      */
     <V> V invoke(String name, List<Object> arguments)
-            throws InvocationTargetException, NoSuchMethodException, IllegalAccessException;
+            throws InvocationTargetException, NoSuchMethodException;
 
     /**
      * Invokes the member method with the specified {@code name} and {@code parameterTypes} in the class (or object if
@@ -246,11 +241,8 @@ public interface Reflect<T> {
 
     /**
      * Returns the {@link Constructor} reflecting the member constructor with the specified and {@code parameterTypes}
-     * in the class (or object if non-static) being reflected on.
-     * <p>
-     * If the constructor is inaccessible from the invoker, certain operations on the returned {@link Constructor} throw
-     * {@link IllegalAccessException}. In this case, {@link #getConstructorAccessible(Class[])} can be used to bypass
-     * this (unless a {@link SecurityManager} prevents it).
+     * in the class (or object if non-static) being reflected on. The returned {@link Constructor} is also made
+     * accessible via {@link AccessibleObject#setAccessible(boolean)}.
      *
      * @param parameterTypes the parameter types the member constructor takes. Must be in the same order in which they
      *                       are declared by the constructor.
@@ -262,11 +254,8 @@ public interface Reflect<T> {
 
     /**
      * Returns the {@link Constructor} reflecting the member constructor with the specified and {@code parameterTypes}
-     * in the class (or object if non-static) being reflected on.
-     * <p>
-     * If the constructor is inaccessible from the invoker, certain operations on the returned {@link Constructor} throw
-     * {@link IllegalAccessException}. In this case, {@link #getConstructorAccessible(Class[])} can be used to bypass
-     * this (unless a {@link SecurityManager} prevents it).
+     * in the class (or object if non-static) being reflected on. The returned {@link Constructor} is also made
+     * accessible via {@link AccessibleObject#setAccessible(boolean)}.
      *
      * @param parameterTypes the parameter types the member constructor takes. Must be in the same order in which they
      *                       are declared by the constructor.
@@ -289,7 +278,10 @@ public interface Reflect<T> {
      * @return the {@link Constructor} reflecting the member constructor
      * @throws NoSuchMethodException if a constructor with the specified {@code parameterTypes} does not exist in the
      *                               class being reflected on
+     * @deprecated replaced by {@link #getConstructor(Class[])}, which should now always sets the constructor as
+     * accessible.
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     Constructor<T> getConstructorAccessible(final Class<?>... parameterTypes) throws NoSuchMethodException;
 
     /**
@@ -305,7 +297,10 @@ public interface Reflect<T> {
      * @return the {@link Constructor} reflecting the member constructor
      * @throws NoSuchMethodException if a constructor with the specified {@code parameterTypes} does not exist in the
      *                               class being reflected on
+     * @deprecated replaced by {@link #getConstructor(Class[])}, which should now always sets the constructor as
+     * accessible.
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     Constructor<T> getConstructorAccessible(final List<Class<?>> parameterTypes) throws NoSuchMethodException;
 
     /**
@@ -317,13 +312,12 @@ public interface Reflect<T> {
      * @return the instantiated object of type {@link T}
      * @throws NoSuchMethodException     if a constructor with the parameter types as determined by the specified {@code
      *                                   arguments} does not exist in the class being reflected on
-     * @throws IllegalAccessException    if the member constructor could not be accessed
      * @throws InvocationTargetException if the underlying constructor invoked throws an exception
      * @throws InstantiationException    if the class being reflected on is abstract
      * @see Constructor#newInstance(Object...)
      */
     T instantiate(Object... arguments)
-            throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException;
+            throws NoSuchMethodException, InvocationTargetException, InstantiationException;
 
     /**
      * Instantiates the class being reflected on using the constructor with the parameter types corresponding to the
@@ -334,13 +328,12 @@ public interface Reflect<T> {
      * @return the instantiated object of type {@link T}
      * @throws NoSuchMethodException     if a constructor with the parameter types as determined by the specified {@code
      *                                   arguments} does not exist in the class being reflected on
-     * @throws IllegalAccessException    if the member constructor could not be accessed
      * @throws InvocationTargetException if the underlying constructor invoked throws an exception
      * @throws InstantiationException    if the class being reflected on is abstract
      * @see Constructor#newInstance(Object...)
      */
     T instantiate(List<Object> arguments)
-            throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException;
+            throws NoSuchMethodException, InvocationTargetException, InstantiationException;
 
     /**
      * Instantiates the class being reflected on using the constructor with the specified {@code parameterTypes}.
@@ -352,13 +345,12 @@ public interface Reflect<T> {
      * @return the instantiated object of type {@link T}
      * @throws NoSuchMethodException     if a constructor with the specified {@code parameterTypes} does not exist in
      *                                   the class being reflected on
-     * @throws IllegalAccessException    if the member constructor could not be accessed
      * @throws InvocationTargetException if the underlying constructor invoked throws an exception
      * @throws InstantiationException    if the class being reflected on is abstract
      * @see Constructor#newInstance(Object...)
      */
     T instantiate(List<Class<?>> parameterTypes, List<Object> arguments)
-            throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException;
+            throws NoSuchMethodException, InvocationTargetException, InstantiationException;
 
     /**
      * Instantiates the class being reflected on using the constructor with the parameter types corresponding to the
@@ -373,7 +365,6 @@ public interface Reflect<T> {
      * @return the instantiated object of type {@link T}
      * @throws NoSuchMethodException     if a constructor with the parameter types as determined by the specified {@code
      *                                   arguments} does not exist in the class being reflected on
-     * @throws IllegalAccessException    if the member constructor could not be accessed
      * @throws InvocationTargetException if the underlying constructor invoked throws an exception
      * @throws InstantiationException    if the class being reflected on is abstract
      * @see Constructor#newInstance(Object...)
@@ -382,7 +373,7 @@ public interface Reflect<T> {
      */
     @Deprecated(forRemoval = true, since = "0.1.3")
     <V> V instantiateInferred(Object... arguments)
-            throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException;
+            throws NoSuchMethodException, InvocationTargetException, InstantiationException;
 
     /**
      * Instantiates the class being reflected on using the constructor with the parameter types corresponding to the
@@ -397,7 +388,6 @@ public interface Reflect<T> {
      * @return the instantiated object of type {@link T}
      * @throws NoSuchMethodException     if a constructor with the parameter types as determined by the specified {@code
      *                                   arguments} does not exist in the class being reflected on
-     * @throws IllegalAccessException    if the member constructor could not be accessed
      * @throws InvocationTargetException if the underlying constructor invoked throws an exception
      * @throws InstantiationException    if the class being reflected on is abstract
      * @see Constructor#newInstance(Object...)
@@ -406,7 +396,7 @@ public interface Reflect<T> {
      */
     @Deprecated(forRemoval = true, since = "0.1.3")
     <V> V instantiateInferred(List<Object> arguments)
-            throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException;
+            throws NoSuchMethodException, InvocationTargetException, InstantiationException;
 
     /**
      * Instantiates the class being reflected on using the constructor with the specified {@code parameterTypes}.
@@ -422,14 +412,13 @@ public interface Reflect<T> {
      * @return the instantiated object of type {@link T}
      * @throws NoSuchMethodException     if a constructor with the specified {@code parameterTypes} does not exist in
      *                                   the class being reflected on
-     * @throws IllegalAccessException    if the member constructor could not be accessed
      * @throws InvocationTargetException if the underlying constructor invoked throws an exception
      * @throws InstantiationException    if the class being reflected on is abstract
      * @see Constructor#newInstance(Object...)
      */
     @Deprecated(forRemoval = true, since = "0.1.3")
     <V> V instantiateInferred(List<Class<?>> parameterTypes, List<Object> arguments)
-            throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException;
+            throws NoSuchMethodException, InvocationTargetException, InstantiationException;
 
     /**
      * Returns the {@link Class} reflecting the inner class with the specified {@code name} in the class being reflected

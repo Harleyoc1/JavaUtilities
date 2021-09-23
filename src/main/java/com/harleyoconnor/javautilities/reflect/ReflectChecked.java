@@ -75,11 +75,13 @@ public final class ReflectChecked<T> implements Reflect<T> {
      */
     @Override
     public Field getField(final String name) throws NoSuchFieldException {
+        Field field;
         try {
-            return this.clazz.getField(name);
+            field = this.clazz.getField(name);
         } catch (final NoSuchFieldException e) {
-            return this.clazz.getDeclaredField(name);
+            field = this.clazz.getDeclaredField(name);
         }
+        return Reflect.setAccessible(field);
     }
 
     /**
@@ -89,7 +91,9 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @return the {@link Field} reflecting the member field
      * @throws NoSuchFieldException if a field with the specified {@code name} does not exist in the class being
      *                              reflected on
+     * @deprecated replaced by {@link #getField(String)}, which should now always sets the method as acessible.
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     @Override
     public Field getFieldAccessible(final String name) throws NoSuchFieldException {
         return Reflect.setAccessible(this.getField(name));
@@ -101,12 +105,15 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @param field the {@link Field}; reflects the member field to get the value of
      * @param <V>   the inferred type of the field
      * @return the value of the field
-     * @throws IllegalAccessException if the field cannot be accessed from this method
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <V> V getFieldValue(final Field field) throws IllegalAccessException {
-        return (V) field.get(this.object);
+    public <V> V getFieldValue(final Field field) {
+        try {
+            return (V) Reflect.setAccessible(field).get(this.object);
+        } catch (IllegalAccessException e) {
+            throw new IllegalAccessError(e.getMessage());
+        }
     }
 
     /**
@@ -115,13 +122,12 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @param name the name of the member field to get the value of
      * @param <V>  the inferred type of the field
      * @return the value of the field
-     * @throws NoSuchFieldException   if a field with the specified {@code name} does not exist in the class being
-     *                                reflected on
-     * @throws IllegalAccessException if the field cannot be accessed from this method
+     * @throws NoSuchFieldException if a field with the specified {@code name} does not exist in the class being
+     *                              reflected on
      */
     @Override
-    public <V> V getFieldValue(final String name) throws NoSuchFieldException, IllegalAccessException {
-        return this.getFieldValue(this.getFieldAccessible(name));
+    public <V> V getFieldValue(final String name) throws NoSuchFieldException {
+        return this.getFieldValue(this.getField(name));
     }
 
     /**
@@ -131,10 +137,9 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @param type  the class type of the field
      * @param <V>   the type of the field
      * @return the value of the field
-     * @throws IllegalAccessException if the field cannot be accessed from this method
      */
     @Override
-    public <V> V getFieldValue(final Field field, final Class<V> type) throws IllegalAccessException {
+    public <V> V getFieldValue(final Field field, final Class<V> type) {
         return this.getFieldValue(field);
     }
 
@@ -145,13 +150,12 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @param type the class type of the field
      * @param <V>  the type of the field
      * @return the value of the field
-     * @throws NoSuchFieldException   if a field with the specified {@code name} does not exist in the class being
-     *                                reflected on
-     * @throws IllegalAccessException if the field cannot be accessed from this method
+     * @throws NoSuchFieldException if a field with the specified {@code name} does not exist in the class being
+     *                              reflected on
      */
     @Override
     public <V> V getFieldValue(final String name, final Class<V> type)
-            throws NoSuchFieldException, IllegalAccessException {
+            throws NoSuchFieldException {
         return this.getFieldValue(name);
     }
 
@@ -189,11 +193,13 @@ public final class ReflectChecked<T> implements Reflect<T> {
      *                               exist in the {@link Class} currently being reflected on.
      */
     private Method tryGetMethod(final String name, final Class<?>... parameterTypes) throws NoSuchMethodException {
+        Method method;
         try {
-            return this.clazz.getMethod(name, parameterTypes);
+            method = this.clazz.getMethod(name, parameterTypes);
         } catch (final NoSuchMethodException e) {
-            return this.clazz.getDeclaredMethod(name, parameterTypes);
+            method = this.clazz.getDeclaredMethod(name, parameterTypes);
         }
+        return Reflect.setAccessible(method);
     }
 
     /**
@@ -220,7 +226,10 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @return the {@link Method} reflecting the member method
      * @throws NoSuchMethodException if a method with the specified {@code name} and {@code parameterTypes} does not
      *                               exist in the class being reflected on
+     * @deprecated replaced by {@link #getMethod(String, Class[])}, which should now always sets the method as
+     * accessible.
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     @Override
     public Method getMethodAccessible(final String name, final Class<?>... parameterTypes)
             throws NoSuchMethodException {
@@ -236,7 +245,9 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @return the {@link Method} reflecting the member method
      * @throws NoSuchMethodException if a method with the specified {@code name} and {@code parameterTypes} does not
      *                               exist in the class being reflected on
+     * @deprecated replaced by {@link #getMethod(String, List)}, which should now always sets the method as accessible.
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     @Override
     public Method getMethodAccessible(final String name, final List<Class<?>> parameterTypes)
             throws NoSuchMethodException {
@@ -260,7 +271,7 @@ public final class ReflectChecked<T> implements Reflect<T> {
      */
     @Override
     public <V> V invoke(final String name, final Object... arguments)
-            throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+            throws InvocationTargetException, NoSuchMethodException {
         return this.invoke(name, Arrays.asList(arguments));
     }
 
@@ -275,13 +286,12 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @throws NoSuchMethodException     if a method with the specified {@code name} and parameter types (as determined
      *                                   by the specified {@code arguments}) does not exist in the class being reflected
      *                                   on
-     * @throws IllegalAccessException    if the member method could not be accessed
      * @throws InvocationTargetException if the underlying method invoked throws an exception
      * @see Method#invoke(Object, Object...)
      */
     @Override
     public <V> V invoke(final String name, final List<Object> arguments)
-            throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+            throws InvocationTargetException, NoSuchMethodException {
         return this.invoke(name, arguments.stream().map(Object::getClass).collect(Collectors.toList()), arguments);
     }
 
@@ -305,8 +315,12 @@ public final class ReflectChecked<T> implements Reflect<T> {
     @Override
     @SuppressWarnings("unchecked")
     public <V> V invoke(final String name, final List<Class<?>> parameterTypes, final List<Object> arguments)
-            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        return (V) this.getMethodAccessible(name, parameterTypes).invoke(this.object, arguments.toArray());
+            throws NoSuchMethodException, InvocationTargetException {
+        try {
+            return (V) this.getMethod(name, parameterTypes).invoke(this.object, arguments.toArray());
+        } catch (IllegalAccessException e) {
+            throw new IllegalAccessError(e.getMessage());
+        }
     }
 
     /**
@@ -320,14 +334,16 @@ public final class ReflectChecked<T> implements Reflect<T> {
      */
     @Override
     public Constructor<T> getConstructor(final Class<?>... parameterTypes) throws NoSuchMethodException {
+        Constructor<T> constructor;
         try {
             // First, try getting the constructor whilst making sure all classes are primitive.
-            return this.clazz.getDeclaredConstructor(Stream.of(parameterTypes)
+            constructor = this.clazz.getDeclaredConstructor(Stream.of(parameterTypes)
                     .map(Primitive::fromOrSelf).toArray(Class<?>[]::new));
         } catch (final NoSuchMethodException e) {
             // Then, try the given parameters.
-            return this.clazz.getDeclaredConstructor(parameterTypes);
+            constructor = this.clazz.getDeclaredConstructor(parameterTypes);
         }
+        return Reflect.setAccessible(constructor);
     }
 
     /**
@@ -352,7 +368,10 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @return the {@link Constructor} reflecting the member constructor
      * @throws NoSuchMethodException if a constructor with the specified {@code parameterTypes} does not exist in the
      *                               class being reflected on
+     * @deprecated replaced by {@link #getConstructor(Class[])}, which should now always sets the constructor as
+     * accessible.
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     @Override
     public Constructor<T> getConstructorAccessible(final Class<?>... parameterTypes) throws NoSuchMethodException {
         return Reflect.setAccessible(this.getConstructor(parameterTypes));
@@ -366,7 +385,10 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @return the {@link Constructor} reflecting the member constructor
      * @throws NoSuchMethodException if a constructor with the specified {@code parameterTypes} does not exist in the
      *                               class being reflected on
+     * @deprecated replaced by {@link #getConstructor(Class[])}, which should now always sets the constructor as
+     * accessible.
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     @Override
     public Constructor<T> getConstructorAccessible(final List<Class<?>> parameterTypes) throws NoSuchMethodException {
         return Reflect.setAccessible(this.getConstructor(parameterTypes));
@@ -380,14 +402,13 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @return the instantiated object of type {@link T}
      * @throws NoSuchMethodException     if a constructor with the parameter types as determined by the specified {@code
      *                                   arguments} does not exist in the class being reflected on
-     * @throws IllegalAccessException    if the member constructor could not be accessed
      * @throws InvocationTargetException if the underlying constructor invoked throws an exception
      * @throws InstantiationException    if the class being reflected on is abstract
      * @see Constructor#newInstance(Object...)
      */
     @Override
     public T instantiate(final Object... arguments)
-            throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+            throws NoSuchMethodException, InvocationTargetException, InstantiationException {
         return this.instantiate(Arrays.asList(arguments));
     }
 
@@ -399,14 +420,13 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @return the instantiated object of type {@link T}
      * @throws NoSuchMethodException     if a constructor with the parameter types as determined by the specified {@code
      *                                   arguments} does not exist in the class being reflected on
-     * @throws IllegalAccessException    if the member constructor could not be accessed
      * @throws InvocationTargetException if the underlying constructor invoked throws an exception
      * @throws InstantiationException    if the class being reflected on is abstract
      * @see Constructor#newInstance(Object...)
      */
     @Override
     public T instantiate(final List<Object> arguments)
-            throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+            throws NoSuchMethodException, InvocationTargetException, InstantiationException {
         return this.instantiate(arguments.stream().map(Object::getClass).collect(Collectors.toList()), arguments);
     }
 
@@ -420,15 +440,18 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @return the instantiated object of type {@link T}
      * @throws NoSuchMethodException     if a constructor with the specified {@code parameterTypes} does not exist in
      *                                   the class being reflected on
-     * @throws IllegalAccessException    if the member constructor could not be accessed
      * @throws InvocationTargetException if the underlying constructor invoked throws an exception
      * @throws InstantiationException    if the class being reflected on is abstract
      * @see Constructor#newInstance(Object...)
      */
     @Override
     public T instantiate(final List<Class<?>> parameterTypes, final List<Object> arguments)
-            throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        return this.getConstructorAccessible(parameterTypes).newInstance(arguments.toArray());
+            throws NoSuchMethodException, InvocationTargetException, InstantiationException {
+        try {
+            return this.getConstructor(parameterTypes).newInstance(arguments.toArray());
+        } catch (IllegalAccessException e) {
+            throw new IllegalAccessError(e.getMessage());
+        }
     }
 
     /**
@@ -440,7 +463,6 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @return the instantiated object of type {@link T}
      * @throws NoSuchMethodException     if a constructor with the parameter types as determined by the specified {@code
      *                                   arguments} does not exist in the class being reflected on
-     * @throws IllegalAccessException    if the member constructor could not be accessed
      * @throws InvocationTargetException if the underlying constructor invoked throws an exception
      * @throws InstantiationException    if the class being reflected on is abstract
      * @see Constructor#newInstance(Object...)
@@ -451,7 +473,7 @@ public final class ReflectChecked<T> implements Reflect<T> {
     @SuppressWarnings({"unchecked", "removal"})
     @Override
     public <V> V instantiateInferred(final Object... arguments)
-            throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+            throws NoSuchMethodException, InvocationTargetException, InstantiationException {
         return (V) this.instantiate(arguments);
     }
 
@@ -464,7 +486,6 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @return the instantiated object of type {@link T}
      * @throws NoSuchMethodException     if a constructor with the parameter types as determined by the specified {@code
      *                                   arguments} does not exist in the class being reflected on
-     * @throws IllegalAccessException    if the member constructor could not be accessed
      * @throws InvocationTargetException if the underlying constructor invoked throws an exception
      * @throws InstantiationException    if the class being reflected on is abstract
      * @see Constructor#newInstance(Object...)
@@ -475,7 +496,7 @@ public final class ReflectChecked<T> implements Reflect<T> {
     @SuppressWarnings({"unchecked", "removal"})
     @Override
     public <V> V instantiateInferred(final List<Object> arguments)
-            throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+            throws NoSuchMethodException, InvocationTargetException, InstantiationException {
         return (V) this.instantiate(arguments);
     }
 
@@ -490,7 +511,6 @@ public final class ReflectChecked<T> implements Reflect<T> {
      * @return the instantiated object of type {@link T}
      * @throws NoSuchMethodException     if a constructor with the specified {@code parameterTypes} does not exist in
      *                                   the class being reflected on
-     * @throws IllegalAccessException    if the member constructor could not be accessed
      * @throws InvocationTargetException if the underlying constructor invoked throws an exception
      * @throws InstantiationException    if the class being reflected on is abstract
      * @see Constructor#newInstance(Object...)
@@ -499,7 +519,7 @@ public final class ReflectChecked<T> implements Reflect<T> {
     @SuppressWarnings({"unchecked", "removal"})
     @Override
     public <V> V instantiateInferred(final List<Class<?>> parameterTypes, final List<Object> arguments)
-            throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+            throws NoSuchMethodException, InvocationTargetException, InstantiationException {
         return (V) this.instantiate(parameterTypes, arguments);
     }
 

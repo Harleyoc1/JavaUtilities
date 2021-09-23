@@ -62,7 +62,9 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      * @return the {@link Field} reflecting the member field
      * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getFieldAccessible(String)}
      *                          (String)} on the delegate
+     * @deprecated replaced by {@link #getField(String)}, which should now always sets the method as acessible.
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     @Override
     public Field getFieldAccessible(final String name) {
         return getUnchecked(() -> this.delegate.getFieldAccessible(name));
@@ -165,7 +167,10 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      * @return the {@link Method} reflecting the member method
      * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getMethodAccessible(String,
      *                          Class[])} on the delegate
+     * @deprecated replaced by {@link #getMethod(String, Class[])}, which should now always sets the method as
+     * accessible.
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     @Override
     public Method getMethodAccessible(final String name, final Class<?>... parameterTypes) {
         return getUnchecked(() -> this.delegate.getMethod(name, parameterTypes));
@@ -180,7 +185,9 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      * @return the {@link Method} reflecting the member method
      * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getMethodAccessible(String,
      *                          List)} on the delegate
+     * @deprecated replaced by {@link #getMethod(String, List)}, which should now always sets the method as accessible.
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     @Override
     public Method getMethodAccessible(final String name, final List<Class<?>> parameterTypes) {
         return getUnchecked(() -> this.delegate.getMethod(name, parameterTypes));
@@ -275,7 +282,10 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      * @return the {@link Constructor} reflecting the member constructor
      * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getConstructorAccessible(Class[])}
      *                          on the delegate
+     * @deprecated replaced by {@link #getConstructor(Class[])}, which should now always sets the constructor as
+     * accessible.
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     @Override
     public Constructor<T> getConstructorAccessible(final Class<?>... parameterTypes) {
         return getUnchecked(() -> this.delegate.getConstructorAccessible(parameterTypes));
@@ -287,9 +297,12 @@ public final class ReflectUnchecked<T> implements Reflect<T> {
      * @param parameterTypes the parameter types the member constructor takes. Must be in the same order in which they
      *                       are declared by the constructor.
      * @return the {@link Constructor} reflecting the member constructor
-     * @throws RuntimeException      if an exception was caught from the invocation of {@link
-     *                               Reflect#getConstructorAccessible(List)} on the delegate
+     * @throws RuntimeException if an exception was caught from the invocation of {@link Reflect#getConstructorAccessible(List)}
+     *                          on the delegate
+     * @deprecated replaced by {@link #getConstructor(Class[])}, which should now always sets the constructor as
+     * accessible.
      */
+    @Deprecated(forRemoval = true, since = "0.1.3")
     @Override
     public Constructor<T> getConstructorAccessible(final List<Class<?>> parameterTypes) {
         return getUnchecked(() -> this.delegate.getConstructorAccessible(parameterTypes));
