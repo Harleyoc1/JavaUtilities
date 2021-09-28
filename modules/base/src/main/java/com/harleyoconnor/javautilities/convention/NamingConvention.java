@@ -108,7 +108,7 @@ public interface NamingConvention {
      * {@link NamingConvention} as long as it uses only A-Z (ignoring case) and 0-9, apart from for separator characters
      * defined by the convention.</p>
      */
-    Pattern ACCEPTABLE_CHARACTERS = Pattern.compile("[A-z0-9]");
+    Pattern ACCEPTABLE_CHARACTERS = Pattern.compile("[a-zA-Z0-9]");
 
     /**
      * Checks the specified {@code string} follows this convention, using the {@linkplain #ACCEPTABLE_CHARACTERS default
