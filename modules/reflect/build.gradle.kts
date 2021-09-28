@@ -1,4 +1,4 @@
 dependencies {
-    implementation(project(":base"))
+    implementation(project(":misc"))
     implementation(project(":function"))
 }

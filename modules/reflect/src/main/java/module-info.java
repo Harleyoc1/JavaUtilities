@@ -2,7 +2,7 @@
  * @author Harley O'Connor
  */
 module javautilities.reflect {
-    requires javautilities.base;
+    requires javautilities.misc;
     requires javautilities.function;
     requires org.jetbrains.annotations;
 

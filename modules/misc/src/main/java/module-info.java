@@ -1,7 +1,7 @@
 /**
  * @author Harley O'Connor
  */
-module javautilities.base {
+module javautilities.misc {
     requires org.jetbrains.annotations;
 
     exports com.harleyoconnor.javautilities.convention;

@@ -1,6 +1,6 @@
 rootProject.name = "JavaUtilities"
 
-val modules = arrayOf("base", "collection", "function", "reflect", "tuple")
+val modules = arrayOf("collection", "function", "misc", "reflect", "tuple")
 
 modules.forEach {
     include(it)
